@@ -1,4 +1,4 @@
-    #!/usr/bin/env python
+#!/usr/bin/env python
 
 from twisted.internet import reactor, task
 from twisted.internet.protocol import ServerFactory 
@@ -85,7 +85,9 @@ def Main():
     factory = ChatProtocolFactory()
     reactor.listenTCP(5071, factory)
 
-    
+    # Create the players directory incrementally, useful if this is the first
+    # time the MUD is run.
+    functions.mkdir_p('./players')
     
     reactor.run()
     

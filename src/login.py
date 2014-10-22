@@ -4,6 +4,9 @@ from player import player
 import pickle
 import time
 
+IAC_WONT_ECHO = '\xff\xfc\x01'
+IAC_WILL_ECHO = '\xff\xfb\x01'
+
 def login(self, line): #self is the protocol object
     line = formatinput(line)
     splitline = line.lower().split(" ")
@@ -26,7 +29,8 @@ def login(self, line): #self is the protocol object
                 if safeName == entry.name:
                     self.player = entry #go ahead and assume that player, the check for password is below
                     self.sendLine("Enter your password (re-login):")
-                    self.transport.write(">")
+                    self.transport.write("(typing will be hidden)>")
+                    self.transport.write(IAC_WILL_ECHO)
                     self.dopple = 1
                     self.status = 1
      
@@ -45,23 +49,28 @@ def login(self, line): #self is the protocol object
                     self.player.islands = self.factory.islands
                     savefile.close()
                     self.sendLine("What is your password?")
-                    self.transport.write(">")
+                    self.transport.write("(typing will be hidden)>")
+                    self.transport.write(IAC_WILL_ECHO)
                     self.status = 1
                 except:
                     self.new = 1
                     self.sendLine("NEW CHARACTER: What is your password?")
-                    self.transport.write(">")
+                    self.transport.write("(typing will be hidden)>")
+                    self.transport.write(IAC_WILL_ECHO)
                     self.status = 1
                 
         
     elif self.status == 1: #was asked for password
         safePass = formatinput(line)
+        # Stop hiding input
+        self.sendLine('')
+        self.transport.write(IAC_WONT_ECHO)
         
         if self.dopple == 1:
             if self.player.password == safePass:
                 # delete other protocol and player reference, tell player object this is its protocol
                 self.status = 2
-                self.sendLine("Login successful!")
+                self.sendLine("Login successful! (press enter)")
                 self.player.protocol = self
                 for entry in self.factory.clientProtocols:
                     if entry.player == self.player and entry != self:
@@ -71,7 +80,7 @@ def login(self, line): #self is the protocol object
             if self.player.password == safePass:
                 self.status = 2
                 
-                self.sendLine("Login successful!")
+                self.sendLine("Login successful! (press enter)")
             else:
                 self.sendLine(color("red")+"Incorrect password."+color("white"))
                 self.status = 0

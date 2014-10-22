@@ -17,7 +17,7 @@ def create(self, line, state):
         self.sex = "o"
         state = 2
     else:
-        self.sendLine("illegal name, try again:")
+        self.sendLine("illegal value, try again:")
         self.protocol.transport.write(">")
     if state == 2:
         return 1
