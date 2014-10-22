@@ -55,9 +55,9 @@ class ChatProtocolFactory(ServerFactory):
     def __init__(self): 
         self.clientProtocols = []
         self.playerObjects = []
-        self.islands = functions.parseIslands(".\\edit\\islands\\", self)
+        self.islands = functions.parseIslands("./edit/islands/", self)
         self.monsters = functions.parseMonsters("./edit/entities/")
-        self.items = functions.parseItems(".\\edit\\items\\")
+        self.items = functions.parseItems("./edit/items/")
         
         loopingCall = task.LoopingCall(self.timeDisbatch)
         loopingCall.start(.5)
