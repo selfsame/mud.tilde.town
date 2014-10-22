@@ -29,8 +29,8 @@ def login(self, line): #self is the protocol object
                 if safeName == entry.name:
                     self.player = entry #go ahead and assume that player, the check for password is below
                     self.sendLine("Enter your password (re-login):")
-
-                    self.transport.write(">")
+                    self.transport.write("(typing will be hidden)>")
+                    self.transport.write(IAC_WILL_ECHO)
                     self.dopple = 1
                     self.status = 1
      
