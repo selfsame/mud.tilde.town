@@ -34,7 +34,7 @@ S:2:1d2
 R:harpers2:Harper's Avenue
 D:You are standing outside of the Terryton harbor.  A dusty avenue runs north to
 D:the main part of town.
-E:2:north
+E:harpers1:north
 E:10:harbor
 S:2:1d2
 S:7:1d4
