@@ -3,8 +3,21 @@ from random import randint, choice
 import copy
 import os, sys
 
+# mkdir -p in python, from:
+# http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python
+def mkdir_p(path):
+  try:
+    os.makedirs(path)
+  except OSError as exc: # Python >2.5
+    if exc.errno == errno.EEXIST:
+      pass
+    else:
+      raise
 
 def formatinput(raw):
+    if raw.startswith('\xff'):
+      raw = raw[3:]
+
     sp = repr(raw).split('\\x08')
     word = ""
     active = 0
