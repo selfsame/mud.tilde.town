@@ -1,7 +1,7 @@
 from objects import *
 from random import randint, choice
 import copy
-import os, sys
+import os, sys, errno
 
 # mkdir -p in python, from:
 # http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python
