@@ -13,9 +13,11 @@ def create(self, line, state):
     elif line == "f":
         self.sex = "f"
         state = 2
+    elif line == "o":
+        self.sex = "o"
+        state = 2
     else:
         self.sendLine("illegal name, try again:")
         self.protocol.transport.write(">")
     if state == 2:
-        self.sendLine("Statistics:")
         return 1

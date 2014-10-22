@@ -84,7 +84,7 @@ def login(self, line): #self is the protocol object
             self.player.password = safePass
             self.player.name = self.name
             self.status = 3
-            self.sendLine("What is your sex (m/f):") ## Move me
+            self.sendLine("What is your sex (m/f/o):") ## Move me
         else:
             self.sendLine("Too short, try again:")
             self.transport.write(">")
