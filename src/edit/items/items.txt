@@ -1,0 +1,6 @@
+
+
+N:0:pepper
+D:It's a pepper.
+V:10
+A:use:You eat the pepper.:eats a pepper.

@@ -1,0 +1,116 @@
+
+
+I:skullcap:Skull Cap Island
+V:A broad island with yellow sand beaches and a dense forset.
+V:There is a sizeable town on the north shore.
+
+R:touroffice:Office of Tourism
+D:You are standing in a wooden room.  Visitors mill around
+D:examining the travel posters on the wall and talking amongst
+D:themselves.
+E:hangmans:red door
+S:7:1d4
+
+R:hangmans:Hangman's alley
+D:A narrow alley between shoddy wooden shacks. A sign above
+D:a gilded red door says "Skull Cap Island Office of Tourism."
+D:Alley cats root around in piles of garbage.
+E:touroffice:gilded red door
+E:harpers1:Harper's Avenue
+S:0:1d5
+S:0:1d5
+S:7:1d4
+S:7:1d4
+
+R:harpers1:Harper's Avenue
+D:You weave through the crowd as you walk down the main street in Terryton.
+D:Venders bark out offers at passing townsfolk.  To the south the cobble road
+D:descends towards the harbor.
+E:harpers2:south
+E:4:north
+E:hangmans:Hangman's alley
+S:2:1d2
+
+R:harpers2:Harper's Avenue
+D:You are standing outside of the Terryton harbor.  A dusty avenue runs north to
+D:the main part of town.
+E:2:north
+E:10:harbor
+S:2:1d2
+S:7:1d4
+
+R:4:Intersection of Harper's Avenue and Govenor St.
+D:A stone fountain is the center of this cobblestone plaza.
+E:harpers1:south
+E:9:town gate
+S:2:1d7
+
+R:altar:Altar clearing
+D:You lie atop a blood stained stone alter in a small clearing in the jungle.
+D:A dirt path leads into the jungle. The ground below you is littered with animal
+D:bones.
+E:6:path
+
+R:6:Jungle Path
+D:The air beneath the canopy is thick with oxygen and the smell of vegetation.
+E:7:south
+S:1:1d2
+S:7:1d4
+
+R:7:Jungle Path
+D:The air beneath the canopy is thick with oxygen and the smell of vegetation.
+E:6:north
+E:8:south
+E:12:west
+S:1:1d2
+S:6:1d7
+
+R:8:Jungle Path
+D:The air beneath the canopy is thick with oxygen and the smell of vegetation.
+E:7:north
+E:9:south
+
+R:9:Edge of the jungle
+D:The outskirts of town lie next to the tropical overgrowth of Skull Cap island.
+E:8:path
+E:4:south
+
+R:10:Terryton Harbor
+D:Two wooden piers stretch out into the bay. Longshoreman unload crates and cargo
+D:from a galleon, stacking it along the retaining wall of the harbor.
+E:harpers2:Harper's Ave.
+E:11:rocky beach
+S:5:1d4
+S:2:1d1
+S:2:1d5
+S:7:1d4
+
+R:11:Rocky Beach
+D:The smell of the sea is strong here.  Waves crash into the shore.
+E:10:harbor
+S:3:1d2
+S:4:1d8
+S:5:1d4
+
+R:12:Dark Jungle
+D:You can barely make out your surroundings in the thick overgrowth of the island
+D:jungle.  Strange calls sound out from the canopy and insects fill the air.
+E:7:east
+E:13:north
+E:14:south
+S:6:1d7
+S:6:1d7
+S:1:1d3
+
+R:13:Dark Jungle
+D:You can barely make out your surroundings in the thick overgrowth of the island
+D:jungle.  Strange calls sound out from the canopy and insects fill the air.
+E:12:south
+S:6:1d7
+S:6:1d7
+S:1:1d3
+
+
+
+
+

@@ -1,0 +1,67 @@
+#N id, name
+#D desc
+#H hp
+#A attacks
+#T drops
+
+N:0:alley cat
+D:A scrawney cat with mangey fur.
+H:10
+A:scratch:1d2
+T:0:1d4
+L:1
+
+N:1:wild boar
+D:A feral pig of the jungle.
+H:21
+A:butt:2d2
+A:bite:1d5
+T:0:1d4
+L:2
+
+N:2:seaman
+D:He is on shore leave, and perhaps a little drunk
+H:31
+A:punch:1d6
+T:0:1d1
+T:0:1d3
+L:3
+
+N:3:large crab
+D:A beach crab, it looks pretty harmless.
+H:8
+A:pince:1d2
+A:snap:1d1
+L:1
+
+N:4:albatros
+D:A large bird of the open sea, it looks irritable.
+H:24
+A:peck:2d3
+A:swipe:1d3
+T:0:1d4
+T:0:1d4
+L:2
+
+N:5:seagull
+D:A feathered scavenger.
+H:14
+A:peck:1d3
+A:swipe:1d2
+T:0:1d4
+L:2
+
+N:6:jaguar
+D:A spotted hunter of the jungle.
+H:36
+A:maul:3d3
+A:claw:1d12
+T:0:1d4
+L:3
+
+N:7:rat
+D:A grey rat.
+H:6
+A:bite:1d1
+L:2
+
