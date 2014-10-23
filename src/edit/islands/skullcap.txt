@@ -10,6 +10,7 @@ D:examining the travel posters on the wall and talking amongst
 D:themselves.
 E:hangmans:red door
 S:7:1d4
+S:8:1d5
 
 R:hangmans:Hangman's alley
 D:A narrow alley between shoddy wooden shacks. A sign above
@@ -21,6 +22,7 @@ S:0:1d5
 S:0:1d5
 S:7:1d4
 S:7:1d4
+S:8:1d5
 
 R:harpers1:Harper's Avenue
 D:You weave through the crowd as you walk down the main street in Terryton.
@@ -30,6 +32,7 @@ E:harpers2:south
 E:4:north
 E:hangmans:Hangman's alley
 S:2:1d2
+S:8:1d5
 
 R:harpers2:Harper's Avenue
 D:You are standing outside of the Terryton harbor.  A dusty avenue runs north to
@@ -38,12 +41,14 @@ E:harpers1:north
 E:10:harbor
 S:2:1d2
 S:7:1d4
+S:8:1d5
 
 R:4:Intersection of Harper's Avenue and Govenor St.
 D:A stone fountain is the center of this cobblestone plaza.
 E:harpers1:south
 E:9:town gate
 S:2:1d7
+S:8:1d5
 
 R:altar:Altar clearing
 D:You lie atop a blood stained stone alter in a small clearing in the jungle.
