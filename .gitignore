@@ -1,2 +1,4 @@
 *.pyc
+*.out
+*.log
 src/players
