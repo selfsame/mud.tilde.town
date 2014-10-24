@@ -65,8 +65,8 @@ H:6
 A:bite:1d1
 L:2
 
-N:8:tild townie
-D:This is probably not it's only SSH session
+N:8:tilde townie
+D:This is probably not it's only SSH session.
 H:88
 A:mkdir:2d5
 A:!!:1d12
