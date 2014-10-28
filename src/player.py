@@ -197,7 +197,15 @@ class player(human):
             self.sendLine( "Unrecognized command: "+line )
             
         self.status()
-            
+    
+    def close_connection(self):
+        self.protocol.transport.loseConnection()
+        try:
+            self.factory.clientProtocols.remove( self.protocol )
+        except:
+            print "error removing connection" + str(self.protocol)
+        
+
     def quit(self, args=[]):
         try:
             self.room.players.getself(self)
@@ -209,12 +217,7 @@ class player(human):
             print 'error removing player on logout'
 
         self.save()
-        
-        self.protocol.transport.loseConnection()
-        try:
-            self.factory.clientProtocols.remove( self.protocol )
-        except:
-            print "error removing connection" + str(self.protocol)
+        self.close_connection()
         self.factory.broadOthers(self, self.name+" has logged out.")
         del self
 
@@ -274,7 +277,7 @@ class player(human):
     def chat(self, args=[]):
         what = " ".join( args[1:] )
         if what != "":
-            self.factory.broadOthers(self, color("cyan") + self.getName()+": "+ what + color("white"))
+            self.factory.broadOthers(self, color("cyan") + self.name+": "+ what + color("white"))
         else:
             self.sendLine("Chat what?")
     

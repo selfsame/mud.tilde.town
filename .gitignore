@@ -1,4 +1,6 @@
 *.pyc
 *.out
 *.log
+*.swp
+log.txt
 src/players

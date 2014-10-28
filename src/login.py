@@ -1,11 +1,20 @@
+import os
 from functions import formatinput
 from colors import *
 from player import player
 import pickle
 import time
+import hashlib
+import binascii
 
 IAC_WONT_ECHO = '\xff\xfc\x01'
 IAC_WILL_ECHO = '\xff\xfb\x01'
+
+def verify(hash, plaintext):
+  if hash == hashlib.sha512(plaintext).hexdigest():
+    return True
+  else:
+    return False
 
 def login(self, line): #self is the protocol object
     line = formatinput(line)
@@ -67,30 +76,32 @@ def login(self, line): #self is the protocol object
         self.transport.write(IAC_WONT_ECHO)
         
         if self.dopple == 1:
-            if self.player.password == safePass:
+            if verify(self.player.password, self.player.salt + safePass):
                 # delete other protocol and player reference, tell player object this is its protocol
-                self.status = 2
+                self.status = 4
                 self.sendLine("Login successful! (press enter)")
                 self.player.protocol = self
                 for entry in self.factory.clientProtocols:
                     if entry.player == self.player and entry != self:
                         del self.factory.clientProtocols[ self.factory.clientProtocols.index(entry) ]          
-                
+            else:
+              self.sendLine(color("red")+"Incorrect password."+color("white"))
+              self.player.close_connection()
+              del self.player
+
         elif self.new == 0: #not new
-            if self.player.password == safePass:
-                self.status = 2
-                
+            if verify(self.player.password, self.player.salt + safePass):
+                self.status = 4     
                 self.sendLine("Login successful! (press enter)")
             else:
                 self.sendLine(color("red")+"Incorrect password."+color("white"))
-                self.status = 0
-                self.sendLine("Enter your name:")
-                self.transport.write(">")
+                self.player.close_connection()
                 del self.player
                 
         elif len( safePass ) > 2: #making a new password #new == 1
             self.player = player(self, self.factory, time.time() )
-            self.player.password = safePass
+            self.player.salt = os.urandom(16)
+            self.player.password = hashlib.sha512(self.player.salt + safePass).hexdigest()
             self.player.name = self.name
             self.status = 3
             self.sendLine("What is your sex (m/f/o):") ## Move me
