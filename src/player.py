@@ -285,10 +285,10 @@ class player(human):
  
         if what != []:
             target = 0
-            for entry in self.room.players.content:
+            for entry in self.room.players:
                 if what[0] in entry.name:
                     target = entry
-            for entry in self.room.monsters.content:
+            for entry in self.room.monsters:
                 if what[0] in entry.name:
                     target = entry
             if target != 0:
