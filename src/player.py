@@ -228,8 +228,7 @@ class player(human):
     def get(self, what=[]):
         what = what[1:]
         if what != []:
-            room = self.islands[ self.island ].roomlist[ self.room ]
-            thing = room.items.get(what)
+            thing = self.room.items.get(what[0])
             if thing:
                 self.items.append( thing )
                 room.sendinroom( self.name+" picks up the "+thing.name+".")
@@ -286,10 +285,10 @@ class player(human):
  
         if what != []:
             target = 0
-            for entry in self.room.players.content:
+            for entry in self.room.players:
                 if what[0] in entry.name:
                     target = entry
-            for entry in self.room.monsters.content:
+            for entry in self.room.monsters:
                 if what[0] in entry.name:
                     target = entry
             if target != 0:
