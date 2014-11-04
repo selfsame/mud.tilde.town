@@ -228,7 +228,7 @@ class player(human):
     def get(self, what=[]):
         what = what[1:]
         if what != []:
-            thing = self.room.items.get(what)
+            thing = self.room.items.get(what[0])
             if thing:
                 self.items.append( thing )
                 room.sendinroom( self.name+" picks up the "+thing.name+".")
