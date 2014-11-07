@@ -2,5 +2,6 @@
 *.out
 *.log
 *.swp
+*.swo
 log.txt
 src/players
