@@ -67,6 +67,8 @@ class human(object):
         
         self.island = self.islands[ self.islandName ]
         self.room = self.island.roomlist[ self.roomName ]
+        if self not in self.room.players:
+            self.room.players.append(self)
 
     def go(self, args=[]):
         where = args[1:]
@@ -86,7 +88,6 @@ class human(object):
                         self.others( self.name + " walks in from the " + entry[1] + "." )
                         try:
                             self.updateRoom()
-                            self.room.players.append(self)
                         except:
                             self.sendLine( "error, some location not made" )
                             self.roomName = failroom
