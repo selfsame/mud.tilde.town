@@ -44,41 +44,42 @@ def parseIslands(editpath, factory):
     pathname = os.path.dirname(sys.argv[0]) + editpath[1:]
     for subdir, dirs, files in os.walk(pathname):
         for file in files:
-            file = open(pathname+file)
-            for line in file:
-                line = line[:-1]
-                
-                if line[:1] == "I":
-                    
-                    #current = islandlist[ len( islandlist )-1 ]
-                    
-                    id = line.split(":")[1]
-                    islandlist[ id ] = island() 
-                    current = islandlist[ id ]
-                    
-                    current.name = line.split(":")[2]
-                    
-                if line[:1] == "V":
-                    current.desc.append(  line.split(":")[1]  )
-                    
-                if line[:1] == "R":
-                    id = line.split(":")[1]
-                    
-                    current.roomlist[ id ] = room(factory)
-                    curroom = current.roomlist[ id ]
-                    curroom.name = line.split(":")[2]
-                    
-                if line[:1] == "D":
-                    curroom.desc.append(  line.split(":")[1]  )
-                if line[:1] == "E":
-                    curroom.exits.append(  [ line.split(":")[1]  , line.split(":")[2] ]  )
-                        
-                if line[:1] == "S":
-                    sp = line.split(":")
-                    curroom.spawn.append( [ int( sp[1]), [ int(sp[2].split('d')[0]), int(sp[2].split('d')[1]) ] ] )
+          if file[-4:] == ".txt":
+              file = open(pathname+file)
+              for line in file:
+                  line = line[:-1]
+                  
+                  if line[:1] == "I":
+                      
+                      #current = islandlist[ len( islandlist )-1 ]
+                      
+                      id = line.split(":")[1]
+                      islandlist[ id ] = island() 
+                      current = islandlist[ id ]
+                      
+                      current.name = line.split(":")[2]
+                      
+                  if line[:1] == "V":
+                      current.desc.append(  line.split(":")[1]  )
+                      
+                  if line[:1] == "R":
+                      id = line.split(":")[1]
+                      
+                      current.roomlist[ id ] = room(factory)
+                      curroom = current.roomlist[ id ]
+                      curroom.name = line.split(":")[2]
+                      
+                  if line[:1] == "D":
+                      curroom.desc.append(  line.split(":")[1]  )
+                  if line[:1] == "E":
+                      curroom.exits.append(  [ line.split(":")[1]  , line.split(":")[2] ]  )
+                          
+                  if line[:1] == "S":
+                      sp = line.split(":")
+                      curroom.spawn.append( [ int( sp[1]), [ int(sp[2].split('d')[0]), int(sp[2].split('d')[1]) ] ] )
 
-            file.close()
-            
+              file.close()
+              
     return islandlist
 
 
@@ -87,28 +88,29 @@ def parseMonsters(editpath):
     pathname = os.path.dirname(sys.argv[0]) + editpath[1:]
     for subdir, dirs, files in os.walk(pathname):
         for file in files:
-            file = open(pathname+file)
-            for line in file:
-                line = line[:-1]
-                if line[:1] == "N":
-                    monsterlist.append( monster() )
-                    current = monsterlist[ len( monsterlist ) - 1 ]
-                    current.id = line.split(":")[1]
-                    current.name = line.split(":")[2]
-                if line[:1] == "D":
-                    current.desc.append(  line.split(":")[1]  )
-                if line[:1] == "H":
-                    current.hp = int( line.split(":")[1]  )
-                if line[:1] == "A":
-                    current.attacks.append( [ line.split(":")[1], [ int(line.split(":")[2].split('d')[0]),int(line.split(":")[2].split('d')[1])]])
-                if line[:1] == "L":
-                    current.level = int( line.split(":")[1]  )
-                if line[:1] == "T":
-                    #drops
-                    current.drops.append( [ int(line.split(":")[1]), [ int(line.split(":")[2].split('d')[0]),int(line.split(":")[2].split('d')[1])]])
+            if file[-4:] == ".txt":
+              file = open(pathname+file)
+              for line in file:
+                  line = line[:-1]
+                  if line[:1] == "N":
+                      monsterlist.append( monster() )
+                      current = monsterlist[ len( monsterlist ) - 1 ]
+                      current.id = line.split(":")[1]
+                      current.name = line.split(":")[2]
+                  if line[:1] == "D":
+                      current.desc.append(  line.split(":")[1]  )
+                  if line[:1] == "H":
+                      current.hp = int( line.split(":")[1]  )
+                  if line[:1] == "A":
+                      current.attacks.append( [ line.split(":")[1], [ int(line.split(":")[2].split('d')[0]),int(line.split(":")[2].split('d')[1])]])
+                  if line[:1] == "L":
+                      current.level = int( line.split(":")[1]  )
+                  if line[:1] == "T":
+                      #drops
+                      current.drops.append( [ int(line.split(":")[1]), [ int(line.split(":")[2].split('d')[0]),int(line.split(":")[2].split('d')[1])]])
 
-            file.close()
-            
+              file.close()
+              
     return monsterlist
 
 def parseItems(editpath):
@@ -116,6 +118,7 @@ def parseItems(editpath):
     pathname = os.path.dirname(sys.argv[0]) + editpath[1:]
     for subdir, dirs, files in os.walk(pathname):
         for file in files:
+          if file[-4:] == ".txt":
             file = open(pathname+file)
             for line in file:
                 line = line[:-1]
