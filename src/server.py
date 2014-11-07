@@ -48,6 +48,7 @@ class MUDProtocol(LineOnlyReceiver):
         print self.factory
         intro(self)
         self.factory.clientProtocols.append(self)
+    
 
 class ChatProtocolFactory(ServerFactory):
 

@@ -76,7 +76,7 @@ class player(human):
         self.time = time
         timeidle = time - self.idletime
         self.heal()
-        if abs(timeidle) > 300:
+        if abs(timeidle) > 1200:
             self.sendLine("Idle too long, logging you out.")
             self.quit()
         if self.target != 0:
@@ -161,54 +161,57 @@ class player(human):
 
     def handle(self, line):
         #routes player commands to functions
-        
         line = formatinput(line)
         ## did something so update idle time
         self.idletime = self.time
-        
-        splitline = line.lower().split(" ")
-        
+        splitline = line.split(" ")
+
         #now we route the first command to a function
-        fullmatches = ["quit"]
+        fullmatches = ["quit", "eval"]
         partialmatches = ["who", "stop", "look", "kill", "go", "inventory", "get", "help", "chat", "say"]
 
         caught = 0
-        
         if line == "":
             caught = 1 #just send status prompt
-            
-        if caught == 0:
-            for entry in fullmatches:
-                if entry == splitline[0]:
-                    funct = eval("self."+entry)
-                    funct( splitline )
-                    caught = 1
-                    break
-            
-        if caught == 0:
-            for entry in partialmatches:
-                if pMatch( splitline[0], entry):
-                    funct = eval("self."+entry)
-                    funct( splitline )
-                    caught = 1
-                    break
 
         if caught == 0:
+            for entry in fullmatches+partialmatches:
+                if entry == splitline[0]:
+                    funct = eval("self."+entry)
+                    try:
+                        caught = 1
+                        funct( splitline )
+                    except:
+                        self.sendLine("error evaling self."+entry)
+                        print "error eval'ing self."+entry
+                    break
+        if caught == 0:
             self.sendLine( "Unrecognized command: "+line )
-            
         self.status()
-    
+
     def close_connection(self):
+        try:
+            self.room.players.remove(self)
+        except:
+            pass
+
         self.protocol.transport.loseConnection()
         try:
             self.factory.clientProtocols.remove( self.protocol )
         except:
             print "error removing connection" + str(self.protocol)
-        
+
+    def eval(self, args=[]):
+        if self.name == "selfsame":
+            code = " ".join(args[1:])
+            try:
+                self.sendLine(str(eval(code)))
+            except:
+                self.sendLine("error: "+code)
 
     def quit(self, args=[]):
         try:
-            self.room.players.getself(self)
+            self.room.players.remove(self)
         except:
             print "error removing player from room on logout"
         try:
@@ -224,34 +227,30 @@ class player(human):
     def stop(self, args=[]):
         self.target = 0
         self.sendLine("You stop attacking.")
-    
+
     def get(self, what=[]):
         what = what[1:]
         if what != []:
             thing = self.room.items.get(what[0])
             if thing:
                 self.items.append( thing )
-                room.sendinroom( self.name+" picks up the "+thing.name+".")
+                self.room.sendinroom( self.name+" picks up the "+thing.name+".")
             else:
                 self.sendLine("You don't see a " + what[0] + " here.")
-            
-    
+
     def inventory(self, args=[]):
         stuff = self.items.listcontents()
         if stuff == ".":
-            self.sendLine ( "You don't have anything.")
+            self.sendLine( "You don't have anything.")
         else:
-            self.sendLine ( "You have: "+ stuff)
+            self.sendLine( "You have: "+ stuff)
 
-    
-            
     def kill(self, args=[]):
         what = args[1:] #arg1 from splitline
         if what == []:
             self.sendLine("Kill what?")
         else:
             target = 0
-            
             for entry in self.room.players:
                 for item in entry.name.split(" "):
                     if pMatch( what[0], item ):
@@ -263,8 +262,7 @@ class player(human):
             if target != 0:
                 self.target = target
                 self.room.sendinroom(self.name+" attacks the "+target.name)
-        
-       
+
     def say(self, args=[]):
         what = " ".join( args[1:] )
         if what != "":

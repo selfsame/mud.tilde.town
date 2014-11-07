@@ -63,8 +63,7 @@ class human(object):
         for entry in olist:
             entry.sendLine( message )    
 
-    def updateRoom(self):
-        
+    def updateRoom(self): 
         self.island = self.islands[ self.islandName ]
         self.room = self.island.roomlist[ self.roomName ]
         if self not in self.room.players:

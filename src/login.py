@@ -83,7 +83,8 @@ def login(self, line): #self is the protocol object
                 self.player.protocol = self
                 for entry in self.factory.clientProtocols:
                     if entry.player == self.player and entry != self:
-                        del self.factory.clientProtocols[ self.factory.clientProtocols.index(entry) ]          
+                      entry.player.close_connection()  
+                      del self.factory.clientProtocols[ self.factory.clientProtocols.index(entry) ]          
             else:
               self.sendLine(color("red")+"Incorrect password."+color("white"))
               self.player.close_connection()
