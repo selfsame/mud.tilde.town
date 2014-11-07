@@ -1,0 +1,4 @@
+{"id": "whale",
+  "living": {"hpmax": 5000},
+  "mamal": true,
+  "weight": 4500}

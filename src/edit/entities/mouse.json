@@ -1,0 +1,5 @@
+{"id": "mouse",
+  "extends": ["mammal","container"],
+  "plural": "mice",
+  "living": {"hpmax": 5},
+  "weight": 0.2}

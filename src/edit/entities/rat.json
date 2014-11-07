@@ -1,0 +1,4 @@
+{"id": "rat",
+  "living": {"hpmax": 12},
+  "mamal": true,
+  "weight": 1.2}
