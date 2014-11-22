@@ -249,6 +249,8 @@ class player(human):
         what = args[1:] #arg1 from splitline
         if what == []:
             self.sendLine("Kill what?")
+        elif pMatch(what[0], self.name):
+            self.sendLine("You can't kill yourself")
         else:
             target = 0
             for entry in self.room.players:
