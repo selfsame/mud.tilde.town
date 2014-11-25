@@ -342,8 +342,10 @@ class player(human):
         self.sendLine( color('magenta')+"NAME        LEVEL       EXP         KILLS       DEATHS      PEPPERS")
         self.sendLine(                  "-------------------------------------------------------------------"+color('white'))
         for entry in self.factory.clientProtocols:
-            player = entry.player
-            self.sendLine( player.name.ljust(12)+ str(player.level).ljust(12) +str(player.exp).ljust(12) +str(player.kills).ljust(12)+str(player.deaths).ljust(12)+str(player.items.count("pepper")).ljust(12) )
+            # We only want to print logged in users
+            if entry.status == 5:
+                player = entry.player
+                self.sendLine( player.name.ljust(12)+ str(player.level).ljust(12) +str(player.exp).ljust(12) +str(player.kills).ljust(12)+str(player.deaths).ljust(12)+str(player.items.count("pepper")).ljust(12) )
 
    
 
