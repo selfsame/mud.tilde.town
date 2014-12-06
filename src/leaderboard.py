@@ -2,7 +2,7 @@
 import pickle
 import sys, os
 import json
-import player
+#import player
 
 def Mainold():
     result = {}
