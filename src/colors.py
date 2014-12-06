@@ -27,3 +27,6 @@ def background(name):
                 "cyan"  :   "\033[01;46m",
                 "white"  :   "\033[01;47m", }
     return codes[name]
+
+def wrap(s, c):
+    return c+s+color('reset')+background('reset')

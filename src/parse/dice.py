@@ -10,21 +10,29 @@ def _roll(count, sides, plus = 0):
     res += randint(1, sides)
   return res + plus
 
-def parse_dice(s):
+def is_dice(thing):
+  if isinstance(thing, (str, unicode)):
+    p = parse(thing)
+    if p:
+      return True
+  return False
+
+def parse(s):
   m = re.match(r"(?P<count>\d+)(d(?P<sides>\d+))*(\+(?P<plus>\d+))*", s)
   if m:
     res = {}
     md = m.groupdict()
     for k in md:
-      if isinstance(md[k], str):
+      if isinstance(md[k], (str, unicode)):
         res[k] = int(md[k])
       else:
         res[k] = 0
     return res
+  return false
 
 def roll(d):
-  if isinstance(d, str):
-    parsed = parse_dice(d)
+  if isinstance(d, (str, unicode)):
+    parsed = parse(d)
     if parsed:
       if parsed["sides"] == 0:
         return parsed["count"]

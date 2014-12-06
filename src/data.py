@@ -1,3 +1,5 @@
+game = False
+
 datatypes = {}
 instances = {}
 

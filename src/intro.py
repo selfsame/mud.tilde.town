@@ -1,6 +1,8 @@
 from colors import *
+import dialogue
 
-def intro(self):
+class Intro(dialogue.Dialogue):
+  def initial(self):
         tb = background('red')
         cb = background('cyan')
         intro = [   background("cyan") + color("yellow") +
@@ -20,13 +22,20 @@ def intro(self):
                     "                  #"+background("yellow")+color('yellow')+",:=. ..;. .# =..=.=. =.=.==.#; . :.=.....=."+background("cyan")+"                  " + background("blue") + color("cyan"),  
                     "^*^^*^~~~*^^-*===  ... .... === ..~~~  ~~^ ==  ~~ ^ ==  ...====^*~^^*^~*^^~^~**~",
                     " * ^*~* ^^~ ^~*  ^ ~ * ^ ^ ^ ~~ ~ ^*~^^*^~*^^~~  ^^~  * ~ ^~ ^*~^ ^~*  ^~ ^~* *~",
+                    " ^ ~ . ~ .^.^ "+color('magenta')+"(1)login"+ color("cyan")+"  ^ .~ ^* .~ "+color('magenta')+"(2)quit"+ color("cyan")+"  *. ^ ~ .* "+color('magenta')+"(3)who"+color('cyan')+" * ~. ^  ^ . ^ ~ ",
                     "^ ^^ ^~~ *^^ ^^~ ^~*  .. ^^~ ^~* .~ ~~ ^^~ ^~* *~^^*^~*^^ . ^^~ *~^^ ^~*^ ~^~* ~",
-                    background("black")]
-        for entry in intro:
-            self.sendLine(entry)
-        self.sendLine("     Welcome to " + color("green") + "IslandsMUD" + color("white") + "!" )
-        self.sendLine("     There are "+str( len( self.factory.clientProtocols ) )+" people online.")
-        self.sendLine("     Type HELP in game for commands")
-        self.sendLine("     ------------------------------------------")
-        self.sendLine("please enter your name:")
-        self.transport.write(">")
+
+                                        background("reset")]
+        return "\r\n".join(intro)
+  
+  def start(self, s):
+    self.done = True
+    if s == "1":
+      return self.con.add_dialogue(dialogue.Login(self.con))
+    if s == "2":
+      return  self.con.close_connection("goodbye!")
+    if s == "3":
+      self.done = False
+      return "0 players online"
+    self.done = False
+    return color('red')+"unknown choice, try again"+color('reset')

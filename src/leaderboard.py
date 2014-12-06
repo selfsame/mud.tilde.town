@@ -4,7 +4,7 @@ import sys, os
 import json
 import player
 
-def Main():
+def Mainold():
     result = {}
     peppers = {}
     for subdir, dirs, files in os.walk("mud.tilde.town/src/players"):
@@ -24,5 +24,7 @@ def Main():
         print t[0]+"            "+str(t[1])+"       "+peppers[t[0]]
     print "</code></pre></body></html>"
 
+def Main():
+    print "<p>broke for the short term :(</p>"
 
 if __name__== '__main__' :Main()

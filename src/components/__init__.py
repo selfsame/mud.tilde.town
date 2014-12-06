@@ -2,8 +2,9 @@ from methods import *
 import construct as _c
 import serialize as _s
 import update as _u
+import actions as _a
 import make as _make
-from make import instance, load
+from make import instance, load, register
 
 def construct(s, d):
     f = _c._symbol(s)
@@ -20,11 +21,14 @@ def serialize(s, d):
 def update(s, d, delta):
     f = _u._symbol(s)
     if f:
-        f(d, delta)
+        return f(d, delta)
 
-def test():
-    load("edit")
-    whale = instance("whale")
-    mouse = instance("mouse")
-    print whale
-    print mouse
+def action(a, k, e, arg1):
+    f = _a._symbol(a+"_"+k)
+    if f:
+      return f(e, arg1)
+
+def act(v, e, arg1):
+  for k in e:
+    f =  action(v, k, e, arg1)
+

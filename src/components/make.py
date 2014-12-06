@@ -4,16 +4,35 @@ import uuid
 from data import *
 import components
 
-def load_json_comp(path):
+def decode_strings(ob):
+  res = {}
+  for k in ob:
+    v = ob[k]
+    if isinstance(k, unicode):
+      k = str(k)
+    if isinstance(v, unicode):
+      v = str(v)
+    res[k] = v
+  return res
+
+def load_json(path):
     file = open(path)
     try:
         fstr = file.read()
-        res = json.loads(fstr)
+        res = json.loads(fstr, object_hook=decode_strings)
         file.close()
         return res
     except:
         file.close()
         raise
+
+def save_json(data, path):
+  with open(path, 'w') as f:
+    try:
+      j = json.dump(data, f, encoding="utf-8")
+      return True
+    except:
+      return False
 
 def compstruct(d):
     res = {}
@@ -32,7 +51,7 @@ def load(path):
             if mime == "json":
                 fpath = subdir + "/" + file
                 print "loading " + fpath + "..."
-                data = load_json_comp(fpath)
+                data = load_json(fpath)
                 if "id" in data:
                     if file == "_base_.json": 
                       is_base = True
@@ -59,8 +78,15 @@ def load(path):
                     bi = -2 if is_base else -1
                     if len(found_bases) > bl:
                         ex = data.get("extends") or []
+                        if "room_base" in found_bases:
+                          data["room"] = True
                         data["extends"] = [found_bases[bi]] + ex
                     datatypes[ustr] = data
+
+                    if data.get('room') == True:
+                      register(instance(ustr))
+
+
 
 def instance(ustr):
     nuuid = uuid.uuid1().hex
@@ -82,7 +108,8 @@ def register(thing):
         uid = thing["uuid"]
         instances[uid] = thing
         if "room" in thing:
-            rooms[uid] = thing
+            #rooms use their id instead of uuid, assumed unique instances
+            rooms[thing["id"]] = thing
         if "object" in thing:
             objects[uid] = thing
         if "entity" in thing:
@@ -93,11 +120,11 @@ def delete(thing):
         uid = thing["uuid"]
         if uid in instances:
             del instances[uid]
-        if uid in rooms:
-            del rooms[uid]
+        if thing["id"] in rooms:
+            del rooms[thing["id"]]
         if uid in objects:
             del objects[uid]
         if uid in entities:
             del entities[uid]
-
+            
 

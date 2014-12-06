@@ -5,50 +5,76 @@ from twisted.internet import reactor, task
 from twisted.internet.protocol import ServerFactory
 from twisted.protocols.basic import LineOnlyReceiver
 
+import dialogue as d
 import time
-import player
-import functions
-from login import login
-from intro import intro
-from create import create
+from intro import Intro
+import parse
+import components
+import data
+from game import *
 
 class MUDProtocol(LineOnlyReceiver):
     ## Connection object, will be hooked up to player object
     def __init__(self):
-        self.status = 0 #used for login state machine
-        self.safename = "guest"
-        self.password = "guest"
-        self.new = 0
-        self.dopple = 0
+        self.player = False
+        self.account = False
+        self.idle = 0
 
+    def echo(self, mode):
+        if not mode:
+          self.transport.write('\xff\xfb\x01')
+        else:
+          self.transport.write('\xff\xfc\x01')
 
-    def lineReceived(self, line):
-        if self.status < 3: #checking name / password
-            login(self, line)
-        elif self.status == 3: #creating a character
-            if create(self.player, line, self.new): #if create dialogue finished
-                self.status = 4
-        elif self.status == 4:
+    def clear(self):
+        self.transport.write('\033[2J')
 
+    def close_connection(self, message="disconnecting"):
+        self.sendLine(message)
+        self.transport.loseConnection()
+        
+    def save(self):
+        if self.account:
+          path = './players/'+self.account['name']+'.json'
+          return components.make.save_json(self.account, path)
+    
+    def add_dialogue(self, dialogue):
+        self.dialogue = dialogue
+        res = dialogue.initial()
+        if isinstance(res, (str, unicode)):
+                self.sendLine(res)
 
-            self.factory.playerObjects.append(self.player)
-            self.factory.broadOthers(self, "\033[01;35m" + self.player.name+ " has logged in." + "\033[01;37m")
-            self.sendLine("\033[01;35m" + "Welcome to the world, "+ self.player.name + "\033[01;37m")
-            self.status = 5
-            self.player.updateRoom()
-            print "ClientProtocols: ", len( self.factory.clientProtocols )
-
-        elif self.status == 5: #now in game
-            self.player.handle(line)
+    def lineReceived(self, l):
+        self.idle = 0
+        line = parse.strip_escape_chars(l)
+        if self.dialogue:
+            res = self.dialogue.input(line)
+            if res == False or self.dialogue.done == True:
+                self.dialogue = False
+            if isinstance(res, (str, unicode)):
+                self.sendLine(res)
+        elif self.player:
+            self.player.input(line)
+            self.transport.write(">")
 
     def sendLine(self, line):
         self.transport.write(line+"\r\n")
 
     def connectionMade(self):
-        print self.factory
-        intro(self)
         self.factory.clientProtocols.append(self)
+        self.add_dialogue(Intro(self))
     
+    def update(self, delta):
+      self.idle += delta
+      if self.idle > 300:
+        self.close_connection("timed out")
+      if self.player:
+        self.player.update(delta)
+  
+    def enter_game(self, data):
+      self.player = Player(self, data)
+      self.factory.broadcast(data['firstname']+" has entered the game")
+
 
 class ChatProtocolFactory(ServerFactory):
 
@@ -56,10 +82,7 @@ class ChatProtocolFactory(ServerFactory):
 
     def __init__(self):
         self.clientProtocols = []
-        self.playerObjects = []
-        self.islands = functions.parseIslands("/edit/islands/", self)
-        self.monsters = functions.parseMonsters("/edit/entities/")
-        self.items = functions.parseItems("/edit/items/")
+        self.last_time = time.time()
         loopingCall = task.LoopingCall(self.timeDisbatch)
         loopingCall.start(.5)
 
@@ -75,20 +98,20 @@ class ChatProtocolFactory(ServerFactory):
                 client.sendLine(mesg)
 
     def timeDisbatch(self):
-        for entry in self.playerObjects:
-                entry.update(time.time())
-        for entry in self.islands:
-            for item in self.islands[ entry ].roomlist:
-                self.islands[ entry ].roomlist[ item ].update(time.time())
+        delta = time.time() - self.last_time
+        self.last_time = time.time()
+        for client in self.clientProtocols:
+          client.update(delta)
+                  #for entry in self.playerObjects:
+        #        entry.update(time.time())
+        return True
 
 def Main():
     port = int(sys.argv[1])
     print "Starting IslandsMUD DEVELOPMENTAL server"
+    data.game = Game()
     factory = ChatProtocolFactory()
     reactor.listenTCP(port, factory)
-    # Create the players directory incrementally, useful if this is the first
-    # time the MUD is run.
-    functions.mkdir_p('./players')
     reactor.run()
 
 if __name__== '__main__' :Main()
