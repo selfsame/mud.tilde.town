@@ -36,7 +36,8 @@ def save(a):
 @action
 @given(player, string)
 def talk(a, b):
-  report(name(a)+" says: ""{#yellow}"+b+"{#reset}")
+  say("You say '{#yellow}"+b+"{#reset}'.")
+  report_to(location(a), name(a)+" says: ""{#yellow}"+b+"{#reset}")
 
 
 @action
@@ -60,7 +61,10 @@ def walk(a, b):
     if b == k:
       v = exits[k]
       r = data.rooms.get(v)
-      return act("move", a, r)
+      if act("move", a, r):
+        act("leave", loc, a, k)
+        act("arrive", a, r)
+
 
 @action
 @given(player, thing)
@@ -130,17 +134,14 @@ def take(a, b):
   relation = act("scope_relation", b, a)
   if act("move", b, a):
     say("you pick up the ", name(b)+" from"+relation+".\r\n")
+    report_to(location(a), act("indefinate_name", a), "picks up the", name(b)+" from"+relation+".\r\n")
 
-@after
-@given(entity, a("object"))
-def take(a, b):
-  report(act("indefinate_name", a), "picks up", act("indefinate_name", b)+".")
 
 @after
 @given(entity, thing)
 def look(a, b):
   relation = act("scope_relation", b, a)
-  report(act("indefinate_name", a), "looks at", act("indefinate_name", b)+relation+".")
+  report_to(location(a), act("indefinate_name", a), "looks at", act("indefinate_name", b)+relation+".")
 
 @action
 @given(player)
@@ -152,6 +153,7 @@ def inventory(a):
 def drop(a, b):
   if act("move", b, location(a)):
     say("you drop the ", name(b)+".\r\n")
+    report_to(location(a), act("indefinate_name", a), "drops the", name(b)+".\r\n")
 
 @action
 @given(player, a("located"), container)
@@ -159,6 +161,7 @@ def drop(a, b, c):
   if act("move", b, c):
     relation = act("scope_relation", c, a)
     say("you put the ", name(b)+" into "+act("indefinate_name", c)+relation+".\r\n")
+    report_to(location(a), act("indefinate_name", a), "puts the ", name(b)+" into "+act("indefinate_name", c)+relation+".\r\n")
 
 
 @action

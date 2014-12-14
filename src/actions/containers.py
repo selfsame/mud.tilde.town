@@ -17,7 +17,7 @@ def look(p, r):
   say("It's completely empty.")
 
 @before
-@given(a(non(open), container))
+@given(a(non(open), a(non(entity), container)))
 def printed_name(e):
   return "closed "
 
@@ -29,10 +29,10 @@ def printed_name(e):
 @after
 @given(a(open, container))
 def indefinate_name(e):
-  return "(containing "+act("list_contents", e)+")"
+  return "({#black}containing "+act("list_contents", e)+"{#reset})"
 
 @after
-@given(a(open, empty, container))
+@given(a(open, empty, container, non(entity)))
 def indefinate_name(e):
   return "(empty)"
 

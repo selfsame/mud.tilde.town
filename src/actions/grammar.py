@@ -80,5 +80,12 @@ def indefinate_name(e):
   noun = "".join(act_stack("printed_name", e))
   return str(act("indefinate_article", noun))+ noun
 
+@action
+@given(player)
+def indefinate_name(e):
+  noun = "".join(act_stack("printed_name", e))
+  return noun.title()
+
+
 
 

@@ -1,6 +1,6 @@
 {"id":"treehouse",
 "name":"a small {#green}treehouse{#reset}.",
-"desc":"It's tiny and crudely built.",
+"desc":"It's tiny and crudely built, but it's got a decent view of the jungle surrounding the visitor center.",
 "contents":[
 	{"id":"rat"}, 
 	{"id":"chest", 

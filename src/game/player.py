@@ -43,6 +43,7 @@ class Player():
     self.con.sendLine(s)
 
   def input(self, line):
+    data.subject = self.data
     directive = determine(line)
     print directive
     if len(directive) > 0:
@@ -52,7 +53,6 @@ class Player():
       return
     if len(directive) == 1:
       print "single verb statement:", verb
-      data.subject = self.data
       act(verb, self.data)
       data.subject = {}
       return
@@ -136,14 +136,22 @@ def get_scope(entity):
   print "SCOPE", map(name, res)
   return res
 
-def scope_matches(scope, s):
+def not_none(e):
+  if e != None: return True
+  return False
+
+def scope_matches(_scope, s):
+  scope = filter(not_none, _scope)
   if not string(s): return []
   res = []
+  regex = "thing"
   for e in scope:
     if string(e):
       regex = e
-    else:
+    elif e:
       regex = e.get('regex')
+    else:
+      print "Nonetype?", e, scope
     if string(regex):
       if re.match(regex, s):
         res.append(e)

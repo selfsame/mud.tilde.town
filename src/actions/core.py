@@ -171,7 +171,8 @@ def report_to(room, *args):
   observers = map(from_uid, contents_of(room))
   for actor in observers:
     if actor.get("player"):
-      actor["player"].send(template(" ".join(args)))
+      if data.subject != actor:
+        actor["player"].send(template(" ".join(args)))
 
 
 

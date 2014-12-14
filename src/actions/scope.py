@@ -63,6 +63,7 @@ def check_scope(a, c):
 @action
 @given(entity, container)
 def check_scope(a, b):
+  if player(a) and player(b) and a != b: return []
   res = [b]
   for item in contents_of(b):
     f = act("check_scope", a, item)
