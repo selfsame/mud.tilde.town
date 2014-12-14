@@ -1,5 +1,7 @@
 #!/usr/bin/env/python
 import re
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from colors import color, background
 
 def sentances(s):
@@ -15,7 +17,7 @@ def blocks(sl):
         print "block: " + s[0:-1]
 
 def separate(pattern, s):
-  rs = re.findall(pattern, s)
+  rs = re.findall(pattern, s) + [""]
   res = re.split(pattern, s)
   return (rs, res)
 
@@ -31,6 +33,8 @@ def evalbars(l):
     res = s[1:-1]
     if res[0:1] == "#":
       res = color(res[1:])
+    elif res[0:1] == "%":
+      res = background(res[1:])
     resl.append(res)
   return resl
 
@@ -46,6 +50,10 @@ def Main():
   if p:
     b = blocks(p)
     print b
-  print handlebars("The {#green}cat{#reset} likes {friend of this}, {#red}but not{#white} {enemy of this}.")
+  print handlebars("The cat")
+  print separate('\{[^\{\}]*\}', "Just a simple {#green}string")
 
 if __name__== '__main__' :Main()
+
+
+

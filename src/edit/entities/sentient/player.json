@@ -1,2 +1,2 @@
 {"id":"player",
-  "sentient":true}
+"living": {"hpmax": "4d4"}}

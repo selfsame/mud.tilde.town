@@ -1,8 +1,10 @@
-import make
+import core.make as make
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import parse
 import data
+import random
+import components
 
 """
 component constructor functions.  
@@ -15,6 +17,7 @@ def _symbol(s):
     return globals()[s]
   except:
     return False
+
 
 def extends(d):
     res = {}
@@ -30,8 +33,19 @@ def living(d):
     d['hpmax'] = hpmax
     return d
 
-def room(d):
-  return {"contents":[]}
+def contents(d):
+  #we need a new list, as d is a reference
+  res = []
+  for e in d:
+    if e.get("id"):
+      c_e = components.construct(e)
+      new = components.instance(e.get("id"))
+      #we merge the conent entry onto the instance
+      merged = dict(new.items() + c_e.items())
+      print "MERGED", merged
+      components.register(merged)
+      res.append(merged.get("uuid"))
+  return res
 
 def exits(d):
   res = {}
@@ -39,6 +53,11 @@ def exits(d):
     dtype = data.datatypes.get(d[ustr])
     if dtype:
       res[ustr] = d[ustr]
-  print res
   return d
 
+def inventory(d):
+  return {"contents":[]}
+
+def acting(d):
+  d["ap"] = random.randint(20,50)
+  return d

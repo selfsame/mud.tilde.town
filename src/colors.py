@@ -9,6 +9,8 @@ def color(name):
                 "red"  :   "\033[01;31m",
                 "green"  :   "\033[01;32m",
                 "yellow"  :   "\033[01;33m",
+                "orange" : "\033[48;5;266m",
+                "teal" : "\033[48;5;34m",
                 "magenta"  :   "\033[01;35m",
                 "cyan"  :   "\033[01;36m",
                 "white"  :   "\033[01;37m", }
@@ -27,6 +29,8 @@ def background(name):
                 "cyan"  :   "\033[01;46m",
                 "white"  :   "\033[01;47m", }
     return codes[name]
+
+special = {"face": "\02", "heart": "\03", "right": "\020", "down": "\037", "up": "\036",}
 
 def wrap(s, c):
     return c+s+color('reset')+background('reset')

@@ -1,4 +1,0 @@
-{"id":"treehouse",
-"name":"A small treehouse.",
-"desc":"It's tiny and crudely built.",
-"exits": {"down": "lobby"}}

@@ -51,11 +51,11 @@ class Login(Dialogue):
       print ("checking for "+self.name+".sav")
       self.account = components.make.load_json('./players/'+self.name+'.json')
       self.state = self.verify
-      self.con.echo(False)
+      #self.con.echo(False)
       return "welcome back "+self.name+"\r\nEnter your password:"
     except:
       self.state = self.choose_pass
-      self.con.echo(False)
+      #self.con.echo(False)
       return "New account, enter your desired password (4+chars):"
 
   def initial(self):
@@ -66,7 +66,7 @@ class Login(Dialogue):
     if verify(self.account['password'], self.account['salt'] + passw):
       self.done = True
       self.con.account = self.account
-      self.con.echo(True)
+      #self.con.echo(True)
       return self.con.add_dialogue(Account(self.con))
     else:
       self.con.close_connection(errorize("INCORRECT - CLOSING CONNECTION"))
@@ -74,7 +74,7 @@ class Login(Dialogue):
   def choose_pass(self, s):
     if self.passw:
       if s == self.passw:
-        self.con.echo(True)
+        #self.con.echo(True)
         account = {'name':self.name, 'salt':base64.b64encode(os.urandom(16)), 'characters':[], 'email':False}
         account['password'] = hashlib.sha512(account['salt'] + self.passw).hexdigest()
         if components.make.save_json(account, './players/'+self.name+'.json'):
@@ -123,10 +123,10 @@ class Account(Dialogue):
                 self.done = True
                 self.con.clear()
                 self.con.sendLine(successize("logging in with "+choice['firstname']))
-                
+                self.con.enter_game(idx)
             except:
                 return "invalid character choice"
-            self.con.enter_game(choice)
+            
             return False
         return "invalid choice"
 

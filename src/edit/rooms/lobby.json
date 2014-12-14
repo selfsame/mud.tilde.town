@@ -1,4 +1,0 @@
-{"id":"lobby",
-"name":"A comfortable lobby",
-"desc":"Several lounge chairs sit around a fire",
-"exits": {"east":"r1", "up": "treehouse"}}

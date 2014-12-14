@@ -1,7 +1,0 @@
-{"id":"container",
-  "extends":["object"],
-  "container":
-    {"capacity":200,
-     "contents":[]},
-  "open":true,
-  "opaque":true}

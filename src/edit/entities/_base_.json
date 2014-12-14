@@ -1,3 +1,6 @@
 {"id":"entity_base",
+ "desc":"There is nothing special about it.",
  "entity":true,
- "located":false}
+ "located":false,
+ "living": {"hpmax": "3d4"},
+ "acting":{"ap":0}}

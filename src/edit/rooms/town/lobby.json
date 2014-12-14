@@ -1,0 +1,5 @@
+{"id":"lobby",
+"room":true,
+"name":"a comfortable lobby",
+"desc":"A carpeted room with potted {#green}plants{#reset} and {#black}leather{#reset} lounge chairs. A {%red}fire{%yellow}place{%reset} is crackeling in the corner.",
+"exits": {"east":"r1", "up": "treehouse"}}

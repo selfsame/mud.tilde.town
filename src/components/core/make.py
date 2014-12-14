@@ -1,8 +1,10 @@
 import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 import json
 import uuid
 from data import *
 import components
+
 
 def decode_strings(ob):
   res = {}
@@ -34,22 +36,19 @@ def save_json(data, path):
     except:
       return False
 
-def compstruct(d):
-    res = {}
-    for k in d:
-        comp = components.construct(k, d[k])
-        res[k] = comp
-    return res
+
+
 
 
 def load(path):
     bases = {}
     pathname = os.path.dirname(sys.argv[0]) + path
     for subdir, dirs, files in os.walk(pathname):
+        files.sort()
         for file in files:
             mime = file.split(".")[-1]
             if mime == "json":
-                fpath = subdir + "/" + file
+                fpath = subdir + os.sep + file
                 print "loading " + fpath + "..."
                 data = load_json(fpath)
                 if "id" in data:
@@ -63,12 +62,13 @@ def load(path):
                         print "duplicate data for " + ustr
                     if is_base:
                         bases[subdir] = data["id"]
+                        data["base"] = True
                     
                     # find bases by iterating the paths
-                    sp = subdir.split("/")
+                    sp = subdir.split(os.sep)
                     found_bases = []
                     for i in range(len(sp)):
-                        kp = "/".join(sp[0:i+1])
+                        kp = os.sep.join(sp[0:i+1])
                         if kp in bases:
                             found_bases.append(bases[kp])
                     # if base data in the path, add the last base to 
@@ -79,12 +79,13 @@ def load(path):
                     if len(found_bases) > bl:
                         ex = data.get("extends") or []
                         if "room_base" in found_bases:
-                          data["room"] = True
+                            data["room"] = True
                         data["extends"] = [found_bases[bi]] + ex
+                        
                     datatypes[ustr] = data
 
                     if data.get('room') == True:
-                      register(instance(ustr))
+                        register(instance(ustr))
 
 
 
@@ -92,8 +93,8 @@ def instance(ustr):
     nuuid = uuid.uuid1().hex
     if ustr in datatypes:
         template = datatypes[ustr]
-        res = compstruct(template)
-        res["uuid"] = nuuid
+        res = components.construct(template)
+        res["uuid"] = ustr+nuuid
         if "extends" in res:
             exres = dict(res["extends"].items() + res.items())
             del exres["extends"]
@@ -114,6 +115,7 @@ def register(thing):
             objects[uid] = thing
         if "entity" in thing:
             entities[uid] = thing
+
 
 def delete(thing):
     if "uuid" in thing:

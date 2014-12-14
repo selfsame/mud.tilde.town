@@ -1,3 +1,6 @@
 {"id":"room_base",
   "room":true,
-  "name":"An empty room."}
+  "name":"An empty room.",
+  "desc":"Nothing special.",
+  "contents":[],
+  "exits": {}}

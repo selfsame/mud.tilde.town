@@ -9,19 +9,20 @@ import dialogue as d
 import time
 from intro import Intro
 import parse
-import components
 import data
 from game import *
+from actions import *
 
 class MUDProtocol(LineOnlyReceiver):
     ## Connection object, will be hooked up to player object
     def __init__(self):
         self.player = False
         self.account = False
+        self.character_idx = 0
         self.idle = 0
 
     def echo(self, mode):
-        if not mode:
+        if mode == False:
           self.transport.write('\xff\xfb\x01')
         else:
           self.transport.write('\xff\xfc\x01')
@@ -55,7 +56,7 @@ class MUDProtocol(LineOnlyReceiver):
                 self.sendLine(res)
         elif self.player:
             self.player.input(line)
-            self.transport.write(">")
+            self.player.prompt()
 
     def sendLine(self, line):
         self.transport.write(line+"\r\n")
@@ -66,14 +67,19 @@ class MUDProtocol(LineOnlyReceiver):
     
     def update(self, delta):
       self.idle += delta
-      if self.idle > 300:
-        self.close_connection("timed out")
       if self.player:
         self.player.update(delta)
+      if self.idle > 100:
+        if self.player:
+            self.player._quit()
+        else:
+            self.close_connection("timed out")
+
   
-    def enter_game(self, data):
-      self.player = Player(self, data)
-      self.factory.broadcast(data['firstname']+" has entered the game")
+    def enter_game(self, idx):
+        self.character_idx = idx
+        self.player = Player(self, self.account["characters"][idx])
+        self.factory.broadcast(data['firstname']+" has entered the game")
 
 
 class ChatProtocolFactory(ServerFactory):
@@ -102,12 +108,13 @@ class ChatProtocolFactory(ServerFactory):
         self.last_time = time.time()
         for client in self.clientProtocols:
           client.update(delta)
-                  #for entry in self.playerObjects:
-        #        entry.update(time.time())
+        data.game.update(delta)
         return True
 
 def Main():
-    port = int(sys.argv[1])
+    port = 5071
+    if len(sys.argv) > 1: 
+        port = int(sys.argv[1])
     print "Starting IslandsMUD DEVELOPMENTAL server"
     data.game = Game()
     factory = ChatProtocolFactory()

@@ -1,0 +1,5 @@
+{"id" :"coin", 
+"name":"coin",
+"extends":[],
+"color":"yellow",
+"desc": "It's shiney!"}

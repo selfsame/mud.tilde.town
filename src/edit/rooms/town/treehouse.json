@@ -1,0 +1,13 @@
+{"id":"treehouse",
+"name":"a small {#green}treehouse{#reset}.",
+"desc":"It's tiny and crudely built.",
+"contents":[
+	{"id":"rat"}, 
+	{"id":"chest", "name":"chest",
+	"contents":[
+		{"id": "book", "name":"book","desc":"a thick {#red}red{#reset} book", "color":"red"},
+		{"id":"coinpurse"},
+		{"id":"coin"},
+		{"id":"coin"},
+		{"id":"coin"}]}],
+"exits": {"down": "lobby"}}

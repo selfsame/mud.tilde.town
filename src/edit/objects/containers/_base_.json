@@ -1,0 +1,4 @@
+{"id":"container",
+  "name":"base",
+  "extends":["object"],
+  "contents":[]}
