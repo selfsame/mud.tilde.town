@@ -1,13 +1,57 @@
-A MUD for tilde.town.
-====================
+mud.tilde.town
+==============
 
-This is a python MUD I had originally wrote for LD17 
-http://ludumdare.com/compo/ludum-dare-17/?action=preview&uid=1066
+![](http://www.selfsamegames.com/screens/ttmud.png)
 
-It is flavored after http://en.wikipedia.org/wiki/Mordor_(MUD)
-but is just a small set of the basics.
+***A python MUD influenced by Inform7***
 
-The theme of the MUD is pirate islands, but could easily change.
+## component entity system:
+* data based game objects, loaded from json.
+* Composable entitiy dictionaries can use multiple inheritances, or merge and recombine as desired.
+* Constructing/serializing component functions easily declared
+* Can be constructed dymanically
+
+```json
+{"id":"treehouse",
+"name":"a small {#green}treehouse{#reset}.",
+"desc":"It's tiny and crudely built.",
+"exits": {"down": "lobby"}
+"contents":[
+	{"id":"chest", "name":"chest",
+	"contents":[
+		{"id": "note", "name":"memo",
+		 "desc":"The 'contents' component will merge partial data with an instance of the full 'id' entry"},
+		{"id":"coinpurse",
+		 "contents":[{"id":"coin"},
+					 {"id":"coin"},
+					 {"id":"coin"}]}]}]}
+```
+
+## Inform7 style predicate/arity dispatch 'action' functions:
+* Actions are a family of function lifecycle variations (check, before, during, after)
+* Action calls are dipatched by arg arity, lifecycle version, and boolean functions called on the arguments provided.
+* python decorators hold the declarations
+* Rich behavior trees are easily created by covering basic functionality then narrowing down edge cases to augment/ovveride
+
+```python
+@after
+@given(player, container)
+def look(p, r):
+  say("Inside it you see "+ act("list_contents", p, r)+ ".")
+
+@after
+@given(player, a(empty, container))
+def look(p, r):
+  say("It's completely empty.")
+```
+
+## Schemaless
+* rooms, objects, and entities are arbitrary components for the demo library
+* Game class pumps updates to some component(s), which propigate the game loop via Actions
+* Player class handles login authentication and links into the game system with entity proxies
+
+
+
 
 Connecting
 ===========
@@ -30,4 +74,8 @@ and run
 python server.py {port number}
 ```
 where port number is an open port (try something between 5000-9000)
+
+WIKI
+======
+[https://github.com/selfsame/mud.tilde.town/wiki](https://github.com/selfsame/mud.tilde.town/wiki)
 

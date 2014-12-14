@@ -3,7 +3,8 @@
 "desc":"It's tiny and crudely built.",
 "contents":[
 	{"id":"rat"}, 
-	{"id":"chest", "name":"chest",
+	{"id":"chest", 
+	 "name":"chest",
 	"contents":[
 		{"id": "book", "name":"book","desc":"a thick {#red}red{#reset} book", "color":"red"},
 		{"id":"coinpurse"},

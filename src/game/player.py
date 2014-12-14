@@ -127,7 +127,7 @@ class Player():
     self.con.close_connection("QUITTING!")
   def _quit(self):
     act("quit", self.data)
-    del self
+
 
 def get_scope(entity):
   "returns a list of entity instances in scope of the actor"
