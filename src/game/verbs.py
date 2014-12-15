@@ -106,5 +106,5 @@ tests = ["look", "look at coin in the box", "take the lamp inside of the box", "
 		"put the second coin inside of the third cup"]
 #"close the cabinet inside of the coach.", 
 #"unlock the first locker with the second key", "put the coin inside the bag", "say haha say hell man. this is great!"]
-print map(determine, tests)
+#print map(determine, tests)
 

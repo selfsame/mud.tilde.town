@@ -150,5 +150,3 @@ class Character(Dialogue):
             self.con.save()
             return self.con.add_dialogue(Account(self.con))
         return errorize("invalid choice, try again:")
-
-

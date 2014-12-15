@@ -123,8 +123,10 @@ class Player():
   def quit(self):
     if self.data in data.scope: data.scope.remove(self.data)
     if data.subject == self.data: data.subject = {}
+    act("delete", self.data)
     self.con.factory.broadcast(color("magenta")+self.data['firstname']+" has disconnected."+color("reset"))
     self.con.close_connection("QUITTING!")
+
   def _quit(self):
     act("quit", self.data)
 

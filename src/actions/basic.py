@@ -103,9 +103,10 @@ def move(a, b):
 def delete(e):
   print "deleting uid from holding room"
   loc = location(e)
-  uuid = e.get("uuid")
-  if uuid in loc['contents']:
-    loc['contents'].remove(uuid)
+  if room(loc):
+    uuid = e.get("uuid")
+    if uuid in loc['contents']:
+      loc['contents'].remove(uuid)
 
 @action
 @given(thing)

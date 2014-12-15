@@ -42,7 +42,6 @@ def contents(d):
       new = components.instance(e.get("id"))
       #we merge the conent entry onto the instance
       merged = dict(new.items() + c_e.items())
-      print "MERGED", merged
       components.register(merged)
       res.append(merged.get("uuid"))
   return res
