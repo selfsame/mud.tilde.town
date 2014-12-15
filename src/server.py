@@ -70,7 +70,7 @@ class MUDProtocol(LineOnlyReceiver):
       self.idle += delta
       if self.player:
         self.player.update(delta)
-      if self.idle > 80:
+      if self.idle > 800:
         if self.player:
             self.idle = 300
             self.player._quit()
