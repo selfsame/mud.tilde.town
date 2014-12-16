@@ -34,6 +34,7 @@ def from_uid(s):
     if r: return r
   elif isinstance(s, dict):
     return s
+  print "NO FROM_UID FOR ", s
 
 
 def contents_of(r):
@@ -53,6 +54,11 @@ def location(e):
   room = data.rooms.get(r)
   if room: return room
   return from_uid(r)
+
+def path(e):
+  l = e.get('located')
+  if l: return [l]+ path(from_uid(l))
+  return []
 
 
 

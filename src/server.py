@@ -33,6 +33,7 @@ class MUDProtocol(LineOnlyReceiver):
     def close_connection(self, message="disconnecting"):
         self.sendLine(message)
         self.transport.loseConnection()
+        del self
         
     def save(self):
         if self.account:
@@ -69,11 +70,12 @@ class MUDProtocol(LineOnlyReceiver):
       self.idle += delta
       if self.player:
         self.player.update(delta)
-      if self.idle > 500:
+      if self.idle > 800:
         if self.player:
+            self.idle = 300
             self.player._quit()
-        else:
-            self.close_connection("timed out")
+        self.close_connection("timed out")
+
 
   
     def enter_game(self, idx):
@@ -115,7 +117,7 @@ def Main():
     port = 5071
     if len(sys.argv) > 1: 
         port = int(sys.argv[1])
-    print "Starting IslandsMUD DEVELOPMENTAL server"
+    print "Starting mud.tilde.town server"
     data.game = Game()
     factory = ChatProtocolFactory()
     reactor.listenTCP(port, factory)

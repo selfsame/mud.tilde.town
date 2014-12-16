@@ -83,7 +83,7 @@ def indefinate_name(e):
 @action
 @given(player)
 def indefinate_name(e):
-  noun = "".join(act_stack("printed_name", e))
+  noun = act("printed_name", e)
   return noun.title()
 
 

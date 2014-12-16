@@ -19,15 +19,16 @@ def line_prompt(a):
 @action
 @given(player)
 def quit(a):
+  print "quit(player)"
   act("save", a)
   player_inst = a.get("player")
-  act("delete", a)
   player_inst.quit()
 
 
 @action
 @given(player)
 def save(a):
+  print "save(player)"
   if a["player"].save(components.serialize(a)):
     say("{#magenta}GAME SAVED{#reset}")
   else:
@@ -158,6 +159,11 @@ def drop(a, b):
 @action
 @given(player, a("located"), container)
 def drop(a, b, c):
+  p = path(c)
+  print "PATH", map(name, map(from_uid, p))
+  if b["uuid"] in p or b["id"] in p:
+    say("you can't put something inside of itself.")
+    return False
   if act("move", b, c):
     relation = act("scope_relation", c, a)
     say("you put the ", name(b)+" into "+act("indefinate_name", c)+relation+".\r\n")

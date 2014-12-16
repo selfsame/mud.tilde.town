@@ -84,8 +84,7 @@ def load(path):
                         
                     datatypes[ustr] = data
 
-                    if data.get('room') == True:
-                        register(instance(ustr))
+                    
 
 
 
@@ -118,6 +117,8 @@ def register(thing):
 
 
 def delete(thing):
+    if not thing or thing == None: return
+    if not isinstance(thing, dict): return
     if "uuid" in thing:
         uid = thing["uuid"]
         if uid in instances:

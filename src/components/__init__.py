@@ -27,12 +27,9 @@ def construct(d):
 
 def serialize(d):
 	res = {}
-	try:
-		for k in d:
-			comp = _serialize(k, d[k])
-			res[k] = comp
-	except:
-		print "ERROR SERIALIZING:", d
+	for k in d:
+		comp = _serialize(k, d[k])
+		res[k] = comp
 	return res
 
 
