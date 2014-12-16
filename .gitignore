@@ -5,8 +5,4 @@
 *.swo
 log.txt
 src/players/*.json
-.idea
-*.egg-info
-*/__pycache__
-dist
-build
+
