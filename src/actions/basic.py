@@ -7,7 +7,7 @@ import random
 
 
 @action
-@given(container)
+@given(holder)
 def init(r):
   print "init:", name(r)
   cont = contents_of(r)
@@ -38,13 +38,14 @@ def update(a, delta):
 @given(entity, room)
 def walk(a, b):
   loc = location(a)
-  exits = the(loc,"exits")
-  exit = False
-  for k in exits:
-    if exits[k] == the(b, "id"):
-      exit = k
   if act("move", a, b):
-    act("leave", loc, a, exit)
+    if loc:
+      exits = the(loc,"exits")
+      exit = False
+      for k in exits:
+        if exits[k] == the(b, "id"):
+          exit = k 
+      act("leave", loc, a, exit)
     act("arrive", a, b)
     return True
   return False
@@ -69,7 +70,19 @@ def printed_name(a):
 
 
 @action
-@given(a('uuid', thing), a('contents'))
+@given(a('uuid', thing), holder)
+def move(a, b):
+  uid = the(a, 'uuid')
+  dest = the(b, 'contents')
+  try:
+    dest.append(uid)
+    return True
+  except:
+    print "fail move:", uid, dest
+    return False
+
+@action
+@given(a('located', 'uuid', thing), holder)
 def move(a, b):
   uid = the(a, 'uuid')
   loc = location(a)
@@ -85,7 +98,7 @@ def move(a, b):
     return False
 
 @after
-@given(a('uuid', thing), container)
+@given(a('uuid', thing), holder)
 def move(a, b):
   a['located'] = b['uuid']
 
@@ -115,7 +128,7 @@ def delete(e):
   components.delete(e)
 
 @action
-@given(container)
+@given(holder)
 def delete(e):
   print "deleting ",name(e) ,"container contents"
   map(components.delete, contents_of(e))

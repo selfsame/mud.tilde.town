@@ -60,3 +60,9 @@ def inventory(d):
 def acting(d):
   d["ap"] = random.randint(20,50)
   return d
+
+def spawning(d):
+  res = {"rate":100, "max":5, "instances":[]}
+  res = dict(res.items() + d.items())
+  res["timer"] = 0
+  return res

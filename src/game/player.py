@@ -10,7 +10,7 @@ from verbs import determine
 import re
 from predicates import string, container
 
-DEBUG = False
+DEBUG = True
 def debug(*args):
   if DEBUG:
     print "debug",args
@@ -105,9 +105,11 @@ class Player():
               scope = act("check_scope_while", self.data, verb, "loc") or []
             matches = scope_matches(scope, noun_string)
             debug("NOUN MATCHES: ", map(name, matches))
+          matches.append(None)
           if len(matches) > 0:
             res.append(matches[0])
             matches = []
+
     
     debug("FINAL:", [verb] + map(name, res))
     data.subject = self.data

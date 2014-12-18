@@ -1,8 +1,10 @@
 from grammar import *
 from basic import *
 from scope import *
+from rooms import *
 from player import *
 from containers import *
+
 
 
 # print act("printed_name",  {"name":"book", "thing":True, "player":True, "firstname":"Joe"})

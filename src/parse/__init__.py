@@ -1,6 +1,7 @@
 import mttlang
 import dice
 import re
+from dice import table_choice
 
 def words(s):
   return re.findall('[\w]+', s)

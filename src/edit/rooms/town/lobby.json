@@ -2,4 +2,6 @@
 "room":true,
 "name":"a comfortable lobby",
 "desc":"A carpeted room with potted {#green}plants{#reset} and {#yellow}leather{#reset} lounge chairs. A {#black}{%red}fire{%yellow}place{%reset} is crackeling in the corner.",
-"exits": {"east":"r1", "up": "treehouse"}}
+"exits": {"east":"r1", "up": "treehouse"},
+"spawning":{"rate":10,
+	"choices":{"mouse":20, "rat":10}}}

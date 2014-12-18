@@ -62,6 +62,9 @@ def isnt(posf):
     return not posf(x)
   return negf
 
+def non(f):
+  def nf(x): return not f(x)
+  return nf
 
 room = a('room')
 thing = a('thing')
@@ -69,11 +72,20 @@ object = a('object')
 entity = a('entity')
 human = a('human')
 player = a('player')
-container = a('contents')
+holder = a('contents')
+container = a(holder, non(entity))
+hidden = a('hidden')
+located = a('located')
 
-def open(e):
-	state = e.get("open")
-	return state or False
+
+
+def closed(e):
+  if e.get("closed") == True:
+    return True
+  return False
+
+opened = non(closed)
+
 
 def empty(e):
 	if container(e):
@@ -89,9 +101,7 @@ def idle(e):
 	return False
 
 
-def non(f):
-  def nf(x): return not f(x)
-  return nf
+
 
 def male(subjects):
   if the(subjects, 'gender') == 'male': return True
@@ -109,10 +119,8 @@ female = a(non(male), 'human')
 adult = a(non(old),non(young), 'human')
 animal = a(non(human), 'entity')
 
-hidden = a('hidden')
 
-located = a('located')
-container = a('contents')
+
 
 colored = a('color')
 def yellow(e): return e.get('color') == "yellow" 

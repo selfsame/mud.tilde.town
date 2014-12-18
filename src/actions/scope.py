@@ -9,7 +9,7 @@ import random
 @action
 @given(player, string)
 def check_scope_while(e, a):
-  res = act("check_scope", e, location(e)) 
+  res = act("check_scope", e) 
   return res
 
 @action
@@ -50,14 +50,14 @@ def check_scope(a):
   return inv + res
 
 @action
-@given(a(player, container))
-def check_inventory_scope(a):
-  return contents_of(a)
-
-@action
 @given(entity, thing)
 def check_scope(a, c):
   return [c]
+
+@action
+@given(a(player, holder))
+def check_inventory_scope(a):
+  return contents_of(a)
 
 
 @action
@@ -72,10 +72,13 @@ def check_scope(a, b):
   return res
 
 
-
+@action
+@given(entity, a(closed, container))
+def check_scope(a, c):
+  return [c]
 
 
 @action
 @given(entity, a(hidden, thing))
 def check_scope(a, c):
-  return False
+  return []

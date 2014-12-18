@@ -3,4 +3,4 @@
   "living": {"hpmax": 12},
   "extends":["mammal"],
   "weight": 1.2,
-  "hidden":true}
+  "contents":[{"id":"coin"}]}

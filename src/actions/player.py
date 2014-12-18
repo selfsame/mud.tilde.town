@@ -156,6 +156,14 @@ def drop(a, b):
     say("you drop the ", name(b)+".\r\n")
     report_to(location(a), act("indefinate_name", a), "drops the", name(b)+".\r\n")
 
+@check
+@given(player, a("located"), a(closed, container))
+def drop(a, b, c):
+  if act("open", a, c):
+    return True
+  say("You're not able to open it.")
+  return False
+
 @action
 @given(player, a("located"), container)
 def drop(a, b, c):
@@ -171,7 +179,7 @@ def drop(a, b, c):
 
 
 @action
-@given(player, container)
+@given(player, holder)
 def list_contents(a, b):
   conts = the(b, 'contents')
   #if the(a, 'uuid') in conts: conts.remove(the(a, 'uuid'))
@@ -202,7 +210,7 @@ def list_contents(a, b):
 
 
 @action
-@given(container)
+@given(holder)
 def list_contents(b):
   conts = the(b, 'contents')
   names = {}
@@ -236,7 +244,7 @@ def scope_relation(a, b):
   ah = from_uid(a['located'])
   bh = from_uid(b['located'])
   if room(ah):
-    return " the floor"
+    return " on the floor"
   elif player(ah):
     res += " in "+name(ah)+"'s inventory"
   else:

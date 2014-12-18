@@ -4,5 +4,5 @@
   "extends":["object"],
   "contents":[{"id":"mouse"}],
   "capacity":5,
-  "open":true,
+  "closed":true,
   "opaque":true}

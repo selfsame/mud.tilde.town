@@ -24,6 +24,7 @@ class Game():
   def update(self,delta):
     data.subject = {}
     for room in data.rooms:
+      act("update", data.rooms[room], delta)
       contents = data.rooms[room]['contents']
       data.scope = map(from_uid, contents)    
       for uid in contents:
