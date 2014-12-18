@@ -14,7 +14,7 @@ def line_prompt(a):
   h = special["heart"]
   hp = a["living"]["hp"]
   maxhp = a["living"]["hpmax"]
-  return color("red")+h+color("black")+str(hp)+"/"+color("reset")+str(maxhp)+color("cyan")+special["right"]+color("reset")
+  return color("red")+h+color("bold")+color("black")+str(hp)+"/"+color("reset")+str(maxhp)+color("cyan")+special["right"]+color("reset")
 
 @action
 @given(player)

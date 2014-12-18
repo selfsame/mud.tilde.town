@@ -52,12 +52,12 @@ def walk(a, b):
 @action
 @given(room, entity, string)
 def leave(o, e, b):
-  report_to(o, "{#black}"+act("indefinate_name", e), "leaves to the", b+".{#reset}")
+  report_to(o, "{#black}{#bold}"+act("indefinate_name", e), "leaves to the", b+".{#reset}")
 
 @action
 @given(entity, room)
 def arrive(e, r):
-  report_to(r,  "{#black}"+act("indefinate_name", e), "walks in.{#reset}")
+  report_to(r,  "{#black}{#bold}"+act("indefinate_name", e), "walks in.{#reset}")
 
 
 @action

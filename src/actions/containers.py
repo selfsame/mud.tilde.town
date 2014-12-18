@@ -29,7 +29,7 @@ def printed_name(e):
 @after
 @given(a(open, container))
 def indefinate_name(e):
-  return "({#black}containing "+act("list_contents", e)+"{#reset})"
+  return "(containing "+act("list_contents", e)+")"
 
 @after
 @given(a(open, empty, container, non(entity)))
@@ -44,7 +44,7 @@ def indefinate_name(e):
 @before
 @given(a(hidden, thing))
 def indefinate_name(e):
-  return "{#black}"
+  return "{#bold}{#black}"
 
 
 @before

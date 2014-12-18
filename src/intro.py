@@ -5,7 +5,7 @@ class Intro(dialogue.Dialogue):
   def initial(self):
         tb = background('red')
         cb = background('cyan')
-        intro = [   background("cyan") + color("yellow") +
+        intro = [   color("bold")+background("cyan") + color("yellow") +
                     "           "+   " _____ "+   "    _                 _      __  __ _    _ _____              ",
                     "           "+tb+"|_   _|"+cb+"   "+tb+"| |"+cb+"               "+tb+"| |"+cb+"    "+tb+"|  \/  | |"+cb+"  "+tb+"| |  __ \\"+cb+"             ",
                     "             "+tb+"| |"+cb+"  ___"+tb+"| |"+cb+" __ _ _ __   __"+tb+"| |"+cb+" ___"+tb+"| \  / | |"+cb+"  "+tb+"| | |"+cb+"  "+tb+"| |"+cb+"            ",
