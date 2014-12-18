@@ -18,7 +18,7 @@ special = {'face': '\02', 'heart': '\03', 'right': '\020',
 
 
 def ansi(code):
-    "Given a code num produce a ansi escape"
+    """Given a code num produce a ansi escape"""
     if isinstance(code, (tuple, list, set)):
         code = ';'.join(code)
     return ANSI_ESCAPE.format(code)
@@ -84,4 +84,3 @@ def background(name):
 
 def wrap(s, c):
     return c+s+CODES['resetall']
-
