@@ -83,4 +83,5 @@ def background(name):
 
 
 def wrap(s, c):
-    return s+c+CODES['resetall']
+    return c+s+CODES['resetall']
+
