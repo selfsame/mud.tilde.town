@@ -2,8 +2,9 @@
 ANSI Color Helpers
 """
 import re
-import string as stringmodule
+import string as string
 
+__all__ = ['style', 'unstyle', 'color', 'background', 'special', 'wrap']
 
 ANSI_ESCAPE = '\x1b[{}m'
 ANSI_RE = re.compile('\x1b\[((?:\d|;)*)m')
@@ -37,9 +38,9 @@ CODES = {'resetall': ansi(0),
          'RESET': ansi(0)}
 
 # fill in colors
-for index, _name in enumerate(COLORS):
-    CODES[_name] = ansi(index + 30)
-    CODES[_name.upper()] = ansi(index + 40)
+for index, name in enumerate(COLORS):
+    CODES[name] = ansi(index + 30)
+    CODES[name.upper()] = ansi(index + 40)
 
 
 def unstyle(text):
@@ -70,7 +71,7 @@ def style(text, reset=True):
     """
     if reset:
         text += '$resetall'
-    styled = stringmodule.Template(text).safe_substitute(CODES)
+    styled = string.Template(text).safe_substitute(CODES)
     return GROUPED_ANSI_RE.sub(_compress_ansi, styled)
 
 
