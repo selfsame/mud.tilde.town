@@ -46,12 +46,8 @@ def parse(s):
 
 
 def Main():
-  p = sentances("Cats like dogs. To print the name of something (called S): get the name of S; and finish.")
-  if p:
-    b = blocks(p)
-    print b
-  print handlebars("The cat")
-  print separate('\{[^\{\}]*\}', "Just a simple {#green}string")
+  print handlebars("The {#green}cat{#reset} sat on a box.")
+
 
 if __name__== '__main__' :Main()
 

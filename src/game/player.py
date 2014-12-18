@@ -6,7 +6,7 @@ from util import *
 from actions import *
 import data
 from colors import *
-from verbs import verbs, determine
+from verbs import determine
 import re
 from predicates import string, container
 

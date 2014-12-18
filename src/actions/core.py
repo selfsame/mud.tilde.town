@@ -95,7 +95,10 @@ def compose(roles, args):
   for role in ["before", "action", "after"]:
     fns = roles.get(role) or []
     for f in fns:
-      res[role] = apply(f, args)
+      try:
+        res[role] = apply(f, args)
+      except:
+        print "ACTION ERROR: "+fn_name(f)+"["+role+"]"+"\r\n    "+str(args)
       break
   return res
 
