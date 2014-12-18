@@ -33,7 +33,8 @@ class MUDProtocol(LineOnlyReceiver):
     def close_connection(self, message="disconnecting"):
         self.sendLine(message)
         self.transport.loseConnection()
-        del self
+        if self in self.factory.clientProtocols:
+            self.factory.clientProtocols.remove(self)
         
     def save(self):
         if self.account:
@@ -70,18 +71,15 @@ class MUDProtocol(LineOnlyReceiver):
       self.idle += delta
       if self.player:
         self.player.update(delta)
-      if self.idle > 800:
+      if self.idle > 400:
         if self.player:
-            self.idle = 300
             self.player._quit()
         self.close_connection("timed out")
 
-
-  
     def enter_game(self, idx):
         self.character_idx = idx
         self.player = Player(self, self.account["characters"][idx])
-        self.factory.broadcast(data['firstname']+" has entered the game")
+
 
 
 class ChatProtocolFactory(ServerFactory):
@@ -99,11 +97,6 @@ class ChatProtocolFactory(ServerFactory):
         for client in self.clientProtocols:
             client.sendLine(mesg)
 
-    def broadOthers(self, me, mesg):
-        #This should send to all playerobjects, so no spam to login
-        for client in self.playerObjects:
-            if client != me:
-                client.sendLine(mesg)
 
     def timeDisbatch(self):
         delta = time.time() - self.last_time

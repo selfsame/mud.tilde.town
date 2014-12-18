@@ -10,6 +10,11 @@ from verbs import determine
 import re
 from predicates import string, container
 
+DEBUG = False
+def debug(*args):
+  if DEBUG:
+    print "debug",args
+
 def recursive_register(e):
   cont = e.get("contents")
   if cont:
@@ -45,14 +50,14 @@ class Player():
   def input(self, line):
     data.subject = self.data
     directive = determine(line)
-    print directive
+    debug(directive)
     if len(directive) > 0:
       verb = directive[0]
     else:
-      print "NO DIRECTIVE"
+      debug("NO DIRECTIVE")
       return
     if len(directive) == 1:
-      print "single verb statement:", verb
+      debug("single verb statement:", verb)
       act(verb, self.data)
       data.subject = {}
       return
@@ -73,11 +78,11 @@ class Player():
 
           #search scope for matching containers
           #find best matches
-          print "matching "+part[1]+"to a container.."
+          debug("matching "+part[1]+"to a container..")
           holder_string = part[1]
           hs = filter(container, scope)
           holders = scope_matches(hs, holder_string)
-          print "matched: ", map(name, holders)
+          debug("matched: ", map(name, holders))
           report = ""
           holder_conts = []
           for h in holders:
@@ -86,25 +91,25 @@ class Player():
               report += "  "+name(c)+"\r\n"
             holder_conts += contents_of(h)
           
-          print "HOLDERS:\r\n", report
+          debug("HOLDERS:\r\n", report)
         if part[0] == "noun":
           noun_string = part[1]
-          print "SEARCHING FOR: ", noun_string
+          debug("SEARCHING FOR: ", noun_string)
           if holder_conts:
             matches = scope_matches(holder_conts, noun_string)
-            print "HOLDER MATCHES: ", map(name, matches)
+            debug("HOLDER MATCHES: ", map(name, matches))
           if len(matches) == 0:
             if scope == False:
               scope = act("check_scope_while", self.data, verb) or []
             elif len(res) == 1:
               scope = act("check_scope_while", self.data, verb, "loc") or []
             matches = scope_matches(scope, noun_string)
-            print "NOUN MATCHES: ", map(name, matches)
+            debug("NOUN MATCHES: ", map(name, matches))
           if len(matches) > 0:
             res.append(matches[0])
             matches = []
     
-    print "FINAL:", [verb] + map(name, res)
+    debug("FINAL:", [verb] + map(name, res))
     data.subject = self.data
     apply(act, [verb, self.data] + res)
 
@@ -130,14 +135,6 @@ class Player():
   def _quit(self):
     act("quit", self.data)
 
-
-def get_scope(entity):
-  "returns a list of entity instances in scope of the actor"
-  #print "get_scope", verb
-  res = act("check_scope", entity)
-  print "SCOPE", map(name, res)
-  return res
-
 def not_none(e):
   if e != None: return True
   return False
@@ -160,31 +157,5 @@ def scope_matches(_scope, s):
     if s == name(e):
       res.append(e)
   return res
-
-def resolve_noun(s, scope):
-  "given a word and a list of entities in scope, determine what is meant"
-  rooms = []
-  entities = []
-  objects = []
-  for e in scope:
-    regex = e.get('regex')
-    if regex:
-      if re.match(regex, s):
-        return e
-    if s == name(e):
-      return e
-    if the(e, 'room'):
-      rooms.append(e)
-    if the(e, 'entity'):
-      entities.append(e)
-    if the(e, 'thing'):
-      objects.append(e)
-
-  for r in rooms:
-    for k in r['exits']:
-      if s == k:
-        return from_uid(r['exits'][k])
-
-  return s
 
 

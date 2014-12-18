@@ -86,7 +86,7 @@ def action(f):
 def printable_preds(col):
   return "<"+", ".join(map(fn_name, col))+">"
 
-def compose(roles, args):
+def compose(roles, args, report = []):
   for f in roles.get("check") or []:
     if not apply(f, args): 
       print "[check failed]"
@@ -98,7 +98,8 @@ def compose(roles, args):
       try:
         res[role] = apply(f, args)
       except:
-        print "ACTION ERROR: "+fn_name(f)+"["+role+"]"+"\r\n    "+str(args)
+        print "ACTION ERROR: "+fn_name(f)+"["+role+"]"+"\r\n    "+"".join(report)
+        return res
       break
   return res
 
@@ -135,7 +136,7 @@ def dict_act(verb, *args):
       if len(rolereport) > 0:
         report.append(" ".join(["  "+str(role)+"->["] + rolereport + ["]\r\n"]))
     #print "".join(report)
-    res = compose(results, args)
+    res = compose(results, args, report)
 
     #apply(act, ["report", actor, verb] + list(args))
     if data.reportstack != []:

@@ -84,7 +84,7 @@ def indefinate_name(e):
 @given(player)
 def indefinate_name(e):
   noun = act("printed_name", e)
-  return noun.title()
+  return noun
 
 
 
