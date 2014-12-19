@@ -28,10 +28,13 @@ def update(a, delta):
 @given(a("wandering", idle, entity), number)
 def update(a, delta):
   loc = location(a)
-  dests = connected_rooms(loc)
-  dest = random.choice(dests)
-  if act("walk", a, dest):
-    a['acting']['ap'] = 20 + random.randint(1, 5)
+  if room(loc):
+    dests = connected_rooms(loc)
+    dest = random.choice(dests)
+    if act("walk", a, dest):
+      a['acting']['ap'] = 30 + random.randint(1, 20)
+
+
 
 
 @action

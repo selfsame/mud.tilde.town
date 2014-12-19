@@ -29,7 +29,7 @@ def printed_name(e):
 @after
 @given(a(opened, container))
 def indefinate_name(e):
-  return "(containing "+act("list_contents", e)+")"
+  return " (containing "+act("list_contents", e)+")"
 
 @after
 @given(a(opened, empty, container))

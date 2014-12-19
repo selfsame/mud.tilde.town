@@ -1,6 +1,7 @@
 {"id": "mouse",
  "name":"mouse",
   "extends": ["mammal"],
+  "object":true,
   "plural": "mice",
   "living": {"hpmax": "2d4"},
   "weight": 0.2}

@@ -106,15 +106,15 @@ def look(a, b):
 @before
 @given(player, room)
 def describe(p, r):
-  say("\r\n{#cyan}~ ~ "+act("write",r,'name')+" ~ ~{#reset}")
+  say("\r\n{#cyan}    ~ ~ "+act("write",r,'name')+"{#cyan} ~ ~{#reset}\r\n ")
 
 @action
 @given(player, room)
 def describe(p, r):
-  res = [act("write",r,'desc'),
+  res = [act("write",r,'desc')," ",
     "You see "+ act("list_contents", p, r)+ ".",
     " ",
-    "exits: {#yellow}"+", ".join(the(r, 'exits').keys()) + "{#reset}"]
+    "exits: {#yellow}{#bold}"+", ".join(the(r, 'exits').keys()) + "{#reset}"," "]
   say("\r\n".join(res))
 
 @action
@@ -124,18 +124,30 @@ def look(a, b):
   say("you look at ", act("indefinate_name", b)+relation+".\r\n", act("write",b,'desc'))
 
 
+@check
+@given(player, a("fixed", object))
+def take(a, b):
+  say("You try, but it seems to be permamently attached.")
+  return False
+
+@check
+@given(player, a(non(object), entity))
+def take(a, b):
+  say("Maybe if it was unconscious, or dead..")
+  return False
+
 @action
 @given(player, anything)
 def take(a, b):
   say("That's not something you could take.")
 
 @action
-@given(player, a("located"))
+@given(player, a("located", object))
 def take(a, b):
   relation = act("scope_relation", b, a)
   if act("move", b, a):
-    say("you pick up the ", name(b)+" from"+relation+".\r\n")
-    report_to(location(a), act("indefinate_name", a), "picks up the", name(b)+" from"+relation+".\r\n")
+    say("you pick up the ", name(b)+relation+".\r\n")
+    report_to(location(a), act("indefinate_name", a), "picks up the", name(b)+relation+".\r\n")
 
 
 @after
@@ -203,6 +215,8 @@ def list_contents(a, b):
     else:
       r = "".join(act_stack("indefinate_name", kinds[k]))
     if r: res.append( str(r) )
+  if len(res) == 0:
+    res = ["nothing"]
   lastpair = res[-2:]
   prev = res[:-2] + [" and ".join(lastpair)]
   return ", ".join(prev)
@@ -239,8 +253,8 @@ def list_contents(b):
 @given(a('located'), a('located'))
 def scope_relation(a, b):
   res = ''
-  if a['located'] == b['located']:
-    return res
+  #if a['located'] == b['located']:
+  #  return res
   ah = from_uid(a['located'])
   bh = from_uid(b['located'])
   if room(ah):

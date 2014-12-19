@@ -3,5 +3,9 @@
 "name":"a comfortable lobby",
 "desc":"A carpeted room with potted {#green}plants{#reset} and {#yellow}leather{#reset} lounge chairs. A {#black}{%red}fire{%yellow}place{%reset} is crackeling in the corner.",
 "exits": {"east":"r1", "up": "treehouse"},
+"contents":[{"id":"sign",
+	"name":"{#yellow}wooden sign{#reset}",
+	"regex":"wooden|sign|wooden sign",
+	"desc":"The sign reads: \r\n{#yellow}Welcome to mud.tilde.town!\r\nWe're still setting up the place, but feel free to have a look around.\r\nCurrent commands: {#red}say, look, get, drop, put, inventory, close, open{#reset}"}],
 "spawning":{"rate":10,
-	"choices":{"mouse":20, "rat":10}}}
+	"choices":{"mouse":10, "rat":10, "goblin":20}}}

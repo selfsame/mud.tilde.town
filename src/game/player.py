@@ -10,7 +10,7 @@ from verbs import determine
 import re
 from predicates import string, container
 
-DEBUG = True
+DEBUG = False
 def debug(*args):
   if DEBUG:
     print "debug",args
