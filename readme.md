@@ -15,7 +15,7 @@ mud.tilde.town
 {"id":"treehouse",
 "name":"a small {#green}treehouse{#reset}.",
 "desc":"It's tiny and crudely built.",
-"exits": {"down": "lobby"}
+"exits": {"down": "lobby"},
 "contents":[
 	{"id":"chest", "name":"chest",
 	"contents":[
