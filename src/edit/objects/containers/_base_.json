@@ -1,4 +1,5 @@
 {"id":"container",
   "name":"base",
   "extends":["object"],
+  "kind":["containers"],
   "contents":[]}

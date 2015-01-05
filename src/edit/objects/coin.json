@@ -1,5 +1,6 @@
 {"id" :"coin", 
 "name":"coin",
 "extends":[],
+"kind":["money","coins","currency"],
 "color":"yellow",
 "desc": "It's shiney!"}

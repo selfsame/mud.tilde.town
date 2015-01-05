@@ -20,9 +20,9 @@ def _symbol(s):
 
 
 def extends(d):
-    res = {}
+    res = []
     for ustr in d:
-        res = dict(res.items() + make.instance(ustr).items())
+        res.append(make.instance(ustr))
     return res
 
 def living(d):
@@ -40,8 +40,8 @@ def contents(d):
     if e.get("id"):
       c_e = components.construct(e)
       new = components.instance(e.get("id"))
-      #we merge the conent entry onto the instance
-      merged = dict(new.items() + c_e.items())
+      #we merge the compent entry onto the instance
+      merged = components.merge([new, c_e])
       components.register(merged)
       res.append(merged.get("uuid"))
   return res

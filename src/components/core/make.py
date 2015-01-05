@@ -95,9 +95,9 @@ def instance(ustr):
         res = components.construct(template)
         res["uuid"] = ustr+nuuid
         if "extends" in res:
-            exres = dict(res["extends"].items() + res.items())
-            del exres["extends"]
-            return exres
+            merged = components.merge(res["extends"] + [res])
+            del merged["extends"]
+            return merged
         else:
             return res
     else:
