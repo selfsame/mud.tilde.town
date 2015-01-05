@@ -113,6 +113,7 @@ class Player():
     
     debug("FINAL:", [verb] + map(name, res))
     data.subject = self.data
+    apply(act, ["player_command", verb, self.data] + res)
     apply(act, [verb, self.data] + res)
 
 

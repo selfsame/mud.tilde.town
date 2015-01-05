@@ -1,21 +1,34 @@
 import re
 
-regexverbs = {"^(\W*look at|look|l|examine|x)\W*(.*)":"look",
-			 "^(\W*get|take|grab|pick up)\W+(.*)":"take",
-			 "^(\W*drop|put|place|set|throw)\W+(.*)":"drop",
-			 "^(\W*give|hand)\W+(.*)":"give",
-			 "^(\W*close|shut)\W+(.*)":"close",
-			 "^(\W*open|unlock)\W+(.*)":"open",
-			 "^(\W*go|enter|leave|walk)\W+(.*)":"walk",
-			 "^(\W*quit)\W*(.*)":"quit",
-			 "^(\W*save)\W*(.*)":"save",
-			 "^(\W*inventory|inv|i)\W*(.*)":"inventory"}
+__all__ = ['determine', 'register', 'forms']
+
+regexverbs = {"look at|look|l|examine|x":"look",
+			 "get|take|grab|pick up":"take",
+			 "drop|put|place|set|throw":"drop",
+			 "give|hand":"give",
+			 "close|shut":"close",
+			 "open|unlock":"open",
+			 "go|enter|leave|walk":"walk",
+			 "quit":"quit",
+			 "save":"save",
+			 "inventory|inv|i":"inventory"}
 
 compiled = {}
+forms = {}
+
+def register(name, regex, tenses = {}):
+	command_pattern = "^(\W*"+regex+")\W*(.*)"
+	c = re.compile(command_pattern)
+	compiled[c] = name
+	default = {"present":name+"s",
+			   "past":name+"ed",
+			   "progressive":name+"ing"}
+	forms[name] = dict(tenses.items() + default.items())
 
 for regex in regexverbs:
-	val = regexverbs[regex]
-	compiled[re.compile(regex)] = val
+	name = regexverbs[regex]
+	register(name, regex)
+
 
 
 numeric = re.compile("\W(second|third|fourth|fifth|sixth|seventh|eight)\W")
@@ -55,6 +68,7 @@ def determine(s):
 	return []
 
 			
+
 
 
 

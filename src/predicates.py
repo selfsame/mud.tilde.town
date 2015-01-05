@@ -1,4 +1,12 @@
 from util import *
+from game import verbs
+
+def verb(e):
+  if e in verbs.forms: return True
+  return False
+
+def anything(e):
+  return True
 
 def number(e):
   return isinstance(e, (int, float))
@@ -20,9 +28,6 @@ def dictionary(e):
 def undefined(e):
 	if e == None: return True
 	return False
-
-def anything(e):
-	return True
 
 def equals(a):
 	def efn(b):

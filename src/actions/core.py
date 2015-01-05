@@ -5,6 +5,7 @@ from util import fn_name, name, players_in_scope, contents_of, from_uid
 import data
 from data import registry
 from parse import template
+from game import verbs
 import components
 
 def OD(ltps=[]):

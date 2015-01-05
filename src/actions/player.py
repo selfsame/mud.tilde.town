@@ -8,6 +8,18 @@ from colors import *
 import components
 
 
+
+@action
+@given(verb, player, undefined)
+def player_command(v, p, u):
+  say("I can't understand what you are "+verbs.forms[v]["progressive"]+".")
+
+@action
+@given(verb, player, undefined, thing)
+def player_command(v, p, u, a):
+  say("I can't understand what you are "+verbs.forms[v]["progressive"]+" in the "+name(a)+".")
+
+
 @action
 @given(player)
 def line_prompt(a):
