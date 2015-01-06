@@ -1,20 +1,5 @@
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from components import *
+import colors, components, actions, verbs, parse, util, predicates, player
 from actions import *
-from verbs import *
 
-
-print dir()
-
-
-
-
-
-
-
-
-
-
-
-
+__all__ = ['colors', 'components', 'actions', 'verbs', 'parse', 'util', 'predicates', 'player',
+ 	'act','act_stack', 'action', 'after', 'before', 'check', 'components','given']

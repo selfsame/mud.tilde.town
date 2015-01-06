@@ -49,7 +49,7 @@ class Login(Dialogue):
       return self.name+" is a reserved word\r\n Enter your name:"
     try:
       print ("checking for "+self.name+".sav")
-      self.account = components.make.load_json('./players/'+self.name+'.json')
+      self.account = components.make.load_json('./save/players/'+self.name+'.json')
       self.state = self.verify
       #self.con.echo(False)
       return "welcome back "+self.name+"\r\nEnter your password:"
@@ -77,7 +77,7 @@ class Login(Dialogue):
         #self.con.echo(True)
         account = {'name':self.name, 'salt':base64.b64encode(os.urandom(16)), 'characters':[], 'email':False}
         account['password'] = hashlib.sha512(account['salt'] + self.passw).hexdigest()
-        if components.make.save_json(account, './players/'+self.name+'.json'):
+        if components.make.save_json(account, './save/players/'+self.name+'.json'):
             print "account created: "+self.name
         self.con.account = account
         return self.con.add_dialogue(Account(self.con))

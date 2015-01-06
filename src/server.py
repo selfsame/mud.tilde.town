@@ -1,17 +1,20 @@
 #!/usr/bin/env python
-
-import sys
+import sys, os
 from twisted.internet import reactor, task
 from twisted.internet.protocol import ServerFactory
 from twisted.protocols.basic import LineOnlyReceiver
 
-import dialogue as d
+import core.dialogue as d
 import time
 from intro import Intro
 import parse
 import data
+from player import Player
+from actions import act
+from components import load
 from game import *
-from actions import *
+
+print "\n\nstarting telnet server\n\n"
 
 class MUDProtocol(LineOnlyReceiver):
     ## Connection object, will be hooked up to player object
@@ -69,8 +72,6 @@ class MUDProtocol(LineOnlyReceiver):
     
     def update(self, delta):
       self.idle += delta
-      if self.player:
-        self.player.update(delta)
       if self.idle > 400:
         if self.player:
             self.player._quit()
@@ -103,15 +104,16 @@ class ChatProtocolFactory(ServerFactory):
         self.last_time = time.time()
         for client in self.clientProtocols:
           client.update(delta)
-        data.game.update(delta)
+        act("update", delta)
         return True
 
 def Main():
     port = 5071
     if len(sys.argv) > 1: 
         port = int(sys.argv[1])
-    print "Starting mud.tilde.town server"
-    data.game = Game()
+    #data.game = Game()
+    load(os.sep.join(['./game']))
+    act("init")
     factory = ChatProtocolFactory()
     reactor.listenTCP(port, factory)
     reactor.run()

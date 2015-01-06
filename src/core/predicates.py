@@ -1,6 +1,9 @@
 from util import *
 import verbs
 
+print "predicates.py"
+
+
 def verb(e):
   if e in verbs.forms: return True
   return False

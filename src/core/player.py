@@ -6,11 +6,13 @@ from util import *
 from actions import *
 import data
 from colors import *
-from verbs import determine
+from core.verbs import determine
 import re
 from predicates import string, container
 
 __all__ = ["Player"]
+
+print "player.py"
 
 DEBUG = True
 
@@ -40,9 +42,6 @@ class Player():
     data.subject = self.data
     self.input("look")
     self.prompt()
-
-  def update(self, delta):
-    pass
 
   def send(self, s):
     self.con.sendLine(s)
@@ -172,7 +171,3 @@ def find_held_scope(cursor, scope):
       res += scope_matches(branch, cursor["string"])
     debug("FOUND", map(name, res))
     return res
-
-
-
-

@@ -1,24 +1,14 @@
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from components import load
-from actions import *
-from player import *
+print "\n\ncompiling ./game\n---------------"
 from standard import *
+import combat
+import writing
 
 
-class Game():
-  def __init__(self):
-    load(os.sep.join(['./edit']))
-    act("init")
+# import importlib
 
-  def update(self,delta):
-    act("update", delta)
+# importlib.import_module('', 'verbs')
 
-
-
-
-
-
+# print verbs
 
 
 

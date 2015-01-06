@@ -1,5 +1,5 @@
-from colors import *
-import dialogue
+from core.colors import *
+from core import dialogue
 
 class Intro(dialogue.Dialogue):
   def initial(self):

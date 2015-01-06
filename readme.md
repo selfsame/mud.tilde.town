@@ -59,7 +59,7 @@ def close(a, b):
 
 WIKI
 ======
-There is a rather thourough set of documentation in the wiki:
+There is a rather thorough set of documentation in the wiki:
 [https://github.com/selfsame/mud.tilde.town/wiki](https://github.com/selfsame/mud.tilde.town/wiki)
 
 

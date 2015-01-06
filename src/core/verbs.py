@@ -1,6 +1,8 @@
 import re
 
-__all__ = ['determine', 'register', 'forms']
+__all__ = ['determine', 'register', 'register_structure', 'forms', 'structures']
+
+print "verbs.py"
 
 regexverbs = {"look at|look|l|examine|x":"look",
 			 "get|take|grab|pick up":"take",

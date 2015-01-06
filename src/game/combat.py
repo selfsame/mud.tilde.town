@@ -1,12 +1,8 @@
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from actions import *
-from util import *
+from required import *
 from predicates import *
-import random
-from parse import table_choice
 
 verbs.register("kill", "kill|k|attack")
+verbs.register_structure("kill", "{1}")
 
 @check
 @given(player, non(entity))
@@ -23,3 +19,14 @@ def kill(a, b):
 @given(player, entity)
 def kill(a, b):
   say("You attack ", act("indefinate_name", b)+".")
+
+
+print "combat.py"
+
+
+import sys
+import re
+import verbs
+for k in sys.modules.keys():
+	if "verbs" in k:
+		print "("+k+")"

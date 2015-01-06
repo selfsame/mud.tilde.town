@@ -1,7 +1,4 @@
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from actions.core import *
-from util import *
+from required import *
 from predicates import *
 import verbs
 
