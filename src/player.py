@@ -10,7 +10,10 @@ from verbs import determine
 import re
 from predicates import string, container
 
+__all__ = ["Player"]
+
 DEBUG = True
+
 def debug(*args):
   if DEBUG:
     print " ".join(map(str, args))
@@ -21,8 +24,6 @@ def recursive_register(e):
     e["contents"] = map(recursive_register, cont)
   register(e)
   return e.get("uuid")
-
-  
 
 
 class Player():
@@ -39,7 +40,6 @@ class Player():
     data.subject = self.data
     self.input("look")
     self.prompt()
-  
 
   def update(self, delta):
     pass
@@ -148,8 +148,6 @@ def get_holder_stack(cursor, stack=[]):
     return get_holder_stack(cursor["holder"], stack)
   else:
     return stack
-
-
 
 def find_held_scope(cursor, scope):
   stack = get_holder_stack(cursor["holder"])

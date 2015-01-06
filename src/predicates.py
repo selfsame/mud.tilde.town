@@ -1,5 +1,5 @@
 from util import *
-from game import verbs
+import verbs
 
 def verb(e):
   if e in verbs.forms: return True
@@ -24,6 +24,9 @@ def string(e):
 
 def dictionary(e):
   return isinstance(e, dict)
+
+def module(e):
+  return str(type(e)) == "<type 'module'>"
 
 def undefined(e):
 	if e == None: return True

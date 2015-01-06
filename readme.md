@@ -31,8 +31,10 @@ def close(a, b):
 
 ## component entity system:
 * data based game objects, loaded from json and converted to python dicts.
-* Entity definitions can have multiple ancestors.
+* components are defined as key value pairs.
 * Constructing/serializing/merging functions easily declared for components.
+* Entity definitions can have multiple ancestors.
+* Directory structure of entity .json can declare inheritance via ```_base_.json``` files
 
 
 ```json
@@ -52,8 +54,8 @@ def close(a, b):
 
 
 ## Schemaless
-* rooms, objects, and entities are arbitrary components for the demo library
-* Games are defined by actions and entities, gameplay code should be decoupled from the mud library
+* rooms, objects, and entities are arbitrary components for the demo library.
+* Games are defined by actions and entities, gameplay code is decoupled from the server
 
 WIKI
 ======

@@ -5,8 +5,9 @@ from util import fn_name, name, players_in_scope, contents_of, from_uid
 import data
 from data import registry
 from parse import template
-from game import verbs
 import components
+
+__all__ = ["given", "check", "before", "after", "action", "act", "act_stack", "say", "report", "report_to"]
 
 def OD(ltps=[]):
   return collections.OrderedDict(ltps)

@@ -1,19 +1,9 @@
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from core import *
+from actions import *
 from util import *
 from predicates import *
 import random
-
-
-@action
-@given(holder)
-def init(r):
-  print "init:", name(r)
-  cont = contents_of(r)
-  for e in cont:
-    e["located"] = r.get("uuid")
-    act("init", e)
 
 
 @action

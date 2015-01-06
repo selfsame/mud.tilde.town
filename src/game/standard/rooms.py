@@ -1,6 +1,6 @@
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from core import *
+from actions import *
 from util import *
 from predicates import *
 import random

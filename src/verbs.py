@@ -26,7 +26,7 @@ def register_structure(v, *patterns):
 	group = structures[v]
 	for pattern in patterns:
 		if pattern not in group:
-			group.append(pattern)
+			structures[v] = [pattern] + group
 
 def register(name, regex, tenses = {}):
 	command_pattern = "^(\W*"+regex+")\W*(.*)"
