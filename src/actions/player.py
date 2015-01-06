@@ -52,6 +52,13 @@ def talk(a, b):
   say("You say '{#yellow}"+b+"{#reset}'.")
   report_to(location(a), name(a)+" says: ""{#yellow}"+b+"{#reset}")
 
+@action
+@given(player, string, entity)
+def talk(a, b, c):
+  message = "'{#yellow}"+b+"{#reset}' to "+act("indefinate_name", c)+"."
+  say("You say "+message)
+  report_to(location(a), name(a)+" says "+message)
+
 
 @action
 @given(player)
@@ -283,3 +290,5 @@ def scope_relation(a, b):
       else:
         res += " in the "+name(ah2)+""
   return res
+
+

@@ -4,12 +4,17 @@
 "contents":[
 	{"id":"rat"}, 
 	{"id":"chest", 
+	"name":"chest",
+	"closed":false,
+	 "contents":[{"id":"bag", "closed":false, "contents":[{"id":"book"}]}]}, 
+	{"id":"chest", "closed":false,
 	 "name":"chest",
 	 "fixed":true,
 	 "desc":"An old wooden chest with iron hinges is bolted to the floor.",
 	"contents":[
 		{"id": "book", "name":"spellbook","regex":"spell|book|spellbook","desc":"You flip through the pages, but none of the symbols make any sense to you.", "color":"red"},
-		{"id":"bag", "closed":true},
+		{"id":"bag", "closed":false},
+		
 		{"id":"coin"},
 		{"id":"coin"},
 		{"id":"coin"}]}],

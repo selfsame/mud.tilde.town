@@ -10,7 +10,7 @@ from verbs import determine
 import re
 from predicates import string, container
 
-DEBUG = False
+DEBUG = True
 def debug(*args):
   if DEBUG:
     print "debug",args
@@ -63,54 +63,36 @@ class Player():
       return
 
     res = []
-
-    scope = False
-    holders = False
-    holder_conts = False
-    matches = []
-    for part in directive[1:]:
-      if part[0] and part[1]:
-        if part[0] == "arg":
-          res.append(part[1])
-        if part[0] == "container":
-          if scope == False:
-            scope = act("check_scope_while", self.data, verb) or []
-
-          #search scope for matching containers
-          #find best matches
-          debug("matching "+part[1]+"to a container..")
-          holder_string = part[1]
-          hs = filter(container, scope)
-          holders = scope_matches(hs, holder_string)
-          debug("matched: ", map(name, holders))
-          report = ""
-          holder_conts = []
-          for h in holders:
-            report += name(h)+"\r\n"
-            for c in contents_of(h):
-              report += "  "+name(c)+"\r\n"
-            holder_conts += contents_of(h)
-          
-          debug("HOLDERS:\r\n", report)
-        if part[0] == "noun":
-          noun_string = part[1]
-          debug("SEARCHING FOR: ", noun_string)
-          if holder_conts:
-            matches = scope_matches(holder_conts, noun_string)
-            debug("HOLDER MATCHES: ", map(name, matches))
-          if len(matches) == 0:
-            if scope == False:
-              scope = act("check_scope_while", self.data, verb) or []
-            elif len(res) == 1:
-              scope = act("check_scope_while", self.data, verb, "loc") or []
-            matches = scope_matches(scope, noun_string)
-            debug("NOUN MATCHES: ", map(name, matches))
-          matches.append(None)
-          if len(matches) > 0:
+    rest = directive[1:]
+    default_scope = False
+    if rest:
+      for idx, part in enumerate(rest):
+        if "text" in part:
+          res.append(part["text"])
+        elif "noun" in part:
+          argscope = act("scope_"+str(idx)+"_while", self.data, verb)
+          if not argscope:
+            if not default_scope:
+              default_scope = act("scope_while", self.data, verb)
+          scope = argscope or default_scope or []
+          if DEBUG:
+            print "SCOPE:"
+            for thing in scope:
+                print "-"+name(thing)
+            print " "
+          s = part["noun"]["string"]
+          if "holder" in part["noun"]:
+            matches = find_held_scope(part["noun"], scope)
+          else:        
+            matches = scope_matches(scope, s)
+          if matches:
             res.append(matches[0])
-            matches = []
+          else:
+            res.append(s)
+        else:
+          res.append(None)
 
-    
+    debug(res)
     debug("FINAL:", [verb] + map(name, res))
     data.subject = self.data
     apply(act, ["player_command", verb, self.data] + res)
@@ -160,5 +142,40 @@ def scope_matches(_scope, s):
     if s == name(e):
       res.append(e)
   return res
+
+def get_holder_stack(cursor, stack=[]):
+  stack = [cursor] + stack
+  if "holder" in cursor:
+    return get_holder_stack(cursor["holder"], stack)
+  else:
+    return stack
+
+
+
+def find_held_scope(cursor, scope):
+  stack = get_holder_stack(cursor["holder"])
+  print "STACK", stack
+  if stack:
+    scopes = [scope]
+    indent = "  "
+    for item in stack:
+      print "->", item
+      paths = []
+      for branch in scopes:
+        hs = filter(container, branch)
+        matches = scope_matches(hs, item["string"])
+        if matches:
+          for m in matches:
+            print indent+"-", name(m)
+            paths.append(contents_of(m))
+      scopes = paths
+      indent += "  "
+    res = []
+    for branch in scopes:
+      res += scope_matches(branch, cursor["string"])
+    print "FOUND", map(name, res)
+    return res
+
+
 
 

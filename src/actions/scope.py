@@ -5,31 +5,44 @@ from util import *
 from predicates import *
 import random
 
+personal = equals("drop", "wear", "wield")
+
+@action
+@given(player, verb)
+def scope_0_while(e, a):
+  pass
 
 @action
 @given(player, string)
-def check_scope_while(e, a):
+def scope_while(e, a):
   res = act("check_scope", e) 
   return res
 
 @action
 @given(player, equals("look"))
-def check_scope_while(e, a):
+def scope_while(e, a):
   return act("check_scope", e) 
 
 @action
 @given(player, equals("walk"))
-def check_scope_while(e, a):
+def scope_while(e, a):
   return the(location(e),"exits").keys()
 
 @action
 @given(player, equals("drop"))
-def check_scope_while(e, a):
+def scope_0_while(e, a):
   return act("check_inventory_scope", e) 
 
 @action
+@given(player, equals("drop"))
+def scope_1_while(a, b):
+  loc = location(a)
+  return act("check_scope", a, loc)
+
+
+@action
 @given(player, equals("drop"), anything)
-def check_scope_while(e, a, b):
+def scope_while(e, a, b):
   inv = act("check_inventory_scope", e) 
   loc = location(e)
   res = act("check_scope", e, loc)
@@ -37,7 +50,7 @@ def check_scope_while(e, a, b):
 
 @action
 @given(player, equals("take"))
-def check_scope_while(e, a):
+def scope_while(e, a):
   "(player, equals('take'))"
   return act("check_scope", e, location(e))
 

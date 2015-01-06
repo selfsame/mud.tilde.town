@@ -29,10 +29,12 @@ def undefined(e):
 	if e == None: return True
 	return False
 
-def equals(a):
-	def efn(b):
-		return a == b 
-	return efn
+def equals(*a):
+  def efn(b):
+    for v in a:
+      if b != v: return False
+    return True
+  return efn
 
 def function(e):
   return str(type(e)) in ["<type 'function'>", "<type 'builtin_function_or_method'>"]
