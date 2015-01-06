@@ -13,7 +13,7 @@ from predicates import string, container
 DEBUG = True
 def debug(*args):
   if DEBUG:
-    print "debug",args
+    print " ".join(map(str, args))
 
 def recursive_register(e):
   cont = e.get("contents")
@@ -70,7 +70,7 @@ class Player():
         if "text" in part:
           res.append(part["text"])
         elif "noun" in part:
-          argscope = act("scope_"+str(idx)+"_while", self.data, verb)
+          argscope = act("scope_"+str(idx+1)+"_while", self.data, verb)
           if not argscope:
             if not default_scope:
               default_scope = act("scope_while", self.data, verb)
@@ -92,7 +92,6 @@ class Player():
         else:
           res.append(None)
 
-    debug(res)
     debug("FINAL:", [verb] + map(name, res))
     data.subject = self.data
     apply(act, ["player_command", verb, self.data] + res)
@@ -154,26 +153,26 @@ def get_holder_stack(cursor, stack=[]):
 
 def find_held_scope(cursor, scope):
   stack = get_holder_stack(cursor["holder"])
-  print "STACK", stack
+  debug("STACK", stack)
   if stack:
     scopes = [scope]
     indent = "  "
     for item in stack:
-      print "->", item
+      debug("->", item)
       paths = []
       for branch in scopes:
         hs = filter(container, branch)
         matches = scope_matches(hs, item["string"])
         if matches:
           for m in matches:
-            print indent+"-", name(m)
+            debug(indent+"-", name(m))
             paths.append(contents_of(m))
       scopes = paths
       indent += "  "
     res = []
     for branch in scopes:
       res += scope_matches(branch, cursor["string"])
-    print "FOUND", map(name, res)
+    debug("FOUND", map(name, res))
     return res
 
 

@@ -30,12 +30,12 @@ def scope_while(e, a):
 
 @action
 @given(player, equals("drop"))
-def scope_0_while(e, a):
+def scope_1_while(e, a):
   return act("check_inventory_scope", e) 
 
 @action
 @given(player, equals("drop"))
-def scope_1_while(a, b):
+def scope_2_while(a, b):
   loc = location(a)
   return act("check_scope", a, loc)
 
