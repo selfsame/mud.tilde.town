@@ -4,5 +4,5 @@
 *.swp
 *.swo
 log.txt
-src/save/players/*.json
+save/accounts/*.json
 
