@@ -1,6 +1,6 @@
 from mud.core.util import *
 from mud.core.actions import *
-from mud.core.predicates import *
+from predicates import *
 from mud.core import data
 import random
 from mud.core.components import load, instance, register

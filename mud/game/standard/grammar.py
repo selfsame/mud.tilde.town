@@ -1,6 +1,6 @@
 from mud.core.util import *
 from mud.core.actions import *
-from mud.core.predicates import *
+from predicates import *
 import random
 
 @action

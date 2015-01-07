@@ -1,5 +1,6 @@
-mud.core import *
-from predicates import *
+from mud.core import *
+from mud.core.actions import *
+from standard.predicates import *
 
 
 verbs.register("kill", "kill|k|attack")

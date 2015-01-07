@@ -1,6 +1,6 @@
 from mud.core.util import *
 from mud.core.actions import *
-from mud.core.predicates import *
+from predicates import *
 import random
 from mud.core.parse import table_choice
 from mud.core.components import *

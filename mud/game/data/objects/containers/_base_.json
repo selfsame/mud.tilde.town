@@ -1,5 +1,2 @@
-{"id":"container",
-  "name":"base",
-  "extends":["object"],
-  "kind":["containers"],
-  "contents":[]}
+{"id":"container_base",
+  "extends":["container"]}

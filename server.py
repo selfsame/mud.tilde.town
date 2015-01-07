@@ -11,7 +11,7 @@ from mud.core import parse
 import data
 from mud.core.player import Player
 from mud.core.actions import act
-from mud.core.components import load
+from mud.core.components import make, load
 from mud.game import *
 
 print "\n\nstarting telnet server\n\n"
@@ -42,7 +42,7 @@ class MUDProtocol(LineOnlyReceiver):
     def save(self):
         if self.account:
           path = './save/accounts/'+self.account['name']+'.json'
-          return components.make.save_json(self.account, path)
+          return make.save_json(self.account, path)
     
     def add_dialogue(self, dialogue):
         self.dialogue = dialogue

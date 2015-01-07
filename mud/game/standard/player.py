@@ -1,6 +1,6 @@
 from mud.core.actions import *
 from mud.core.util import *
-from mud.core.predicates import *
+from predicates import *
 from mud.core.colors import *
 from mud.core import verbs
 import random

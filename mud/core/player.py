@@ -6,18 +6,20 @@ import data
 from colors import *
 from mud.core import verbs
 import re
-from mud.core.predicates import string, container
+from mud.core.predicates import string
+from mud.game.standard.predicates import container
 
 __all__ = ["Player"]
 
 
-DEBUG = False
+DEBUG = True
 
 def debug(*args):
   if DEBUG:
     print " ".join(map(str, args))
 
 def recursive_register(e):
+  if isinstance(e, str): return e
   cont = e.get("contents")
   if cont:
     e["contents"] = map(recursive_register, cont)
