@@ -1,5 +1,6 @@
-from required import *
+mud.core import *
 from predicates import *
+
 
 verbs.register("kill", "kill|k|attack")
 verbs.register_structure("kill", "{1}")
@@ -20,13 +21,3 @@ def kill(a, b):
 def kill(a, b):
   say("You attack ", act("indefinate_name", b)+".")
 
-
-print "combat.py"
-
-
-import sys
-import re
-import verbs
-for k in sys.modules.keys():
-	if "verbs" in k:
-		print "("+k+")"

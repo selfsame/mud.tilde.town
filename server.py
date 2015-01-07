@@ -4,15 +4,15 @@ from twisted.internet import reactor, task
 from twisted.internet.protocol import ServerFactory
 from twisted.protocols.basic import LineOnlyReceiver
 
-import core.dialogue as d
+import mud.core.dialogue as d
 import time
-from intro import Intro
-import parse
+from mud.intro import Intro
+from mud.core import parse
 import data
-from player import Player
-from actions import act
-from components import load
-from game import *
+from mud.core.player import Player
+from mud.core.actions import act
+from mud.core.components import load
+from mud.game import *
 
 print "\n\nstarting telnet server\n\n"
 
@@ -41,7 +41,7 @@ class MUDProtocol(LineOnlyReceiver):
         
     def save(self):
         if self.account:
-          path = './players/'+self.account['name']+'.json'
+          path = './save/accounts/'+self.account['name']+'.json'
           return components.make.save_json(self.account, path)
     
     def add_dialogue(self, dialogue):
@@ -112,7 +112,7 @@ def Main():
     if len(sys.argv) > 1: 
         port = int(sys.argv[1])
     #data.game = Game()
-    load(os.sep.join(['./game']))
+    load(os.sep.join(['./mud/game']))
     act("init")
     factory = ChatProtocolFactory()
     reactor.listenTCP(port, factory)

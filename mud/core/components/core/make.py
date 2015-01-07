@@ -2,7 +2,7 @@ import os, sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 import json
 import uuid
-from data import *
+from mud.core.data import *
 import components
 
 

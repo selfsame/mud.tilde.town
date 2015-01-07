@@ -1,7 +1,5 @@
 from util import *
-import verbs
-
-print "predicates.py"
+from mud.core import verbs
 
 
 def verb(e):

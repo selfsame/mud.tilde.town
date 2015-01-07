@@ -8,9 +8,6 @@ objects = {}
 entities = {}
 
 scope = {}
-
-saystack = []
-reportstack = []
 subject = {}
 
 registry = {}

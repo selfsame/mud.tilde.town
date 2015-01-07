@@ -1,11 +1,9 @@
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import collections
-from util import fn_name, name, players_in_scope, contents_of, from_uid
-import data
-from data import registry
-from parse import template
-import components
+from mud.core.util import fn_name, name, players_in_scope, contents_of, from_uid
+from mud.core import data
+from mud.core.data import registry
+from mud.core.parse import template
+import mud.core.components
 
 __all__ = ["given", "check", "before", "after", "action", "act", "act_stack", "say", "report", "report_to"]
 
@@ -112,9 +110,6 @@ def speccheck(t, e):
 
 def dict_act(verb, *args):
   arity = len(args)
-  
-  #print verb, tuple(map(name, args))
-  #print name(data.subject)
   cursor = walk(registry, verb)
   cursor = walk(cursor, arity)
   if cursor:
@@ -129,25 +124,13 @@ def dict_act(verb, *args):
           if b == False:
             good = b
             break
-        #print printable_preds(spec)," ~ ", specced
         if good:
           roledict = tunnel(results, role, [])
-
           roledict.insert(0, cursor[role][spec])
           rolereport +=  [str(printable_preds(spec))]
       if len(rolereport) > 0:
         report.append(" ".join(["  "+str(role)+"->["] + rolereport + ["]\r\n"]))
-    #print "".join(report)
     res = compose(results, args, report)
-
-    #apply(act, ["report", actor, verb] + list(args))
-    if data.reportstack != []:
-      observers = players_in_scope(data.scope)
-      for actor in observers:
-        if actor != data.subject:
-          if actor.get("player"):
-            actor['player'].send(template("".join(data.reportstack)))
-      data.reportstack = []
     return res
 
 

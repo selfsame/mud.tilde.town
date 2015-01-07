@@ -1,7 +1,6 @@
-from required import *
-from actions import *
-from util import *
-from predicates import *
+from mud.core.util import *
+from mud.core.actions import *
+from mud.core.predicates import *
 import random
 
 @action

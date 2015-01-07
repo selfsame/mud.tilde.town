@@ -1,20 +1,17 @@
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import parse
 from components import instance, register
 from util import *
 from actions import *
 import data
 from colors import *
-from core.verbs import determine
+from mud.core import verbs
 import re
-from predicates import string, container
+from mud.core.predicates import string, container
 
 __all__ = ["Player"]
 
-print "player.py"
 
-DEBUG = True
+DEBUG = False
 
 def debug(*args):
   if DEBUG:
@@ -48,7 +45,7 @@ class Player():
 
   def input(self, line):
     data.subject = self.data
-    directive = determine(line)
+    directive = verbs.determine(line)
     debug(directive)
     if len(directive) > 0:
       verb = directive[0]

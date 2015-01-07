@@ -1,12 +1,9 @@
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from required import *
-from actions import *
-import data
-from util import *
-from predicates import *
+from mud.core.util import *
+from mud.core.actions import *
+from mud.core.predicates import *
+from mud.core import data
 import random
-from components import load, instance, register
+from mud.core.components import load, instance, register
 
 @action
 @given()
