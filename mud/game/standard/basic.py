@@ -43,12 +43,12 @@ def walk(a, b):
 @action
 @given(room, entity, string)
 def leave(o, e, b):
-  report_to(o, "{#black}{#bold}"+act("indefinate_name", e), "leaves to the", b+".{#reset}")
+  report_to(o, "{#bold}"+act("indefinate_name", e), "leaves to the", b+".{#reset}")
 
 @action
 @given(entity, room)
 def arrive(e, r):
-  report_to(r,  "{#black}{#bold}"+act("indefinate_name", e), "walks in.{#reset}")
+  report_to(r,  "{#bold}"+act("indefinate_name", e), "walks in.{#reset}")
 
 
 @action
@@ -72,7 +72,7 @@ def move(a, b):
     return False
 
 @action
-@given(a('located', 'uuid', thing), holder)
+@given(a(located, 'uuid', thing), holder)
 def move(a, b):
   uid = the(a, 'uuid')
   loc = location(a)

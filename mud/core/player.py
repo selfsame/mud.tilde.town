@@ -19,7 +19,8 @@ def debug(*args):
     print " ".join(map(str, args))
 
 def recursive_register(e):
-  if isinstance(e, str): return e
+  if isinstance(e, str): 
+    return e
   cont = e.get("contents")
   if cont:
     e["contents"] = map(recursive_register, cont)
@@ -39,6 +40,7 @@ class Player():
     r = data.rooms.get(self.data['located'])
     r['contents'].append(self.data['uuid'])
     data.subject = self.data
+    act("init", self.data)
     self.input("look")
     self.prompt()
 

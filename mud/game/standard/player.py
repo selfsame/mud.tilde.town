@@ -2,7 +2,7 @@ from mud.core.actions import *
 from mud.core.util import *
 from predicates import *
 from mud.core.colors import *
-from mud.core import verbs
+from mud.core import verbs, components
 import random
 
 
@@ -24,7 +24,7 @@ def line_prompt(a):
   h = special["heart"]
   hp = a["living"]["hp"]
   maxhp = a["living"]["hpmax"]
-  return color("red")+h+color("bold")+color("black")+str(hp)+"/"+color("reset")+str(maxhp)+color("cyan")+special["right"]+color("reset")
+  return color("red")+h+color("bold")+color("yellow")+str(hp)+"/"+color("reset")+str(maxhp)+color("cyan")+">"+color("reset")
 
 @action
 @given(player)

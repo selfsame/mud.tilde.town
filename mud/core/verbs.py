@@ -84,6 +84,10 @@ def match_pattern(p, s):
 			res.append({types["g2"]: gd["g2"]})
 		if "g3" in gd:
 			res.append({types["g3"]: gd["g3"]})
+		if "g4" in gd:
+			res.append({types["g4"]: gd["g4"]})
+		if "g5" in gd:
+			res.append({types["g5"]: gd["g5"]})
 		return res
 	else:
 		return False

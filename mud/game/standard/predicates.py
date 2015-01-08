@@ -1,4 +1,5 @@
 from mud.core.predicates import *
+from mud.core.util import contents_of
 
 room = a('room')
 thing = a('thing')
@@ -7,7 +8,10 @@ entity = a('entity')
 human = a('human')
 player = a('player')
 hidden = a('hidden')
-located = a('located')
+
+def located(e):
+  if e.get('located'): return True
+  return False
 
 holder = a('contents')
 
@@ -22,7 +26,7 @@ opened = non(closed)
 
 def empty(e):
   if container(e):
-    c = len(get_contents(e))
+    c = len(contents_of(e))
     if c == 0: return True
   return False
 

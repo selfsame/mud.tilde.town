@@ -117,8 +117,11 @@ class Account(Dialogue):
         elif s.lower() == "quit":
             self.con.close_connection("goodbye!")
         else:
-            idx = int(s)
-            choice = self.con.account['characters'][idx]
+            try:
+              idx = int(s)
+              choice = self.con.account['characters'][idx]
+            except:
+              return "invalid choice"
             self.done = True
             self.con.clear()
             self.con.sendLine(successize("logging in with "+choice['firstname']))

@@ -1,1 +1,3 @@
-{"id" :"book", "desc":"a small paperback book", "name":"book"}
+{"id" :"book", "desc":"a small paperback book", "name":"book",
+"surface":true,
+"writing":""}
