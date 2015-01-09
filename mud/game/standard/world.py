@@ -1,8 +1,5 @@
 from mud.core.util import *
-from mud.core.actions import *
-from predicates import *
-from mud.core import data
-from mud.core.components import *
+from mud.core import *
 
 @action
 @given()
@@ -12,7 +9,7 @@ def init():
     e = data.datatypes[k]
     if e.get("room"):
         if not e.get("base"):
-            register(instance(e.get("id"))) 
+            components.register(components.instance(e.get("id"))) 
   for k in data.rooms:
       act("init", data.rooms[k])
 

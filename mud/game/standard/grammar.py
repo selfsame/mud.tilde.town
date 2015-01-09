@@ -1,6 +1,5 @@
 from mud.core.util import *
-from mud.core.actions import *
-from mud.core.predicates import *
+from mud.core import *
 
 
 @action

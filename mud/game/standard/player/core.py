@@ -1,14 +1,7 @@
-from mud.core.actions import *
-from mud.core.util import *
-from mud.game.standard.predicates import *
-from mud.core.colors import *
-from mud.core import verbs, components, predicates
-from mud.core.components import *
-import random
+from mud.core import *
+from colors import color
 
-def player(e):
-  if dictionary(e) and e.get("player"): return True
-  return False
+player = has("player")
 
 predicates.register("player", has("player"))
 
@@ -32,10 +25,10 @@ def player_command(v, p, u, a):
 @action
 @given("player")
 def line_prompt(a):
-  h = special["heart"]
+  h = colors.special["heart"]
   hp = a["living"]["hp"]
   maxhp = a["living"]["hpmax"]
-  return color("red")+h+color("bold")+color("yellow")+str(hp)+"/"+color("reset")+str(maxhp)+color("cyan")+">"+color("reset")
+  return parse.template("{#bold}{#red}"+h+"{#yellow}"+str(hp)+"{#green}/"+str(maxhp)+"{#reset}:")
 
 @action
 @given("player")
@@ -133,21 +126,6 @@ def look(a, b):
   say("you dont see anything like that here.")
 
 
-@before
-@given("player", "room")
-def describe(p, r):
-  say("\r\n{#cyan}    ~ ~ "+act("write",r,'name')+"{#cyan} ~ ~{#reset}\r\n ")
-
-@action
-@given("player", "room")
-def describe(p, r):
-  res = [act("write",r,'desc')," ",
-    "You see "+ act("list_contents", p, r)+ ".",
-    " ",
-    "exits: {#yellow}{#bold}"+", ".join(the(r, 'exits').keys()) + "{#reset}"," "]
-  say("\r\n".join(res))
-
-
 @action
 @given("player", "thing")
 def look(a, b):
@@ -221,63 +199,5 @@ def drop(a, b, c):
     report_to(location(a), act("indefinate_name", a), "puts the ", name(b)+" into "+act("indefinate_name", c)+relation+".\r\n")
 
 
-@action
-@given("player", "holder")
-def list_contents(a, b):
-  conts = the(b, 'contents')
-  #if the(a, 'uuid') in conts: conts.remove(the(a, 'uuid'))
-  names = {}
-  kinds = {}
-  for item in conts:
-    ent = from_uid(item)
-    if ent == a:
-      break
-    n = act("printed_name", ent)
-    if names.get(n):
-      names[n] += 1
-    else:
-      names[n] = 1
-    if not kinds.get(n):
-      kinds[n] = from_uid(item)
-  res = []
-  for k in names:
-    if names[k] > 1:
-      r = "".join(act("indefinate_name", names[k], kinds[k]))
-    else:
-      r = "".join(act_stack("indefinate_name", kinds[k]))
-    if r: res.append( str(r) )
-  if len(res) == 0:
-    res = ["nothing"]
-  lastpair = res[-2:]
-  prev = res[:-2] + [" and ".join(lastpair)]
-  return ", ".join(prev)
-
-
-
-@action
-@given("holder")
-def list_contents(b):
-  conts = the(b, 'contents')
-  names = {}
-  kinds = {}
-  for item in conts:
-    ent = from_uid(item)
-    n = act("printed_name", ent)
-    if names.get(n):
-      names[n] += 1
-    else:
-      names[n] = 1
-    if not kinds.get(n):
-      kinds[n] = from_uid(item)
-  res = []
-  for k in names:
-    if names[k] > 1:
-      r = "".join(act("indefinate_name", names[k], kinds[k]))
-    else:
-      r = "".join(act_stack("indefinate_name", kinds[k]))
-    if r: res.append( str(r) )
-  lastpair = res[-2:]
-  prev = res[:-2] + [" and ".join(lastpair)]
-  return ", ".join(prev)
 
 

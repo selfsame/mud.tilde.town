@@ -2,6 +2,7 @@
 from container import *
 from entity import *
 from world import *
+from description import *
 from grammar import *
 from basic import *
 from scope import *

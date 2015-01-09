@@ -27,6 +27,8 @@ def handlebars(s):
   zipped = [val for pair in zip(unzip[1], swap) for val in pair]
   return "".join(zipped)
 
+
+
 def evalbars(l):
   resl = []
   for s in l:

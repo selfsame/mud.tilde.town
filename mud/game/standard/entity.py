@@ -1,12 +1,9 @@
-from mud.core.actions import *
 from mud.core.util import *
-from mud.core.components import *
-from mud.core.predicates import *
-from mud.core import data, predicates
+from mud.core import *
 import random
 
 
-entity = register("entity", has("entity"))
+predicates.register("entity", has("entity"))
 
 def idle(e):
   if dictionary(e):
@@ -15,6 +12,28 @@ def idle(e):
   return False
 
 register("idle", has("idle"))
+
+
+@construct
+def living(d):
+    hpmax = d['hpmax']
+    if parse.dice.is_dice(d['hpmax']):
+        hpmax = parse.dice.roll(d['hpmax'])
+    d['hp'] = hpmax
+    d['hpmax'] = hpmax
+    return d
+
+@construct
+def inventory(d):
+  return {"contents":[]}
+
+@construct
+def acting(d):
+  d["ap"] = random.randint(20,50)
+  return d
+
+
+
 
 @action
 @given(has("acting"), number)

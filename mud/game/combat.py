@@ -1,7 +1,4 @@
 from mud.core import *
-from mud.core.actions import *
-from standard.predicates import *
-
 
 verbs.register("kill", "kill|k|attack")
 verbs.register_structure("kill", "{1}")

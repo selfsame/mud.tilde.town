@@ -1,9 +1,5 @@
 from mud.core.util import *
-from mud.core.actions import *
-from predicates import *
-
-
-
+from mud.core import *
 
 @action
 @given('located', 'located')
@@ -25,7 +21,6 @@ def scope_relation(a, b):
       else:
         res += " in the "+name(ah2)+""
   return res
-
 
 
 
@@ -73,9 +68,9 @@ def scope_while(e, a):
 @action
 @given("player")
 def check_scope(a):
-  inv = act("check_inventory_scope", a) 
+  inv = act("check_inventory_scope", a) or []
   loc = location(a)
-  res = act("check_scope", a, loc)
+  res = act("check_scope", a, loc) or []
   return inv + res
 
 @action

@@ -1,7 +1,4 @@
-from mud.core.actions import *
-from mud.core import predicates
-from standard.predicates import *
-from mud.core import verbs
+from mud.core import *
 
 verbs.register("write", "write|inscribe", {"past":"wrote"})
 verbs.register_structure("write", "{1:text}on|in{2}","{1:text}on|in{2}with|using{3}")

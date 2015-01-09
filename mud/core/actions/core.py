@@ -132,6 +132,7 @@ def dict_act(verb, *args):
       return res
   except Exception as exc:
     print exc, "\r\n", " ".join(report)
+    raise
 
 
 def act(verb, *args):

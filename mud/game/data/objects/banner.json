@@ -1,0 +1,4 @@
+{"id" :"banner", 
+"regex":"banner|tattered",
+"scenery":"A tattered banner is draped across the front of the visitor center.\r\nYou are starting to wonder where all the tourists are.",
+"desc":"\r\nYou can barely make out what it once said:\r\n{#red}{%black}D-no.aur Out*.c,k ,Adve*.,r,{#reset}{%reset}."}

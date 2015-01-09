@@ -1,5 +1,4 @@
-from mud.core.actions import *
-from mud.core.predicates import *
+from mud.core import *
 
 register("colored", has('color'))
 

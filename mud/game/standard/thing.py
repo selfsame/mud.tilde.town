@@ -1,12 +1,8 @@
-from mud.core.actions import *
-from mud.core import predicates
-from mud.core.components import *
-from mud.core import data
+from mud.core import *
 
 predicates.register("thing", predicates.dictionary)
 predicates.register("registered", predicates.has("uuid"))
 predicates.register("object", predicates.has("object"))
-
 
 def _datatype(s): 
 	if predicates.string(s):

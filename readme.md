@@ -1,7 +1,7 @@
 mud.tilde.town
 ==============
 
-***A python MUD influenced by Inform7***
+***A python MUD for interactive fiction***
 
 ![](http://www.selfsamegames.com/screens/ttmud.png)
 
@@ -9,57 +9,90 @@ mud.tilde.town
 
 #Features
 
-## Inform7 style function dispatching::
-* Actions are a family of functions with lifecycle variations (check, before, during, after)
-* Action calls are dipatched by arg arity, lifecycle version, and boolean predicate functions called on the arguments provided.
+## extensive function dispatching
+* inspired by inform7
+* functions dispatch for argument arity, argument predicate, and lifecycle variations (check, before, during, after)
 * Rich behavior trees are easily created by covering basic functionality then narrowing down edge cases to augment/ovveride.
-* Behaviour is distributed, and easily alterable from separate modules.
+* functions and predicates are declarativly registered, avoiding import dependencies between game modules
 
 ```python
 @action
-@given(entity, a(closed, container))
+@given("entity", a("closed", "container"))
 def close(a, b):
   say("It's already closed.")
 
 @action
-@given(entity, a(opened, container))
+@given("entity", a("opened", "container"))
 def close(a, b):
   b["closed"] = True
-  say("You close the "+name(b)+".")
-  return True
+  say("You close "+act("indefinate_name", b)+".")
 ```
 
-## component entity system:
-* data based game objects, loaded from json and converted to python dicts.
-* components are defined as key value pairs.
+## component/entity game objects:
+* data based definitions, .json files or python dicts.
+* components are the key value pairs.
 * Constructing/serializing/merging functions easily declared for components.
-* Entity definitions can have multiple ancestors.
+* Can extend by mergine from multiple ancestors.
 * Directory structure of entity .json can declare inheritance via ```_base_.json``` files
 
 
 ```json
-{"id":"treehouse",
-"name":"a small treehouse.",
-"desc":"It's tiny and crudely built.",
-"exits": {"down": "lobby"},
-"contents":[
-	{"id":"chest", 
-	 "name":"chest",
-	 "closed":true,
-	 "contents":[
-		{"id":"coinpurse",
-		 "contents":[{"id":"coin"},
-					 {"id":"coin"}]}]}]}
+{"id":"chest",
+"name":"wooden chest",
+"descripton":"It is likely to have a thing or two inside",
+  "extends":["object"],
+  "contents":[{"id":"mouse"}],
+  "capacity":5,
+  "closed":true,
+  "opaque":true}
+```
+
+```python
+from mud.core import *
+
+#component lifecycles
+
+@construct
+def contents(d):
+	return map(the("uuid"), map(instance, d))
+
+@serialize
+def contents(d):
+  return map(_serialize, map(util.from_uid, d))
+
+#predicate declaration
+
+predicates.register("container", has('contents'))
+
+def empty(e): return len(the("contents")) == 0
+predicates.register("empty", empty)
+
+predicates.register("closed", closed)
+predicates.register("open", a(has("closed"), non("closed")))
+
+#rule declaration
+
+@after
+@given(a("open", "empty", "container"))
+def printed_name(e):
+  return "(empty)"
+
 ```
 
 
-## Schemaless
-* rooms, objects, and entities are arbitrary components for the demo library.
-* Games are defined by actions and entities, gameplay code is decoupled from the server
+## pretty good input parsing
+
+```python
+verbs.register("write", "write|inscribe", {"past":"wrote"})
+
+verbs.register_structure("write", "{1:text}on|in{2}","{1:text}on|in{2}with|using{3}")
+```
+
+## standard library of modules
+* core concepts like rooms/containers/scope use the above systems and can be removed, modified or redefined.
 
 WIKI
 ======
-There is a rather thorough set of documentation in the wiki:
 [https://github.com/selfsame/mud.tilde.town/wiki](https://github.com/selfsame/mud.tilde.town/wiki)
 
 

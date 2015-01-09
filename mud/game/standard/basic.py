@@ -1,8 +1,4 @@
-from mud.core.actions import *
-from mud.core.predicates import *
-from mud.core import components
-
-
+from mud.core import *
 
 @action
 @given("thing")

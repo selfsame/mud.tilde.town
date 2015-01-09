@@ -1,9 +1,22 @@
-from mud.core.actions import *
-from mud.core.util import *
-from mud.core import predicates
-from mud.core.predicates import *
-from mud.core.components import *
-from mud.core.components import _serialize, _merge, _construct
+from mud.core import *
+from components import _serialize, _merge, _construct
+
+@construct
+def contents(d):
+  res = []
+  for e in d:
+    if e.get("id"):
+      c_e = _construct(e)
+      new = components.instance(e.get("id"))
+      merged = _merge([new, c_e])
+      components.register(merged)
+      res.append(merged.get("uuid"))
+  return res
+
+@serialize
+def contents(d):
+  conts = map(util.from_uid, d)
+  return map(_serialize, conts)
 
 predicates.register("holder", has('contents'))
 predicates.register("container", a(non("entity"), "holder"))
@@ -23,27 +36,7 @@ def closed(e):
   return False
 
 predicates.register("closed", closed)
-predicates.register("open", non("closed"))
-
-
-@construct
-def contents(d):
-  res = []
-  for e in d:
-    if e.get("id"):
-      c_e = _construct(e)
-      new = instance(e.get("id"))
-      merged = _merge([new, c_e])
-      register(merged)
-      res.append(merged.get("uuid"))
-  return res
-
-@serialize
-def contents(d):
-  conts = map(from_uid, d)
-  return map(_serialize, conts)
-
-
+predicates.register("open", a(has("closed"), non("closed")))
 
 
 

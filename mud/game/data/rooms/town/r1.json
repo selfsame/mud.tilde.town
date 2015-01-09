@@ -1,6 +1,6 @@
 {"id":"r1", 
 "name": "the visitor lobby plaza", 
-"desc":"You emerge from the lobby building into the heat of the island.  The jungle around this complex seems to have grown faster than the maintenance crews could trim it.\r\n\r\nA tattered banner draped accros the from of the visitor center reads: \r\n      {#red}{%black}D-no.aur Out*.c,k ,Adve*.,r,{#reset}{%reset}.\r\n\r\nYou are starting to wonder where all the tourists are.",
-"contents":[
+"desc":"You emerge from the lobby building into the heat of the island.  The jungle around this complex seems to have grown faster than the maintenance crews could trim it. Vines have begun to climb up the walls of the buildings and leaf litter is forming a carpet over the concrete paving.",
+"contents":[{"id":"banner"},
 	{"id":"object","name":"bloody boot", "regex":"bloody|boot","desc":"Someone has forgotten their sho... wait.. is that a severed foot?"}], 
 "exits":{"door":"lobby"}}
