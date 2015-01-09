@@ -1,7 +1,7 @@
 from mud.core.util import *
 from mud.core.actions import *
-from predicates import *
-import random
+from mud.core.predicates import *
+
 
 @action
 @given(number)
@@ -12,7 +12,7 @@ def written(n):
   return res or "many"
 
 @action
-@given(thing, string)
+@given("thing", string)
 def write(e,p):
   if e.get(p):
     return e.get(p)
@@ -20,7 +20,7 @@ def write(e,p):
     return "<no "+p+">"
 
 @action
-@given(thing)
+@given("thing")
 def indefinate_article(a):
   return act("indefinate_article", name(a))
 
@@ -41,7 +41,7 @@ def indefinate_article(n, a):
   return act("indefinate_article", a)
 
 @action
-@given(thing)
+@given("thing")
 def plural_name(a):
   p = the(a, "plural")
   if p: return p
@@ -49,12 +49,12 @@ def plural_name(a):
 
 
 @action
-@given(number, thing)
+@given(number, "thing")
 def definate_article(n, a):
   return "the "
 
 @action
-@given(thing)
+@given("thing")
 def definate_article(n, a):
   return "the "
 
@@ -66,20 +66,20 @@ def indefinate_name(n, e):
 
 
 @action
-@given(number, thing)
+@given(number, "thing")
 def indefinate_name(n, e):
   noun = "".join(act_stack("plural_name", e))
   return str(act("indefinate_article", n, noun))+ noun
 
 
 @action
-@given(thing)
+@given("thing")
 def indefinate_name(e):
   noun = "".join(act_stack("printed_name", e))
   return str(act("indefinate_article", noun))+ noun
 
 @action
-@given(player)
+@given("player")
 def indefinate_name(e):
   noun = act("printed_name", e)
   return noun

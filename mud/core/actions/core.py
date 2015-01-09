@@ -4,6 +4,7 @@ from mud.core import data
 from mud.core.data import registry
 from mud.core.parse import template
 import mud.core.components
+from mud.core import predicates
 
 __all__ = ["given", "check", "before", "after", "action", "act", "act_stack", "say", "report", "report_to"]
 
@@ -81,8 +82,6 @@ def action(f):
     return f[k](a, b)    
   return f
 
-
-
 def printable_preds(col):
   return "<"+", ".join(map(fn_name, col))+">"
 
@@ -95,43 +94,44 @@ def compose(roles, args, report = []):
   for role in ["before", "action", "after"]:
     fns = roles.get(role) or []
     for f in fns:
-      try:
-        res[role] = apply(f, args)
-      except:
-        print "ACTION ERROR: "+fn_name(f)+"["+role+"]"+"\r\n    "+"".join(report)
-        return res
+      res[role] = apply(f, args)
       break
   return res
 
 def speccheck(t, e):
+  if isinstance(t, str):
+    return predicates.get(t)(e)
   return t(e)
 
 
 
 def dict_act(verb, *args):
-  arity = len(args)
-  cursor = walk(registry, verb)
-  cursor = walk(cursor, arity)
-  if cursor:
-    results = OD()
+  try:
+    arity = len(args)
+    cursor = walk(registry, verb)
+    cursor = walk(cursor, arity)
     report = []
-    for role in cursor:
-      rolereport = []
-      for spec in cursor[role]:
-        good = True
-        specced = map(speccheck, spec, args)
-        for b in specced:
-          if b == False:
-            good = b
-            break
-        if good:
-          roledict = tunnel(results, role, [])
-          roledict.insert(0, cursor[role][spec])
-          rolereport +=  [str(printable_preds(spec))]
-      if len(rolereport) > 0:
-        report.append(" ".join(["  "+str(role)+"->["] + rolereport + ["]\r\n"]))
-    res = compose(results, args, report)
-    return res
+    rolereport = []
+    if cursor:
+      results = OD()   
+      for role in cursor:      
+        for spec in cursor[role]:
+          good = True      
+          specced = map(speccheck, spec, args)
+          for b in specced:
+            if b == False:
+              good = b
+              break
+          if good:
+            roledict = tunnel(results, role, [])
+            roledict.insert(0, cursor[role][spec])
+            rolereport +=  [str(printable_preds(spec))]
+        if len(rolereport) > 0:
+          report.append(" ".join(["  "+str(role)+"->["] + rolereport + ["]\r\n"]))
+      res = compose(results, args, report)
+      return res
+  except Exception as exc:
+    print exc, "\r\n", " ".join(report)
 
 
 def act(verb, *args):

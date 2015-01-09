@@ -1,4 +1,4 @@
-import data
+from mud.core import data
 
 "useful functions"
 

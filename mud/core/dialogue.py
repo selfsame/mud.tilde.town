@@ -7,7 +7,7 @@ import base64
 
 from colors import *
 import parse
-import components
+from mud.core.components import *
 
 def errorize(s):
   return wrap(s, color('red'))
@@ -49,11 +49,12 @@ class Login(Dialogue):
       return self.name+" is a reserved word\r\n Enter your name:"
     try:
       print ("checking for "+self.name+".sav")
-      self.account = components.make.load_json('./save/accounts/'+self.name+'.json')
+      self.account = load_json('./save/accounts/'+self.name+'.json')
       self.state = self.verify
       #self.con.echo(False)
       return "welcome back "+self.name+"\r\nEnter your password:"
-    except:
+    except Exception as exc:
+      print exc
       self.state = self.choose_pass
       #self.con.echo(False)
       return "New account, enter your desired password (4+chars):"
@@ -77,7 +78,7 @@ class Login(Dialogue):
         #self.con.echo(True)
         account = {'name':self.name, 'salt':base64.b64encode(os.urandom(16)), 'characters':[], 'email':False}
         account['password'] = hashlib.sha512(account['salt'] + self.passw).hexdigest()
-        if components.make.save_json(account, './save/accounts/'+self.name+'.json'):
+        if save_json(account, './save/accounts/'+self.name+'.json'):
             print "account created: "+self.name
         self.con.account = account
         return self.con.add_dialogue(Account(self.con))
@@ -120,7 +121,8 @@ class Account(Dialogue):
             try:
               idx = int(s)
               choice = self.con.account['characters'][idx]
-            except:
+            except Exception as exc:
+              print exc
               return "invalid choice"
             self.done = True
             self.con.clear()

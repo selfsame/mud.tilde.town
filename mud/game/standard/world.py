@@ -2,8 +2,7 @@ from mud.core.util import *
 from mud.core.actions import *
 from predicates import *
 from mud.core import data
-import random
-from mud.core.components import load, instance, register
+from mud.core.components import *
 
 @action
 @given()
@@ -13,7 +12,7 @@ def init():
     e = data.datatypes[k]
     if e.get("room"):
         if not e.get("base"):
-            register(instance(e.get("id")))    
+            register(instance(e.get("id"))) 
   for k in data.rooms:
       act("init", data.rooms[k])
 
@@ -26,7 +25,7 @@ def init():
   print data.datatypes.keys()
 
 @action
-@given(holder)
+@given("holder")
 def init(r):
   print "    room:", name(r)
   cont = contents_of(r)
@@ -42,7 +41,7 @@ def update(delta):
 
 
 @after
-@given(room, number)
+@given("room", number)
 def update(r, delta):
   contents = r['contents']
   data.scope = map(from_uid, contents)    

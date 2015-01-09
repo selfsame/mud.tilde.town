@@ -1,25 +1,36 @@
 from mud.core.actions import *
 from mud.core.util import *
-from predicates import *
+from mud.game.standard.predicates import *
 from mud.core.colors import *
-from mud.core import verbs, components
+from mud.core import verbs, components, predicates
+from mud.core.components import *
 import random
+
+def player(e):
+  if dictionary(e) and e.get("player"): return True
+  return False
+
+predicates.register("player", has("player"))
+
+@serialize
+def player(e):
+  return True
 
 
 
 @action
-@given(verb, player, undefined)
+@given(verb, "player", undefined)
 def player_command(v, p, u):
   say("I can't understand what you are "+verbs.forms[v]["progressive"]+".")
 
 @action
-@given(verb, player, undefined, thing)
+@given(verb, "player", undefined, "thing")
 def player_command(v, p, u, a):
   say("I can't understand what you are "+verbs.forms[v]["progressive"]+" in the "+name(a)+".")
 
 
 @action
-@given(player)
+@given("player")
 def line_prompt(a):
   h = special["heart"]
   hp = a["living"]["hp"]
@@ -27,7 +38,7 @@ def line_prompt(a):
   return color("red")+h+color("bold")+color("yellow")+str(hp)+"/"+color("reset")+str(maxhp)+color("cyan")+">"+color("reset")
 
 @action
-@given(player)
+@given("player")
 def quit(a):
   print "quit(player)"
   act("save", a)
@@ -36,22 +47,23 @@ def quit(a):
 
 
 @action
-@given(player)
+@given("player")
 def save(a):
   print "save(player)"
-  if a["player"].save(components.serialize(a)):
+  ser = components._serialize(a)
+  if a["player"].save(ser):
     say("{#magenta}GAME SAVED{#reset}")
   else:
     say("{#red}{%white}ERROR SAVE ERROR{#reset}")
 
 @action
-@given(player, string)
+@given("player", string)
 def talk(a, b):
   say("You say '{#yellow}"+b+"{#reset}'.")
   report_to(location(a), name(a)+" says: ""{#yellow}"+b+"{#reset}")
 
 @action
-@given(player, string, entity)
+@given("player", string, "entity")
 def talk(a, b, c):
   message = "'{#yellow}"+b+"{#reset}' to "+act("indefinate_name", c)+"."
   say("You say "+message)
@@ -59,19 +71,20 @@ def talk(a, b, c):
 
 
 @action
-@given(player)
+@given("player")
 def printed_name(a):
-  return "{#magenta}"+the(a, "firstname")+"{#reset}"
+  n = str(the(a, "firstname"))
+  return "{#magenta}"+n+"{#reset}"
 
 
 @after
-@given(player, anything)
+@given("player", anything)
 def walk(a, b):
   act("look", a)
 
 
 @action
-@given(player, string)
+@given("player", string)
 def walk(a, b):
   loc = location(a)
   exits = the(loc, "exits")
@@ -85,12 +98,12 @@ def walk(a, b):
 
 
 @action
-@given(player, thing)
+@given("player", "thing")
 def get_name(a,b):
   return (the(b, "name") or the(b, "id") or "thing")
 
 @action
-@given(player, thing, equals("name"))
+@given("player", "thing", equals("name"))
 def printing(actor, subjects, property):
   res = dict_act("get_name", actor, subjects)
   s = ""
@@ -102,31 +115,31 @@ def printing(actor, subjects, property):
 
 
 @after
-@given(player, thing)
+@given("player", "thing")
 def get_name(a,b):
   return "(named)"  
 
 
 @action
-@given(player)
+@given("player")
 def look(a):
   r = location(a)
   act("describe", a, r)
 
 
 @action
-@given(player, undefined)
+@given("player", undefined)
 def look(a, b):
   say("you dont see anything like that here.")
 
 
 @before
-@given(player, room)
+@given("player", "room")
 def describe(p, r):
   say("\r\n{#cyan}    ~ ~ "+act("write",r,'name')+"{#cyan} ~ ~{#reset}\r\n ")
 
 @action
-@given(player, room)
+@given("player", "room")
 def describe(p, r):
   res = [act("write",r,'desc')," ",
     "You see "+ act("list_contents", p, r)+ ".",
@@ -134,32 +147,33 @@ def describe(p, r):
     "exits: {#yellow}{#bold}"+", ".join(the(r, 'exits').keys()) + "{#reset}"," "]
   say("\r\n".join(res))
 
+
 @action
-@given(player, thing)
+@given("player", "thing")
 def look(a, b):
   relation = act("scope_relation", b, a)
   say("you look at ", act("indefinate_name", b)+relation+".\r\n", act("write",b,'desc'))
 
 
 @check
-@given(player, a("fixed", object))
+@given("player", a("fixed", "object"))
 def take(a, b):
   say("You try, but it seems to be permamently attached.")
   return False
 
 @check
-@given(player, a(non(object), entity))
+@given("player", a(non("object"), "entity"))
 def take(a, b):
   say("Maybe if it was unconscious, or dead..")
   return False
 
 @action
-@given(player, anything)
+@given("player", anything)
 def take(a, b):
   say("That's not something you could take.")
 
 @action
-@given(player, a("located", object))
+@given("player", a("located", "object"))
 def take(a, b):
   relation = act("scope_relation", b, a)
   if act("move", b, a):
@@ -168,25 +182,25 @@ def take(a, b):
 
 
 @after
-@given(entity, thing)
+@given("entity", "thing")
 def look(a, b):
   relation = act("scope_relation", b, a)
   report_to(location(a), act("indefinate_name", a), "looks at", act("indefinate_name", b)+relation+".")
 
 @action
-@given(player)
+@given("player")
 def inventory(a):
   say("You have "+ act("list_contents", a, a) + ".\r\n")
 
 @action
-@given(player, a("located"))
+@given("player", a("located"))
 def drop(a, b):
   if act("move", b, location(a)):
     say("you drop the ", name(b)+".\r\n")
     report_to(location(a), act("indefinate_name", a), "drops the", name(b)+".\r\n")
 
 @check
-@given(player, a("located"), a(closed, container))
+@given("player", a("located"), a("closed", "container"))
 def drop(a, b, c):
   if act("open", a, c):
     return True
@@ -194,7 +208,7 @@ def drop(a, b, c):
   return False
 
 @action
-@given(player, a("located"), container)
+@given("player", a("located"), "container")
 def drop(a, b, c):
   p = path(c)
   print "PATH", map(name, map(from_uid, p))
@@ -208,7 +222,7 @@ def drop(a, b, c):
 
 
 @action
-@given(player, holder)
+@given("player", "holder")
 def list_contents(a, b):
   conts = the(b, 'contents')
   #if the(a, 'uuid') in conts: conts.remove(the(a, 'uuid'))
@@ -241,7 +255,7 @@ def list_contents(a, b):
 
 
 @action
-@given(holder)
+@given("holder")
 def list_contents(b):
   conts = the(b, 'contents')
   names = {}
@@ -265,28 +279,5 @@ def list_contents(b):
   lastpair = res[-2:]
   prev = res[:-2] + [" and ".join(lastpair)]
   return ", ".join(prev)
-
-@action
-@given(a('located'), a('located'))
-def scope_relation(a, b):
-  res = ''
-  #if a['located'] == b['located']:
-  #  return res
-  ah = from_uid(a['located'])
-  bh = from_uid(b['located'])
-  if room(ah):
-    return " on the floor"
-  elif player(ah):
-    res += " in "+name(ah)+"'s inventory"
-  else:
-    res += " inside the "+name(ah)+""
-  if ah.get("located"):
-    ah2 = from_uid(ah['located'])
-    if not room(ah2):
-      if player(ah2):
-        res += " in "+name(ah2)+"'s inventory"
-      else:
-        res += " in the "+name(ah2)+""
-  return res
 
 

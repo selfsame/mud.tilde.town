@@ -1,10 +1,13 @@
-from scenario import *
+
+from container import *
+from entity import *
+from world import *
 from grammar import *
 from basic import *
 from scope import *
-from rooms import *
+from room import *
 from player import *
-from containers import *
+from thing import *
 
 
 

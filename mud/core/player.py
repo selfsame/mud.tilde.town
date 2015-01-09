@@ -7,12 +7,12 @@ from colors import *
 from mud.core import verbs
 import re
 from mud.core.predicates import string
-from mud.game.standard.predicates import container
+from mud.game.standard import predicates
 
 __all__ = ["Player"]
 
 
-DEBUG = True
+DEBUG = False
 
 def debug(*args):
   if DEBUG:
@@ -159,7 +159,7 @@ def find_held_scope(cursor, scope):
       debug("->", item)
       paths = []
       for branch in scopes:
-        hs = filter(container, branch)
+        hs = filter(predicates.get("container"), branch)
         matches = scope_matches(hs, item["string"])
         if matches:
           for m in matches:
