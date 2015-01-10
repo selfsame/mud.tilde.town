@@ -1,6 +1,6 @@
 from mud.core import data
+from CAPSMODE import *
 
-"useful functions"
 
 def fn_name(f):
   try:
@@ -17,10 +17,36 @@ def the(thing, compstr, default=False):
 
 def name(thing):
   if isinstance(thing, dict):
-    return the(thing,'name') or the(thing,'firstname') or the(thing,'ustr') or the(thing,'id') or "thing"
+    return FIRST(filter(INVERT(NONE), map(INF(GET, thing, "%1"), ['name','firstname','ustr','id'])))
   if thing == None:
     return "nothing"
   return str(type(thing))
+
+def its(k, notfound = None):
+  def _its_(e):
+    if isinstance(e, dict):
+      if e.get(k): return e[k]
+    return notfound
+  return _its_
+
+def get_in(col, ks, notfound = None):
+  for k in ks:
+    if isinstance(col, dict):
+      if k in col:
+        col = col[k]
+      else: return notfound
+    else: return notfound
+  return col
+
+def fn_2(fn, arg2):
+  def _fn_2(arg1):
+    return fn(arg1, arg2)
+  return _fn_2
+
+def map_get_in(ks, col):
+  return map(fn_2(get_in, ks), col)
+
+
 
 def from_uid(s):
   if isinstance(s, str):
@@ -72,4 +98,5 @@ def connected_rooms(r):
   for k in exits:
     res.append(from_uid(exits[k]))
   return res
+
 

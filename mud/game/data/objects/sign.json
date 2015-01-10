@@ -1,3 +1,4 @@
 {"id" :"sign", 
 "name":"sign",
-"desc":"There is nothing written on it."}
+"desc":"There is nothing written on it.",
+"fails": {"write":"You're pretty sure that counts as grafitti."}}

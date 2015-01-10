@@ -3,4 +3,5 @@
   "living": {"hpmax": 12},
   "extends":["mammal"],
   "weight": 1.2,
-  "contents":[{"id":"coin"}]}
+  "contents":[{"id":"coin"}],
+	"fails": {"write":"Rat writing's really rude."}}

@@ -27,22 +27,21 @@ def paragraph(s):
 def describe(p, r):
   say("\r\n{#bold}"+center(act("write",r,'name'))+"{#reset}\r\n ")
 
-scenic = has("scenery")
-
 def descenic(e):
-	return paragraph(e["scenery"])
+	return e["scenery"]
 
 @action
 @given("player", "room")
 def describe(p, r):
     ps = act("write",r,'desc').split("\r\n")
-    fmt = "\r\n\r\n".join(map(paragraph, ps))
     conts = contents_of(r)
-    scenics = "\r\n\r\n".join(map(descenic, filter(scenic, conts)))
+    scenics = map(util.its("scenery"), filter(a("scenic"), conts))
 
-    res = [fmt, " ", scenics, " ", "You see "+ act("list_contents", p, r)+ ".", " ",
-    "exits: {#yellow}{#bold}"+", ".join(the(r, 'exits').keys()) + "{#reset}"," "]
-    say("\r\n".join(res))
+    say("\r\n\r\n".join(map(paragraph, ps + scenics)))
+
+    say("\r\n"+"You see "+ act("list_contents", p, r)+ ".\r\n")
+    say("exits: {#yellow}{#bold}"+", ".join(the(r, 'exits').keys()) + "{#reset}\r\n")
+
 
 
 

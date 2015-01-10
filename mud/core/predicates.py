@@ -36,6 +36,9 @@ def string(e):
 def function(e):
   return str(type(e)) in ["<type 'function'>", "<type 'builtin_function_or_method'>"]
 
+def sequential(e):
+  return isinstance(e, (list, tuple))
+
 def dictionary(e):
   return isinstance(e, dict)
 

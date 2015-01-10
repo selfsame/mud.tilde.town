@@ -1,6 +1,8 @@
 from mud.core import *
 from util import *
 
+scenic = a("scenic")
+
 @action
 @given("player", "holder")
 def list_contents(a, b):
@@ -8,17 +10,16 @@ def list_contents(a, b):
   #if the(a, 'uuid') in conts: conts.remove(the(a, 'uuid'))
   names = {}
   kinds = {}
-  for item in conts:
-    ent = from_uid(item)
-    if ent == a:
-      break
-    n = act("printed_name", ent)
-    if names.get(n):
-      names[n] += 1
-    else:
-      names[n] = 1
-    if not kinds.get(n):
-      kinds[n] = from_uid(item)
+  for item in map(from_uid, conts):
+    if item == a: break
+    if not scenic(item):
+      n = act("printed_name", item)
+      if names.get(n):
+        names[n]  += 1
+      else:
+        names[n] = 1
+      if not kinds.get(n):
+        kinds[n] = from_uid(item)
   res = []
   for k in names:
     if names[k] > 1:

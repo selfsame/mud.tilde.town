@@ -4,6 +4,7 @@ from colors import color
 player = has("player")
 
 predicates.register("player", has("player"))
+predicates.register("fails", has("fails"))
 
 @serialize
 def player(e):
@@ -12,14 +13,13 @@ def player(e):
 
 
 @action
-@given(verb, "player", undefined)
-def player_command(v, p, u):
-  say("I can't understand what you are "+verbs.forms[v]["progressive"]+".")
+@given(verb, "player", sequential)
+def object_blocked(v, p, args):
+  res = filter(string, map_get_in(["fails", v], args))
+  if res:
+    say(res[0])
+    return True
 
-@action
-@given(verb, "player", undefined, "thing")
-def player_command(v, p, u, a):
-  say("I can't understand what you are "+verbs.forms[v]["progressive"]+" in the "+name(a)+".")
 
 
 @action
