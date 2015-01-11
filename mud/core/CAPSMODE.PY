@@ -50,16 +50,3 @@ def _SWAP(col, args):
       col.insert(widx, v)
   return col
 
-print filter(INVERT(NONE), map(KEYFN("key"), [0, [], {"key":"found!"}]))
-
-print FIRST({"a":1,2:3})
-
-x = {"a":1,2:3}
-
-for k in x:
-  print k, x[k]
-
-print dir(x)
-
-print x.items()
-print x

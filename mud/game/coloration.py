@@ -1,40 +1,34 @@
 from mud.core import *
 
-register("colored", has('color'))
+bind.predicate("colored", has('color'))
 
 def _color_is(c): 
   def hue(e):
     return e.get('color') == c
   return hue
 
-register("yellow", _color_is("yellow"))
-register("red", _color_is("red"))
-register("green", _color_is("green"))
+bind.predicate("yellow", _color_is("yellow"))
+bind.predicate("red", _color_is("red"))
+bind.predicate("green", _color_is("green"))
+bind.predicate("hidden", has("hidden"))
 
-hidden = register("hidden", has("hidden"))
-
-@after
-@given(a("hidden", "thing"))
+@after(a("hidden", "thing"))
 def indefinate_name(e):
   return "(hidden){#reset}"
 
-@before
-@given(a("hidden", "thing"))
+@before(a("hidden", "thing"))
 def indefinate_name(e):
   return "{#bold}{#black}"
 
 
-@before
-@given(a("yellow", "thing"))
+@before(a("yellow", "thing"))
 def printed_name(e):
   return "{#yellow}"
 
-@before
-@given(a("red", "thing"))
+@before(a("red", "thing"))
 def printed_name(e):
   return "{#red}"
 
-@after
-@given(a("colored", "thing"))
+@after(a("colored", "thing"))
 def printed_name(e):
   return "{#reset}"

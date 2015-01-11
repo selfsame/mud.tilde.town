@@ -1,5 +1,5 @@
 {"id":"mammal",
-  "mammal":true,
+ "mammal":true,
  "hunger":0.0,
  "state":"awake",
  "wandering":true}

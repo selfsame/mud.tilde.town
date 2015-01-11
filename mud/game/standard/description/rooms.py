@@ -22,24 +22,21 @@ def paragraph(s):
 	final[0] = "  "+final[0]
 	return "\r\n".join(final)
 
-@before
+@before("player", "room")
+def describe(p, r):
+  say("\r\n{#bold}"+center(call("write",r,'name'))+"{#reset}\r\n ")
+
+def descenic(e): return e["scenery"]
+
 @given("player", "room")
 def describe(p, r):
-  say("\r\n{#bold}"+center(act("write",r,'name'))+"{#reset}\r\n ")
-
-def descenic(e):
-	return e["scenery"]
-
-@action
-@given("player", "room")
-def describe(p, r):
-    ps = act("write",r,'desc').split("\r\n")
+    ps = call("write",r,'desc').split("\r\n")
     conts = contents_of(r)
     scenics = map(util.its("scenery"), filter(a("scenic"), conts))
 
     say("\r\n\r\n".join(map(paragraph, ps + scenics)))
 
-    say("\r\n"+"You see "+ act("list_contents", p, r)+ ".\r\n")
+    say("\r\n"+"You see "+ call("list_contents", p, r)+ ".\r\n")
     say("exits: {#yellow}{#bold}"+", ".join(the(r, 'exits').keys()) + "{#reset}\r\n")
 
 

@@ -1,7 +1,6 @@
 {"id":"chest",
-"name":"wooden chest",
+"name":"chest",
 "descripton":"It is likely to have a thing or two inside",
-  "extends":["object"],
   "contents":[{"id":"mouse"}],
   "capacity":5,
   "closed":true,

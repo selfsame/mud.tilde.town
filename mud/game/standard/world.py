@@ -1,7 +1,6 @@
 from mud.core.util import *
 from mud.core import *
 
-@action
 @given()
 def init():
   print "\n\n(init)"
@@ -9,39 +8,35 @@ def init():
     e = data.datatypes[k]
     if e.get("room"):
         if not e.get("base"):
-            components.register(components.instance(e.get("id"))) 
+            data.instance(e.get("id"))
   for k in data.rooms:
-      act("init", data.rooms[k])
+      call("init", data.rooms[k])
 
-@after
-@given()
+@after()
 def init():
   print "\n==rooms==============================================="
   print data.rooms.keys()
   print "==datatypes============================================"
   print data.datatypes.keys()
 
-@action
+
 @given("holder")
 def init(r):
-  print "    room:", name(r)
   cont = contents_of(r)
   for e in cont:
     e["located"] = r.get("uuid")
-    act("init", e)
+    call("init", e)
 
-@action
 @given(number)
 def update(delta):
   for room in data.rooms:
-    act("update", data.rooms[room], delta)
+    call("update", data.rooms[room], delta)
 
 
-@after
-@given("room", number)
+@after("room", number)
 def update(r, delta):
   contents = r['contents']
   data.scope = map(from_uid, contents)    
   for uid in contents:
     if uid in data.instances:
-        act("update", data.instances[uid], delta)
+        call("update", data.instances[uid], delta)

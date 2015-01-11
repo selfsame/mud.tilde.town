@@ -1,7 +1,7 @@
 import parse
-from components import instance, register
+from data import instance, register
 from util import *
-from actions import *
+from dispatch import *
 import data
 from colors import *
 from mud.core import verbs
@@ -40,7 +40,7 @@ class Player():
     r = data.rooms.get(self.data['located'])
     r['contents'].append(self.data['uuid'])
     data.subject = self.data
-    act("init", self.data)
+    call("init", self.data)
     self.input("look")
     self.prompt()
 
@@ -58,7 +58,7 @@ class Player():
       return
     if len(directive) == 1:
       debug("single verb statement:", verb)
-      act(verb, self.data)
+      call(verb, self.data)
       data.subject = {}
       return
 
@@ -70,10 +70,10 @@ class Player():
         if "text" in part:
           res.append(part["text"])
         elif "noun" in part:
-          argscope = act("scope_"+str(idx+1)+"_while", self.data, verb)
+          argscope = call("scope_"+str(idx+1)+"_while", self.data, verb)
           if not argscope:
             if not default_scope:
-              default_scope = act("scope_while", self.data, verb)
+              default_scope = call("scope_while", self.data, verb)
           scope = argscope or default_scope or []
           if DEBUG:
             print "SCOPE:"
@@ -94,12 +94,12 @@ class Player():
 
     debug("FINAL:", [verb] + map(name, res))
     data.subject = self.data
-    if apply(act, ["object_blocked", verb, self.data] + [res]): return False
-    apply(act, [verb, self.data] + res)
+    if apply(call, ["object_blocked", verb, self.data] + [res]): return False
+    apply(call, [verb, self.data] + res)
 
 
   def prompt(self):
-    self.con.transport.write(act("line_prompt", self.data))
+    self.con.transport.write(call("line_prompt", self.data))
 
   def save(self,character):
     try:
@@ -112,12 +112,12 @@ class Player():
   def quit(self):
     if self.data in data.scope: data.scope.remove(self.data)
     if data.subject == self.data: data.subject = {}
-    act("delete", self.data)
+    call("delete", self.data)
     self.con.factory.broadcast(color("magenta")+self.data['firstname']+" has disconnected."+color("reset"))
     self.con.close_connection("QUITTING!")
 
   def _quit(self):
-    act("quit", self.data)
+    call("quit", self.data)
 
 def not_none(e):
   if e != None: return True

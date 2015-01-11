@@ -3,7 +3,6 @@ from util import *
 
 scenic = a("scenic")
 
-@action
 @given("player", "holder")
 def list_contents(a, b):
   conts = the(b, 'contents')
@@ -13,7 +12,7 @@ def list_contents(a, b):
   for item in map(from_uid, conts):
     if item == a: break
     if not scenic(item):
-      n = act("printed_name", item)
+      n = call("printed_name", item)
       if names.get(n):
         names[n]  += 1
       else:
@@ -23,7 +22,7 @@ def list_contents(a, b):
   res = []
   for k in names:
     if names[k] > 1:
-      r = "".join(act("indefinate_name", names[k], kinds[k]))
+      r = "".join(call("indefinate_name", names[k], kinds[k]))
     else:
       r = "".join(act_stack("indefinate_name", kinds[k]))
     if r: res.append( str(r) )
@@ -33,9 +32,6 @@ def list_contents(a, b):
   prev = res[:-2] + [" and ".join(lastpair)]
   return ", ".join(prev)
 
-
-
-@action
 @given("holder")
 def list_contents(b):
   conts = the(b, 'contents')
@@ -43,7 +39,7 @@ def list_contents(b):
   kinds = {}
   for item in conts:
     ent = from_uid(item)
-    n = act("printed_name", ent)
+    n = call("printed_name", ent)
     if names.get(n):
       names[n] += 1
     else:
@@ -53,7 +49,7 @@ def list_contents(b):
   res = []
   for k in names:
     if names[k] > 1:
-      r = "".join(act("indefinate_name", names[k], kinds[k]))
+      r = "".join(call("indefinate_name", names[k], kinds[k]))
     else:
       r = "".join(act_stack("indefinate_name", kinds[k]))
     if r: res.append( str(r) )

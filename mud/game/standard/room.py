@@ -17,10 +17,9 @@ def spawning(d):
   res["timer"] = 0
   return res
 
-predicates.register("room", has("room", "exits"))
-predicates.register("located", has("located"))
+bind.predicate("room", has("room", "exits"))
+bind.predicate("located", has("located"))
 
-@action
 @given("room")
 def connections(r):
   es = r["exits"]
@@ -30,7 +29,6 @@ def connections(r):
     if er: res.append(er)
   return res
 
-@action
 @given(a("spawning", "room"), number)
 def update(r, delta):
   spawner = r['spawning']
@@ -47,11 +45,10 @@ def update(r, delta):
     if count < spawner['max']:
       choices = spawner['choices']
       chosen = parse.table_choice(choices)
-      sp = components.instance(chosen)
+      sp = data.instance(chosen)
       spawner['instances'].append(sp['uuid'])
       sp['located'] = r['id']
-      components.register(sp)
-      act("walk",sp,r)      
+      call("walk",sp,r)      
     spawner['timer'] = spawner['rate']
   else:
     spawner['timer'] = ap

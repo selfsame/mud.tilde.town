@@ -3,7 +3,7 @@ from mud.core import *
 import random
 
 
-predicates.register("entity", has("entity"))
+bind.predicate("entity", has("entity"))
 
 def idle(e):
   if dictionary(e):
@@ -11,7 +11,7 @@ def idle(e):
       return True
   return False
 
-register("idle", has("idle"))
+bind.predicate("idle", has("idle"))
 
 
 @construct
@@ -35,7 +35,6 @@ def acting(d):
 
 
 
-@action
 @given(has("acting"), number)
 def update(a, delta):
   ap = a['acting']['ap']
@@ -43,42 +42,38 @@ def update(a, delta):
   if ap < 0: ap = 0
   a['acting']['ap'] = ap
 
-@action
 @given(a("wandering", "idle", "entity"), number)
 def update(a, delta):
   loc = location(a)
   if has("room")(loc):
     dests = connected_rooms(loc)
     dest = random.choice(dests)
-    if act("walk", a, dest):
+    if call("walk", a, dest):
       a['acting']['ap'] = 30 + random.randint(1, 20)
 
 
-@action
 @given("entity", "room")
 def walk(a, b):
   loc = location(a)
-  if act("move", a, b):
+  if call("move", a, b):
     if loc:
       exits = the(loc,"exits")
       exit = False
       for k in exits:
         if exits[k] == the(b, "id"):
           exit = k 
-      act("leave", loc, a, exit)
-    act("arrive", a, b)
+      call("leave", loc, a, exit)
+    call("arrive", a, b)
     return True
   return False
 
-@action
 @given("room", "entity", string)
 def leave(o, e, b):
-  report_to(o, "{#bold}"+act("indefinate_name", e), "leaves to the", b+".{#reset}")
+  report_to(o, "{#bold}"+call("indefinate_name", e), "leaves to the", b+".{#reset}")
 
-@action
 @given("entity", "room")
 def arrive(e, r):
-  report_to(r,  "{#bold}"+act("indefinate_name", e), "walks in.{#reset}")
+  report_to(r,  "{#bold}"+call("indefinate_name", e), "walks in.{#reset}")
 
 
 

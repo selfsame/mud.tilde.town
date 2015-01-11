@@ -1,7 +1,6 @@
 from mud.core.util import *
 from mud.core import *
 
-@action
 @given('located', 'located')
 def scope_relation(a, b):
   res = ''
@@ -24,84 +23,71 @@ def scope_relation(a, b):
 
 
 
-@action
 @given("player", string)
 def scope_while(e, a):
-  res = act("check_scope", e) 
+  res = call("check_scope", e) 
   return res
 
-@action
 @given("player", equals("look"))
 def scope_while(e, a):
-  return act("check_scope", e) 
+  return call("check_scope", e) 
 
-@action
 @given("player", equals("walk"))
 def scope_while(e, a):
   return the(location(e),"exits").keys()
 
-@action
 @given("player", equals("drop"))
 def scope_1_while(e, a):
-  return act("check_inventory_scope", e) 
+  return call("check_inventory_scope", e) 
 
-@action
 @given("player", equals("drop"))
 def scope_2_while(a, b):
   loc = location(a)
-  return act("check_scope", a, loc)
+  return call("check_scope", a, loc)
 
 
-@action
 @given("player", equals("drop"), anything)
 def scope_while(e, a, b):
-  inv = act("check_inventory_scope", e) 
+  inv = call("check_inventory_scope", e) 
   loc = location(e)
-  res = act("check_scope", e, loc)
+  res = call("check_scope", e, loc)
   return inv + res
 
-@action
 @given("player", equals("take"))
 def scope_while(e, a):
-  return act("check_scope", e, location(e))
+  return call("check_scope", e, location(e))
 
-@action
 @given("player")
 def check_scope(a):
-  inv = act("check_inventory_scope", a) or []
+  inv = call("check_inventory_scope", a) or []
   loc = location(a)
-  res = act("check_scope", a, loc) or []
+  res = call("check_scope", a, loc) or []
   return inv + res
 
-@action
 @given("entity", "thing")
 def check_scope(a, c):
   return [c]
 
-@action
 @given(a("player", "holder"))
 def check_inventory_scope(a):
   return contents_of(a)
 
 
-@action
 @given("player", "container")
 def check_scope(a, b):
   res = [b]
   for item in contents_of(b):
-    f = act("check_scope", a, item)
+    f = call("check_scope", a, item)
     if f: 
       res += f
   return res
 
 
-@action
 @given("entity", a("closed", "container"))
 def check_scope(a, c):
   return [c]
 
 
-# @action
 # @given("entity", a("hidden", "thing"))
 # def check_scope(a, c):
 #   return []

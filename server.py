@@ -10,8 +10,8 @@ from mud.intro import Intro
 from mud.core import parse
 import data
 from mud.core.player import Player
-from mud.core.actions import act
-from mud.core.components import save_json, load
+from mud.core.dispatch import call
+from mud.core.data import save_json, load
 from mud.game import *
 
 print "\n\nstarting telnet server\n\n"
@@ -104,7 +104,7 @@ class ChatProtocolFactory(ServerFactory):
         self.last_time = time.time()
         for client in self.clientProtocols:
           client.update(delta)
-        act("update", delta)
+        call("update", delta)
         return True
 
 def Main():
@@ -113,7 +113,7 @@ def Main():
         port = int(sys.argv[1])
     #data.game = Game()
     load(os.sep.join(['./mud/game']))
-    act("init")
+    call("init")
     factory = ChatProtocolFactory()
     reactor.listenTCP(port, factory)
     reactor.run()

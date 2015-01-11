@@ -1,6 +1,7 @@
 {"id":"bag",
 "name":"leather bag",
-"regex":"leather$|bag$|leather bag$",
+"extends":[],
+"regex":"leather|bag|leather bag",
 "descripton":"A crudely stitched leather bag, cinched close with a piece of twine.",
 "contents":[{"id":"coin"}],
 "capacity":5}

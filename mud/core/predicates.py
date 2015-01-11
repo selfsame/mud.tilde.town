@@ -1,25 +1,21 @@
 from util import *
 from mud.core import verbs
 
-registry = {}
+_registry = {}
 
-def register(s, f):
-  registry[s] = f
+def _register(s, f):
+  _registry[s] = f
   return s
 
-
-
-
-
-def get(s):
-  if s in registry: return registry[s]
+def _get(s):
+  if s in _registry: return _registry[s]
   def key(e):
     if isinstance(e, dict):
       if s in e: return True
     return False
   return key
 
-
+def bound(s): return _get(s)
 
 def anything(e):
   return True
@@ -66,7 +62,7 @@ def a(*args):
   def f(e):
     for spec in args:
       if isinstance(spec, str):
-        p = get(spec)
+        p = _get(spec)
         if not p(e): 
           return False
       elif function(spec):
@@ -79,7 +75,7 @@ def non(*args):
   def nf(x): 
     for f in args:
       if isinstance(f, str):
-        p = get(f)
+        p = _get(f)
         if p(x): 
           return False
       elif f(x): return False

@@ -1,25 +1,28 @@
 from mud.core import *
-from components import _serialize, _merge, _construct
 
 @construct
 def contents(d):
   res = []
   for e in d:
     if e.get("id"):
-      c_e = _construct(e)
-      new = components.instance(e.get("id"))
-      merged = _merge([new, c_e])
-      components.register(merged)
+      c_e = components._construct(e)
+      new = data.instance(e.get("id"), False)
+      merged = components._merge([new, c_e])
+      data.register(merged)
       res.append(merged.get("uuid"))
   return res
+
+@merge
+def contents(a, b):
+  return a + b
 
 @serialize
 def contents(d):
   conts = map(util.from_uid, d)
-  return map(_serialize, conts)
+  return map(components._serialize, conts)
 
-predicates.register("holder", has('contents'))
-predicates.register("container", a(non("entity"), "holder"))
+bind.predicate("holder", has('contents'))
+bind.predicate("container", a(non("entity"), "holder"))
 
 def empty(e):
   if "contents" in e:
@@ -27,7 +30,7 @@ def empty(e):
     if c == 0: return True
   return False
 
-predicates.register("empty", empty)
+bind.predicate("empty", empty)
 
 def closed(e):
   if has("closed")(e):
@@ -35,12 +38,11 @@ def closed(e):
       return True
   return False
 
-predicates.register("closed", closed)
-predicates.register("open", a(has("closed"), non("closed")))
+bind.predicate("closed", closed)
+bind.predicate("open", a(has("closed"), non("closed")))
 
 
 
-@action
 @given("container")
 def get_contents(p, r):
   es = r["contents"]
@@ -50,61 +52,51 @@ def get_contents(p, r):
     if er: res.append(er)
   return res
 
-@after
-@given("player", a("open", "container"))
+@after("player", a("open", "container"))
 def look(p, r):
-  say("Inside it you see "+ act("list_contents", p, r)+ ".")
+  say("Inside it you see "+ call("list_contents", p, r)+ ".")
 
-@after
-@given("player", a("empty", "container"))
+@after("player", a("empty", "container"))
 def look(p, r):
   say("It's completely empty.")
 
-@before
-@given(a("closed", "container"))
+@before(a("closed", "container"))
 def printed_name(e):
   return "closed "
 
-@before
-@given(a("open", "container"))
+@before(a("open", "container"))
 def printed_name(e):
   return "open "
 
-@after
-@given(a("open", "container"))
+@after(a("open", "container"))
 def indefinate_name(e):
-  return " (containing "+act("list_contents", e)+")"
+  return " (containing "+call("list_contents", e)+")"
 
-@after
-@given(a("open", "empty", "container"))
+@after(a("open", "empty", "container"))
 def indefinate_name(e):
   return "(empty)"
 
 
-@action
 @given("player", a("open", "container"))
 def open(a, b):
   say("It's allready opened.")
 
-@action
 @given("player", a("closed", "container"))
 def close(a, b):
   say("It's allready closed.")
 
-@action
 @given("player", a("closed", "container"))
 def open(a, b):
   b["closed"] = False
-  relation = act("scope_relation", b, a)
+  relation = call("scope_relation", b, a)
   say("You open the "+name(b)+relation+".")
-  report_to(location(a), act("indefinate_name", a), "opens the ", name(b)+relation+".")
+  report_to(location(a), call("indefinate_name", a), "opens the ", name(b)+relation+".")
   return True
 
-@action
 @given("player", a("open", "container"))
 def close(a, b):
   b["closed"] = True
-  relation = act("scope_relation", b, a)
+  relation = call("scope_relation", b, a)
   say("You close the "+name(b)+relation+".")
-  report_to(location(a), act("indefinate_name", a), "closes the ", name(b)+relation+".")
+  report_to(location(a), call("indefinate_name", a), "closes the ", name(b)+relation+".")
   return True

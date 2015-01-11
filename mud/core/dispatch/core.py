@@ -6,24 +6,12 @@ from mud.core.parse import template
 import mud.core.components
 from mud.core import predicates
 
-__all__ = ["given", "check", "before", "after", "action", "act", "act_stack", "say", "report", "report_to"]
+__all__ = ["given", "check", "before", "after", "instead", "fail", "call", "act_stack", "say", "report", "report_to"]
 
 def OD(ltps=[]):
   return collections.OrderedDict(ltps)
 
 
-def given(*types, **kw):
-  try:
-      def decorator(f):
-          def newf(*args):
-              return f(*args)
-          newf.__name__ = f.__name__
-          return {types:newf}
-      return decorator
-  except KeyError, key:
-      raise KeyError, key + "is not a valid keyword argument"
-  except TypeError, msg:
-      raise TypeError, msg
 
 def tunnel(cursor, key, notfound={}):
   if key not in cursor:
@@ -45,42 +33,43 @@ def _register(f, tag, spec=[]):
     cursor = tunnel(cursor, tag, OD())    
     cursor = tunnel(cursor, spec, f)
 
+def check(*types):
+  def decorator(f):
+    _register(f, "check", types)
+    return f
+  return decorator
+
+def before(*types):
+  def decorator(f):
+    _register(f, "before", types)
+    return f
+  return decorator
+
+def given(*types):
+  def decorator(f):
+    _register(f, "action", types)
+    return f
+  return decorator
+
+def after(*types):
+  def decorator(f):
+    _register(f, "after", types)
+    return f
+  return decorator
+
+def instead(*types):
+  def decorator(f):
+    _register(f, "instead", types)
+    return f
+  return decorator
+
+def fail(*types):
+  def decorator(f):
+    _register(f, "fail", types)
+    return f
+  return decorator
 
 
-def before(f):
-  for k in f:
-    _register(f[k], "before", k)
-  def f_w(a, b):
-    return f[k](a, b)    
-  return f
-
-def after(f):
-  for k in f:
-    _register(f[k], "after", k)
-  def f_w(a, b):
-    return f[k](a, b)    
-  return f
-
-def instead(f):
-  for k in f:
-    _register(f[k], "instead", k)
-  def f_w(a, b):
-    return f[k](a, b)    
-  return f
-
-def check(f):
-  for k in f:
-    _register(f[k], "check", k)
-  def f_w(a, b):
-    return f[k](a, b)    
-  return f
-
-def action(f):
-  for k in f:
-    _register(f[k], "action", k)
-  def f_w(a, b):
-    return f[k](a, b)    
-  return f
 
 def printable_preds(col):
   return "<"+", ".join(map(fn_name, col))+">"
@@ -100,7 +89,7 @@ def compose(roles, args, report = []):
 
 def speccheck(t, e):
   if isinstance(t, str):
-    return predicates.get(t)(e)
+    return predicates._get(t)(e)
   return t(e)
 
 
@@ -135,10 +124,12 @@ def dict_act(verb, *args):
     raise
 
 
-def act(verb, *args):
+
+def call(verb, *args):
   res = apply(dict_act, [verb] + list(args))
   if res:
     return res.get("action")
+
 
 def act_stack(verb, *args):
   out = []

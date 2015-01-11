@@ -1,6 +1,7 @@
 {"id":"r1", 
 "name": "the visitor lobby plaza", 
 "desc":"You emerge from the lobby building into the heat of the island.  The jungle around this complex seems to have grown faster than the maintenance crews could trim it. Vines have begun to climb up the walls of the buildings and leaf litter is forming a carpet over the concrete paving.",
-"contents":[{"id":"banner"},
+"contents":[{"id":"rat"},
+	{"id":"banner"},
 	{"id":"object","name":"bloody boot", "regex":"bloody|boot","desc":"Someone has forgotten their sho... wait.. is that a severed foot?"}], 
 "exits":{"door":"lobby"}}

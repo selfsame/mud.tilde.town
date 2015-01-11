@@ -1,47 +1,42 @@
 from mud.core import *
 
-verbs.register("write", "write|inscribe", {"past":"wrote"})
-verbs.register_structure("write", "{1:text}on|in{2}","{1:text}on|in{2}with|using{3}")
+bind.verb("write", "write|inscribe", {"past":"wrote"})
+bind.verb_pattern("write", "{1:text}on|in{2}","{1:text}on|in{2}with|using{3}")
 
-verbs.register("erase", "erase", {"progressive":"erasing"})
-verbs.register_structure("erase", "{1}with{2}")
+bind.verb("erase", "erase", {"progressive":"erasing"})
+bind.verb_pattern("erase", "{1}with{2}")
 
 def written(e):
 	if "writing" in e:
 		return e["writing"] not in ["", False]
 	return False
 
-predicates.register("surface", has("surface"))
-predicates.register("implement", has("implement"))
+bind.predicate("surface", has("surface"))
+bind.predicate("implement", has("implement"))
 
-predicates.register("written", written)
-predicates.register("blank", non(written))
+bind.predicate("written", written)
+bind.predicate("blank", non(written))
 
-@check
-@given("player", string, non("surface"), "implement")
+@check("player", string, non("surface"), "implement")
 def write(a, b, c, d):
-  say("You try to write on "+act("indefinate_name", c)+" but your "+act("printed_name", d)+" doesn't leave a mark.")
+  say("You try to write on "+call("indefinate_name", c)+" but your "+call("printed_name", d)+" doesn't leave a mark.")
   return False
 
-@before
-@given("player", string, "surface", "implement")
+@before("player", string, "surface", "implement")
 def write(a, b, c, d):
-  say("You start writing '"+b+"' on "+act("indefinate_name", c)+".")
+  say("You start writing '"+b+"' on "+call("indefinate_name", c)+".")
 
-@action
 @given("player", string, "surface", "implement")
 def write(a, b, c, d):
   c["writing"] = "\r\n"+b
 
 
-@before
-@given(a("blank", "surface"))
+@before(a("blank", "surface"))
 def printed_name(e):
   return "blank "
 
 
-@after
-@given("player", a("written", "surface"))
+@after("player", a("written", "surface"))
 def look(a, b):
   say("It reads:\r\n"+str(b.get("writing"))+"\r\n")
 

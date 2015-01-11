@@ -1,7 +1,6 @@
 {"id":"treehouse",
 "name":"{#green}a small treehouse{#reset}","desc":"It's tiny and crudely built, but it's got a decent view of the jungle surrounding the visitor center.",
 "contents":[
-	{"id":"rat"}, 
 	{"id":"chest", "closed":false,
 	 "name":"chest",
 	 "fixed":true,
@@ -10,8 +9,5 @@
 		{"id": "book", "name":"spellbook","regex":"spell|book|spellbook",
 		"writing":"magico fabuloso!",
 		"desc":"You flip through the pages, but none of the symbols make any sense to you.", "color":"red"},
-		{"id":"bag"},
-		{"id":"coin"},
-		{"id":"coin"},
-		{"id":"coin"}]}],
+		{"id":"bag"}]}],
 "exits": {"down": "lobby"}}
