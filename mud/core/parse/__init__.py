@@ -3,8 +3,11 @@ import dice
 import re
 from dice import table_choice
 
+def length(s):
+  return mttlang.length(s)
+
 def words(s):
-  return re.findall('[\w]+', s)
+  return mttlang.words(s)
 
 def first_word(col):
   if isinstance(col, (str, unicode)):
@@ -30,3 +33,6 @@ def strip_escape_chars(raw):
 
 def template(s):
   return mttlang.handlebars(s)
+
+def temp_slice(st, s=None, e=None):
+  return mttlang.temp_slice(st, s, e)

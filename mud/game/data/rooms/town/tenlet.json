@@ -1,0 +1,9 @@
+{"id":"tenlet",
+"room":true,
+"name":"Tenlet Street",
+"regex":"tenlet|street",
+"desc":"The street is littered malformed test entities.",
+"exits": {"north":"lobby","east":"tenlet-1","west":"tenlet-2"},
+"contents":[{"id":"person"}],
+"spawning":{"rate":10,
+	"choices":{"person":10, "mouse":10, "person":20}}}

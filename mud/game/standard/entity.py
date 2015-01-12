@@ -1,17 +1,18 @@
 from mud.core.util import *
 from mud.core import *
 import random
+from mud.core.CAPSMODE import *
 
 
 bind.predicate("entity", has("entity"))
 
 def idle(e):
-  if dictionary(e):
-    if e.get("ap") == 0:
+  if GET(e,"acting"):
+    if GET(e["acting"],"ap") <= 0:
       return True
   return False
 
-bind.predicate("idle", has("idle"))
+bind.predicate("idle", idle)
 
 
 @construct
@@ -29,7 +30,7 @@ def inventory(d):
 
 @construct
 def acting(d):
-  d["ap"] = random.randint(20,50)
+  d["ap"] = random.randint(20,100)
   return d
 
 
@@ -42,14 +43,14 @@ def update(a, delta):
   if ap < 0: ap = 0
   a['acting']['ap'] = ap
 
-@given(a("wandering", "idle", "entity"), number)
+@given(a(has("wandering"), "idle", "entity"), number)
 def update(a, delta):
+  a['acting']['ap'] = 30 + random.randint(100, 1000)
   loc = location(a)
   if has("room")(loc):
     dests = connected_rooms(loc)
     dest = random.choice(dests)
-    if call("walk", a, dest):
-      a['acting']['ap'] = 30 + random.randint(1, 20)
+    call("walk", a, dest)
 
 
 @given("entity", "room")

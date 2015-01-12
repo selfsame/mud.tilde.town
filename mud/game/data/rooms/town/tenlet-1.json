@@ -1,0 +1,9 @@
+{"id":"tenlet-1",
+"room":true,
+"name":"Tenlet Street",
+"regex":"tenlet|street",
+"desc":"The world ends abruptly.",
+"exits": {"west":"tenlet"},
+"contents":[],
+"spawning":{"rate":10,
+	"choices":{"person":10, "mouse":10, "person":20}}}

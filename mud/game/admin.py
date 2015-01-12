@@ -16,6 +16,13 @@ def admin(a, b, c):
 		res.append("{#yellow}"+str(k)+":"+"{#reset}"+str(c[k]))
 	say("\r\n".join(res))
 
+@given("player", equals("show"))
+def admin(a, b):
+	res = []
+	for k in a:
+		res.append("{#yellow}"+str(k)+":"+"{#reset}"+str(a[k]))
+	say("\r\n".join(res))
+
 @given("player", equals("predicates"), "thing")
 def admin(a, b, c):
 	res = []
@@ -48,7 +55,23 @@ def admin(a, b, c, d, e):
 	c[d] = val
 	say(name(c)+"["+d+"] set to "+e)
 
+@given("player", equals("room"))
+def admin(a, b):
+	a["player"].add_dialogue(RoomBuilder(a))
 
 
+class RoomBuilder(Dialogue):
+	def initial(self):
+		self.__name__ = "RoomBuilder"
+		self.con["player"].clear()
+		return "ROOM CREATION\r\nquit new"
 
+	def start(self, s):
+		if s == "quit": return False
+		if s == "new": return "ENTER ROOM IDENTIFIER:"
+		self.state = self.name
+		return "[not a menu option]"
+
+	def name(self, s):
+		return False
 

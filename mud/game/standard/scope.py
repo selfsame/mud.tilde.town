@@ -7,7 +7,7 @@ def scope_relation(a, b):
   ah = from_uid(a['located'])
   bh = from_uid(b['located'])
   if has("room")(ah):
-    return " on the floor"
+    return ""
   elif has("player")(ah):
     res += " in "+name(ah)+"'s inventory"
   else:

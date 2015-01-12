@@ -20,6 +20,7 @@ def bound(s): return _get(s)
 def anything(e):
   return True
 
+
 def number(e):
   return isinstance(e, (int, float))
 
@@ -44,6 +45,9 @@ def module(e):
 def undefined(e):
 	if e == None: return True
 	return False
+
+def empty(e):
+  return e == []
 
 
 def has(*args):

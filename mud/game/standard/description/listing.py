@@ -2,6 +2,7 @@ from mud.core import *
 from util import *
 
 scenic = a("scenic")
+bind.predicate("unlisted", has("unlisted"))
 
 @given("player", "holder")
 def list_contents(a, b):
@@ -32,9 +33,9 @@ def list_contents(a, b):
   prev = res[:-2] + [" and ".join(lastpair)]
   return ", ".join(prev)
 
-@given("holder")
+@given(sequential)
 def list_contents(b):
-  conts = the(b, 'contents')
+  conts = b
   names = {}
   kinds = {}
   for item in conts:
@@ -58,7 +59,10 @@ def list_contents(b):
   return ", ".join(prev)
 
 
-
+@given("holder")
+def list_contents(b): 
+  print "list_contents(holder)"
+  return act("list_contents", b['contents'])
 
 
 

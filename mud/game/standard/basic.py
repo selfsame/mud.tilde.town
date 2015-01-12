@@ -5,6 +5,13 @@ from mud.core.util import *
 def printed_name(a):
   return name(a)
 
+def _located(e):
+  if has("located")(e):
+    if e["located"]: return True
+  return False
+
+bind.predicate("located", _located)
+
 @given(a("registered", "thing"), "holder")
 def move(a, b):
   uid = a['uuid']

@@ -8,6 +8,7 @@ from description import *
 from basic import *
 from entity import *
 from player import *
+from dialogue import *
 from scenery import *
 
 

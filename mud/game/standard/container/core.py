@@ -1,5 +1,6 @@
 from mud.core import *
 
+
 @construct
 def contents(d):
   res = []
@@ -25,7 +26,7 @@ bind.predicate("holder", has('contents'))
 bind.predicate("container", a(non("entity"), "holder"))
 
 def empty(e):
-  if "contents" in e:
+  if has("contents")(e):
     c = len(e["contents"])
     if c == 0: return True
   return False
@@ -44,8 +45,8 @@ bind.predicate("open", a(has("closed"), non("closed")))
 
 
 @given("container")
-def get_contents(p, r):
-  es = r["contents"]
+def get_contents(c):
+  es = c["contents"]
   res = []
   for s in es:
     er = data.instances.get(s)
@@ -70,7 +71,7 @@ def printed_name(e):
 
 @after(a("open", "container"))
 def indefinate_name(e):
-  return " (containing "+call("list_contents", e)+")"
+  return " ({#yellow}containing "+call("list_contents", call("get_contents", e))+"{#reset})"
 
 @after(a("open", "empty", "container"))
 def indefinate_name(e):

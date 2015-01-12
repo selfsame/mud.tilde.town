@@ -5,6 +5,7 @@ from mud.core.data import registry
 from mud.core.parse import template
 import mud.core.components
 from mud.core import predicates
+from CAPSMODE import *
 
 __all__ = ["given", "check", "before", "after", "instead", "fail", "call", "act_stack", "say", "report", "report_to"]
 
@@ -19,6 +20,8 @@ def tunnel(cursor, key, notfound={}):
   return cursor[key]
 
 def walk(cursor, key):
+  if isinstance(key, dict):
+    return False
   if cursor:
     if cursor.get(key):
       return cursor[key]
@@ -47,7 +50,7 @@ def before(*types):
 
 def given(*types):
   def decorator(f):
-    _register(f, "action", types)
+    _register(f, "given", types)
     return f
   return decorator
 
@@ -80,7 +83,7 @@ def compose(roles, args, report = []):
       print "[check failed]"
       return False
   res = {}
-  for role in ["before", "action", "after"]:
+  for role in ["before", "given", "after"]:
     fns = roles.get(role) or []
     for f in fns:
       res[role] = apply(f, args)
@@ -96,10 +99,10 @@ def speccheck(t, e):
 
 def dict_act(verb, *args):
   try:
+    report = []
     arity = len(args)
     cursor = walk(registry, verb)
     cursor = walk(cursor, arity)
-    report = []
     rolereport = []
     if cursor:
       results = OD()   
@@ -120,30 +123,31 @@ def dict_act(verb, *args):
       res = compose(results, args, report)
       return res
   except Exception as exc:
-    print exc, "\r\n", " ".join(report)
+    print exc, "\r\n", verb, " ".join(report)
     raise
+
 
 
 
 def call(verb, *args):
   res = apply(dict_act, [verb] + list(args))
   if res:
-    return res.get("action")
+    return res.get("given")
 
 
 def act_stack(verb, *args):
   out = []
   res = apply(dict_act, [verb] + list(args))
   if res:   
-    for role in ["before", "action", "after"]:
+    for role in ["before", "given", "after"]:
       if res.get(role):
         out.append(res.get(role))
   return out
 
 
 def say(*args):
-  if data.subject.get("player"):
-    data.subject['player'].send(template("".join(args)))
+  if GET(data.subject, "player"):
+    data.subject['player'].sendLine(template("".join(args)))
 
 def report(*args):
   data.reportstack.append(" ".join(args))
@@ -153,7 +157,7 @@ def report_to(room, *args):
   for actor in observers:
     if actor.get("player"):
       if data.subject != actor:
-        actor["player"].send(template(" ".join(args)))
+        actor["player"].sendLine(template(" ".join(args)))
 
 
 

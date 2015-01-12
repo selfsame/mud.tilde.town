@@ -5,9 +5,6 @@
 	 "name":"chest",
 	 "fixed":true,
 	 "desc":"An old wooden chest with iron hinges is bolted to the floor.",
-	"contents":[
-		{"id": "book", "name":"spellbook","regex":"spell|book|spellbook",
-		"writing":"magico fabuloso!",
-		"desc":"You flip through the pages, but none of the symbols make any sense to you.", "color":"red"},
-		{"id":"bag"}]}],
+	"contents":[{
+		"id":"bag"}]}],
 "exits": {"down": "lobby"}}

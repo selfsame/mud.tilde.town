@@ -22,6 +22,7 @@ def init():
 
 @given("holder")
 def init(r):
+  print "init(holder)", name(r)
   cont = contents_of(r)
   for e in cont:
     e["located"] = r.get("uuid")

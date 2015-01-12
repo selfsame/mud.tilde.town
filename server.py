@@ -4,14 +4,10 @@ from twisted.internet import reactor, task
 from twisted.internet.protocol import ServerFactory
 from twisted.protocols.basic import LineOnlyReceiver
 
-import mud.core.dialogue as d
 import time
-from mud.intro import Intro
-from mud.core import parse
-import data
-from mud.core.player import Player
-from mud.core.dispatch import call
-from mud.core.data import save_json, load
+
+from mud.login import Intro
+from mud.core import *
 from mud.game import *
 
 print "\n\nstarting telnet server\n\n"
@@ -19,6 +15,7 @@ print "\n\nstarting telnet server\n\n"
 class MUDProtocol(LineOnlyReceiver):
     ## Connection object, will be hooked up to player object
     def __init__(self):
+        self.__name__ = "MUDClient"
         self.player = False
         self.account = False
         self.character_idx = 0
@@ -42,26 +39,36 @@ class MUDProtocol(LineOnlyReceiver):
     def save(self):
         if self.account:
           path = './save/accounts/'+self.account['name']+'.json'
-          return save_json(self.account, path)
+          return data.save_json(self.account, path)
     
     def add_dialogue(self, dialogue):
-        self.dialogue = dialogue
-        res = dialogue.initial()
-        if isinstance(res, (str, unicode)):
-                self.sendLine(res)
+        try:
+            self.dialogue = dialogue
+            res = dialogue.initial()
+            call("start_dialogue", self, dialogue)
+            if isinstance(res, (str, unicode)):
+                    self.sendLine(res)
+        except: 
+            print "DIALOGUE EXCEPTION"
+            raise
 
     def lineReceived(self, l):
         self.idle = 0
         line = parse.strip_escape_chars(l)
         if self.dialogue:
-            res = self.dialogue.input(line)
-            if res == False or self.dialogue.done == True:
-                self.dialogue = False
-            if isinstance(res, (str, unicode)):
-                self.sendLine(res)
+            try:
+                res = self.dialogue.input(line)
+                if res == False or self.dialogue.done == True:
+                    call("end_dialogue", self, self.dialogue)
+                    self.dialogue = False
+                if isinstance(res, (str, unicode)):
+                    self.sendLine(res)
+            except: 
+                print "DIALOGUE EXCEPTION"
+                raise
         elif self.player:
-            self.player.input(line)
-            self.player.prompt()
+            dispatch.call("player_input", self.player, line)
+        self.transport.write(call("line_prompt", self.player))
 
     def sendLine(self, line):
         self.transport.write(line+"\r\n")
@@ -73,13 +80,13 @@ class MUDProtocol(LineOnlyReceiver):
     def update(self, delta):
       self.idle += delta
       if self.idle > 400:
-        if self.player:
-            self.player._quit()
+        dispatch.call("quit", self.player)
         self.close_connection("timed out")
 
     def enter_game(self, idx):
         self.character_idx = idx
-        self.player = Player(self, self.account["characters"][idx])
+        self.player = dispatch.call("player_enter_game", self, self.account["characters"][idx])
+
 
 
 
@@ -112,7 +119,7 @@ def Main():
     if len(sys.argv) > 1: 
         port = int(sys.argv[1])
     #data.game = Game()
-    load(os.sep.join(['./mud/game']))
+    data.load(os.sep.join(['./mud/game']))
     call("init")
     factory = ChatProtocolFactory()
     reactor.listenTCP(port, factory)

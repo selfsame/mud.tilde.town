@@ -7,7 +7,7 @@ bind.verb("erase", "erase", {"progressive":"erasing"})
 bind.verb_pattern("erase", "{1}with{2}")
 
 def written(e):
-	if "writing" in e:
+	if has("writing")(e):
 		return e["writing"] not in ["", False]
 	return False
 

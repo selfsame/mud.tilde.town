@@ -43,10 +43,21 @@ def INF(f, *args):
 
 def _SWAP(col, args):
   for idx, v in enumerate(args):
-    w = GET([_1, _2, _3], idx)
+    w = GET([_1, _2, _3, _4, _5], idx)
     if w in col:
       widx = col.index(w)
       col.remove(w)
       col.insert(widx, v)
   return col
+
+
+def GROUP_BY(f, col):
+  res = {}
+  for i in col:
+    v = f(i)
+    if GET(res, v):
+      res[v].append(i)
+    else:
+      res[v] = [i]
+  return res
 
