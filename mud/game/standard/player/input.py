@@ -1,4 +1,5 @@
 from mud.core import *
+from mud.core.CAPSMODE import *
 import re
 
 bind.predicate("token", dictionary)
@@ -7,7 +8,9 @@ bind.predicate("token", dictionary)
 def player_input(a, b):
 	data.subject = a
 	tokens = verbs.determine(b)
-	call("player_input", a, tokens[0], tokens[1:])
+	if not tokens: return False
+	if len(tokens) > 0:
+		call("player_input", a, GET(tokens,0), tokens[1:])
 
 
 @given("player", verb, sequential)
