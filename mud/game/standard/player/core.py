@@ -77,7 +77,7 @@ def save(a):
   ser = components._serialize(a)
   try:
     idx = a["player"].character_idx
-    a["player"].account["characters"][idx] = character
+    a["player"].account["characters"][idx] = ser
     a["player"].save()
     say("{#magenta}GAME SAVED{#reset}")
   except:

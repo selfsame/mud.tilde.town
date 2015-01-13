@@ -74,7 +74,7 @@ def look(a, b):
 @given("player", "thing")
 def look(a, b):
   relation = call("scope_relation", b, a)
-  say("you look at ", call("indefinate_name", b)+relation+".\r\n", call("write",b,'desc'))
+  say("you look at ", call("indefinate_name", b)+str(relation)+".\r\n", call("write",b,'desc'))
 
 @check("player", a("fixed", "object"))
 def take(a, b):

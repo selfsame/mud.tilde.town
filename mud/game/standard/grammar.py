@@ -54,6 +54,10 @@ def indefinate_name(n, e):
   return "a thing"
 
 
+@given("anything")
+def indefinate_name(e):
+  return "a thing"
+
 
 @given(number, "thing")
 def indefinate_name(n, e):
