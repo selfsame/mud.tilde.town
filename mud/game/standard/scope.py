@@ -40,10 +40,10 @@ def scope_while(e, a):
 def scope_1_while(e, a):
   return call("check_inventory_scope", e) 
 
-@given("player", equals("drop"))
-def scope_2_while(a, b):
-  loc = location(a)
-  return call("check_scope", a, loc)
+# @given("player", equals("drop"))
+# def scope_2_while(a, b):
+#   loc = location(a)
+#   return call("check_scope", a, loc)
 
 
 @given("player", equals("drop"), anything)
@@ -70,13 +70,16 @@ def check_scope(a, c):
 
 @given(a("player", "holder"))
 def check_inventory_scope(a):
-  return contents_of(a)
+  res = []
+  for item in call("get_contents", a):
+    res += call("check_scope", a, item)
+  return res
 
 
 @given("player", "container")
 def check_scope(a, b):
   res = [b]
-  for item in contents_of(b):
+  for item in call("get_contents", b):
     f = call("check_scope", a, item)
     if f: 
       res += f

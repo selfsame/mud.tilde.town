@@ -112,6 +112,7 @@ def length(s):
   return len("".join(separate('\{[^\{\}]*\}', s)[1]))
 
 def parse(s):
+  s = s or ""
   m = re.match(r"(?P<count>\d+)(d(?P<sides>\d+))*(\+(?P<plus>\d+))*", s)
   m2 = re.search(r"(\w+[\s:;.]+)*", s)
   return m2

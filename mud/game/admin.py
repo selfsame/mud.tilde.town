@@ -16,6 +16,14 @@ def admin(a, b, c):
 		res.append("{#yellow}"+str(k)+":"+"{#reset}"+str(c[k]))
 	say("\r\n".join(res))
 
+@given("player", equals("delete"), "thing")
+def admin(a, b, c):
+	try:
+		call("delete", n)
+		say("deleted!")
+	except:
+		say("delete failed.")
+
 @given("player", equals("show"))
 def admin(a, b):
 	res = []

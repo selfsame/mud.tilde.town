@@ -15,6 +15,12 @@ def _get(s):
     return False
   return key
 
+def fn_name(f):
+  try:
+    return f.__name__
+  except:
+    return str(f)
+
 def bound(s): return _get(s)
 
 def anything(e):

@@ -1,5 +1,5 @@
 from mud.core import *
-
+from CAPSMODE import *
 
 @construct
 def exits(d):
@@ -25,9 +25,18 @@ def connections(r):
   es = r["exits"]
   res = []
   for s in es:
-    er = data.rooms.get(es[s])
+    er = data.game["rooms"].get(es[s])
     if er: res.append(er)
   return res
+
+@given("located")
+def get_location(e):
+  r = GET(data.game["rooms"], e["located"])
+  if r: return r
+  r = GET(data.instances, e["located"])
+  if r: return r
+  print "NO LOCATION FOR", util.name(e)
+
 
 @given(a("spawning", "room"), number)
 def update(r, delta):

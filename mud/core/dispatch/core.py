@@ -1,18 +1,20 @@
 import collections
-from mud.core.util import fn_name, name, players_in_scope, contents_of, from_uid
-from mud.core import data
-from mud.core.data import registry
-from mud.core.parse import template
 import mud.core.components
 from mud.core import predicates
-from CAPSMODE import *
+from mud.core.CAPSMODE import *
 
-__all__ = ["given", "check", "before", "after", "instead", "fail", "call", "act_stack", "say", "report", "report_to"]
+__all__ = ["given", "check", "before", "after", "instead", "fail", "call", "act_stack", "stack"]
+
+registry = {}
 
 def OD(ltps=[]):
   return collections.OrderedDict(ltps)
 
-
+def fn_name(f):
+  try:
+    return f.__name__
+  except:
+    return str(f)
 
 def tunnel(cursor, key, notfound={}):
   if key not in cursor:
@@ -77,17 +79,21 @@ def fail(*types):
 def printable_preds(col):
   return "<"+", ".join(map(fn_name, col))+">"
 
-def compose(roles, args, report = []):
+def compose(roles, args, report = [], every=False):
   for f in roles.get("check") or []:
     if not apply(f, args): 
       print "[check failed]"
       return False
   res = {}
+  if every: res = {"before":[], "given":[], "after":[]}
   for role in ["before", "given", "after"]:
     fns = roles.get(role) or []
     for f in fns:
-      res[role] = apply(f, args)
-      break
+      if every: 
+        res[role].append(apply(f, args))
+      else:
+        res[role] = apply(f, args)
+        break
   return res
 
 def speccheck(t, e):
@@ -97,7 +103,7 @@ def speccheck(t, e):
 
 
 
-def dict_act(verb, *args):
+def dict_act(verb, every, *args):
   try:
     report = []
     arity = len(args)
@@ -120,24 +126,25 @@ def dict_act(verb, *args):
             rolereport +=  [str(printable_preds(spec))]
         if len(rolereport) > 0:
           report.append(" ".join(["  "+str(role)+"->["] + rolereport + ["]\r\n"]))
-      res = compose(results, args, report)
+      res = compose(results, args, report, every)
       return res
   except Exception as exc:
     print exc, "\r\n", verb, " ".join(report)
     raise
 
-
-
-
 def call(verb, *args):
-  res = apply(dict_act, [verb] + list(args))
+  res = apply(dict_act, [verb, False] + list(args))
   if res:
     return res.get("given")
 
+def stack(verb, *args):
+  res = apply(dict_act, [verb, True] + list(args))
+  if res:
+    return GET(res,"before") + GET(res,"given") + GET(res,"after")
 
 def act_stack(verb, *args):
   out = []
-  res = apply(dict_act, [verb] + list(args))
+  res = apply(dict_act, [verb, False] + list(args))
   if res:   
     for role in ["before", "given", "after"]:
       if res.get(role):
@@ -145,19 +152,6 @@ def act_stack(verb, *args):
   return out
 
 
-def say(*args):
-  if GET(data.subject, "player"):
-    data.subject['player'].sendLine(template("".join(args)))
-
-def report(*args):
-  data.reportstack.append(" ".join(args))
-
-def report_to(room, *args):
-  observers = map(from_uid, contents_of(room))
-  for actor in observers:
-    if actor.get("player"):
-      if data.subject != actor:
-        actor["player"].sendLine(template(" ".join(args)))
 
 
 

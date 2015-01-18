@@ -1,4 +1,5 @@
 {"id":"entity_base",
+ "kind":["entity|entities"],
  "desc":"There is nothing special about it.",
  "entity":true,
  "located":false,

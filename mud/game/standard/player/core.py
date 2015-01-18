@@ -18,6 +18,8 @@ def player(e):
 
 @given("MUDClient", dictionary)
 def player_enter_game(a, b):
+  if GET(data.instances, GET(b, "uuid")):
+    return call("reconnect", GET(data.instances, GET(b, "uuid")), a)
   default = data.instance("player", False)
   b['player'] = a
   new = dict(default.items() + b.items())
@@ -26,13 +28,20 @@ def player_enter_game(a, b):
   call("player_init", new)
   return new
 
+@given("player", "MUDClient")
+def reconnect(a, b):
+  print "reconnecting "+name(a)
+  GET(a, "player").close_connection("reconnecting")
+  a["player"] = b
+  return a
+
 
 @given("player")
 def player_init(e):
   recursive_register(e)
   r = util.location(e)
   r['contents'].append(e['uuid'])
-  call("init", e)
+  dispatch.stack("init", e)
 
 @before(a(non("located"), "player"))
 def player_init(e):

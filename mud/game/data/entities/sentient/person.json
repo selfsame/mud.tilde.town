@@ -1,5 +1,6 @@
 {"id":"person",
 "plural":"people",
+"kind":["person|people"],
 "traits":true,
 "gender":"m",
 "wandering":true,

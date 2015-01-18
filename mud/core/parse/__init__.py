@@ -4,10 +4,10 @@ import re
 from dice import table_choice
 
 def length(s):
-  return mttlang.length(s)
+  return mttlang.length(str(s))
 
 def words(s):
-  return mttlang.words(s)
+  return mttlang.words(str(s))
 
 def first_word(col):
   if isinstance(col, (str, unicode)):
@@ -32,7 +32,10 @@ def strip_escape_chars(raw):
 
 
 def template(s):
-  return mttlang.handlebars(s)
+  return mttlang.handlebars(str(s))
+
+def plain(s):
+  return mttlang.removebars(str(s))
 
 def temp_slice(st, s=None, e=None):
   return mttlang.temp_slice(st, s, e)

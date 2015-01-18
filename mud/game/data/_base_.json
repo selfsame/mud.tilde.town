@@ -1,2 +1,3 @@
 {"id" :"thing_base",
+ "kind":["thing|things"],
  "thing":true}

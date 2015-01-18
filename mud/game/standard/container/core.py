@@ -1,5 +1,5 @@
 from mud.core import *
-
+from mud.core.util import *
 
 @construct
 def contents(d):
@@ -10,6 +10,7 @@ def contents(d):
       new = data.instance(e.get("id"), False)
       merged = components._merge([new, c_e])
       data.register(merged)
+      dispatch.stack("init", merged)
       res.append(merged.get("uuid"))
   return res
 
@@ -42,9 +43,11 @@ def closed(e):
 bind.predicate("closed", closed)
 bind.predicate("open", a(has("closed"), non("closed")))
 
+bind.adjective("closed", "closed")
+bind.adjective("open", "open")
 
 
-@given("container")
+@given("holder")
 def get_contents(c):
   es = c["contents"]
   res = []
@@ -61,21 +64,23 @@ def look(p, r):
 def look(p, r):
   say("It's completely empty.")
 
-@before(a("closed", "container"))
-def printed_name(e):
-  return "closed "
+@given(a("closed", "container"))
+def adjectives(e):
+  return "closed"
 
-@before(a("open", "container"))
-def printed_name(e):
-  return "open "
+@given(a("open", "container"))
+def adjectives(e):
+  return "open"
 
-@after(a("open", "container"))
-def indefinate_name(e):
-  return " ({#yellow}containing "+call("list_contents", call("get_contents", e))+"{#reset})"
+# @after(a("open", "container"))
+# def printed_name(e):
+#   return " (containing "+call("list_contents", call("get_contents", e))+")"
 
-@after(a("open", "empty", "container"))
-def indefinate_name(e):
-  return "(empty)"
+@before(a("open", "empty", "container"))
+def adjectives(e):
+  return "empty"
+
+
 
 
 @given("player", a("open", "container"))
@@ -88,16 +93,18 @@ def close(a, b):
 
 @given("player", a("closed", "container"))
 def open(a, b):
+  understood.objects([b])
+  relation = str(call("scope_relation", b, a))
+  report("[Subject] open[s] [object]"+relation+".")
   b["closed"] = False
-  relation = call("scope_relation", b, a)
-  say("You open the "+name(b)+relation+".")
-  report_to(location(a), call("indefinate_name", a), "opens the ", name(b)+relation+".")
+  understood.previous()
   return True
 
 @given("player", a("open", "container"))
 def close(a, b):
+  understood.objects([b])
+  relation = str(call("scope_relation", b, a))
+  report("[Subject] close[s] [object]"+relation+".")
   b["closed"] = True
-  relation = call("scope_relation", b, a)
-  say("You close the "+name(b)+relation+".")
-  report_to(location(a), call("indefinate_name", a), "closes the ", name(b)+relation+".")
+  understood.previous()
   return True

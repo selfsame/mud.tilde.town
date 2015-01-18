@@ -43,7 +43,7 @@ def descenic(e): return e["scenery"]
 @given("player", "room")
 def describe(p, r):
     ps = call("write",r,'desc').split("\r\n")
-    conts = contents_of(r)
+    conts = call("get_contents",r)
     scenics = map(util.its("scenery"), filter(a("scenic"), conts))
 
     say("{#white}{#bold}"+"\r\n\r\n".join(map(paragraph, ps + scenics))+"{#reset}")
@@ -52,7 +52,7 @@ def describe(p, r):
     conts.remove(p)
     call("sort_contents", p, conts)
 
-    say("   exits: {#yellow}{#bold}"+", ".join(the(r, 'exits').keys()) + "{#reset}\r\n")
+    say("   exits: {#yellow}{#bold}"+", ".join(GET(r, 'exits', {}).keys()) + "{#reset}\r\n")
 
 
 
@@ -64,11 +64,14 @@ def sort_contents(p, r):
   listed = map(INF(call, "list_contents", "%1"), map(INF(GET, "%1", "%2", []), [gend,gend,enti], [True, False, False]))
   res = []
   if GET(listed, 0):
-  	res.append(GET(listed, 0)+ " are here.")
+    tobe = " is"
+    if len(GET(gend,True, [])) > 1: tobe = " are"
+    sentance = GET(listed, 0)+tobe+" here."
+    res.append(sentance[0].upper()+sentance[1:])
   if GET(listed, 1):
-  	res.append(GET(listed, 1)+ " here as well.")
+    res.append(GET(listed, 1)+ " here as well.")
   if GET(listed, 2):
-  	res.append("On the floor is "+ GET(listed, 2)+ ".")
+    res.append("On the floor is "+ GET(listed, 2)+ ".")
   say("\r\n"+paragraph(" ".join(res))+"\r\n")
 
 

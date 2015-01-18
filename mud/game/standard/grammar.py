@@ -23,7 +23,7 @@ def indefinate_article(a):
 
 @given(string)
 def indefinate_article(a):
-  if a[0] in ["a", "o", "i", "e"]:
+  if a[0].lower() in ["a", "o", "i", "e"]:
     return "an "
   else:
     return "a "
@@ -65,16 +65,45 @@ def indefinate_name(n, e):
   return str(call("indefinate_article", n, noun))+ noun
 
 
-@given("thing")
-def indefinate_name(e):
-  noun = "".join(act_stack("printed_name", e))
-  return str(call("indefinate_article", noun))+ noun
-
-@given("player")
-def indefinate_name(e):
-  noun = call("printed_name", e)
-  return noun
 
 
+@given(anything, "player")
+def print_name_for(e, o):
+  adjectives = ", ".join(stack("adjectives", e))
+  noun = str("".join(act_stack("printed_name", e)))
+  if adjectives:
+    noun = adjectives+" "+noun
+  return str(call("indefinate_article", noun)+noun)
 
 
+@given(anything, "player")
+def print_for(e, o):
+  return str(e)
+
+@given("thing", "player")
+def print_for(e, o):
+  if e == o:
+    return "you"
+  return str(call("print_name_for", e, o))
+
+@given("thing", "player")
+def print_reflexive_for(e, o):
+  return "theirself"
+
+@given(anything, "player")
+def print_object_for(e, o):
+  if understood.subject() == e:
+    if o == e: return "yourself"
+    return call("print_reflexive_for", e, o)
+  return str(call("print_for", e, o))
+
+
+
+
+# #adjectives
+# bald headed
+# old
+# #kind
+# man
+# #descriptives
+# with a cane

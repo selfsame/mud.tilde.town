@@ -13,7 +13,7 @@ def list_contents(a, b):
   for item in map(from_uid, conts):
     if item == a: break
     if not scenic(item):
-      n = call("printed_name", item)
+      n = call("print_name_for", item, a)
       if names.get(n):
         names[n]  += 1
       else:
@@ -25,7 +25,7 @@ def list_contents(a, b):
     if names[k] > 1:
       r = "".join(call("indefinate_name", names[k], kinds[k]))
     else:
-      r = "".join(act_stack("indefinate_name", kinds[k]))
+      r = "".join(act_stack("print_name_for", kinds[k], a))
     if r: res.append( str(r) )
   if len(res) == 0:
     res = ["nothing"]
@@ -40,7 +40,7 @@ def list_contents(b):
   kinds = {}
   for item in conts:
     ent = from_uid(item)
-    n = call("printed_name", ent)
+    n = call("print_name_for", ent, understood.subject())
     if names.get(n):
       names[n] += 1
     else:
@@ -52,11 +52,12 @@ def list_contents(b):
     if names[k] > 1:
       r = "".join(call("indefinate_name", names[k], kinds[k]))
     else:
-      r = "".join(act_stack("indefinate_name", kinds[k]))
+      r = "".join(act_stack("print_name_for", kinds[k], understood.subject()))
     if r: res.append( str(r) )
   lastpair = res[-2:]
   prev = res[:-2] + [" and ".join(lastpair)]
-  return ", ".join(prev)
+  return  ", ".join(prev)
+  
 
 
 @given("holder")
@@ -65,7 +66,18 @@ def list_contents(b):
   return act("list_contents", b['contents'])
 
 
-
+@given("player", sequential)
+def smart_list(a, b):
+  conts = b
+  known = []
+  kinds = {}
+  for item in conts:
+    if data.related(a, "knows", b):
+      known.append(item)
+    else:
+      typekinds = GET(item, "kind")
+      for tk in typekinds:
+        kinds[tk] = GET(kinds, tk, []).append(item)
 
 
 

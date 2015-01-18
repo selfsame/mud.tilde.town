@@ -1,64 +1,79 @@
 from mud.core import *
 from colors import color
 from mud.core.util import *
+from mud.core.CAPSMODE import *
 
 
-@given("player", string)
+bind.verb("talk", "say|[\']", {"past":"said"})
+bind.verb_pattern("talk", "{1:text}")
+
+bind.verb("tell", "tell", {"past":"told"})
+bind.verb_pattern("tell", "{1} [\'\"]*{2:text}[\'\"\?]*")
+
+bind.verb("ask", "ask", {"past":"asked"})
+bind.verb_pattern("ask", "{1:text}","{1} [\'\"]*{2:text}[\'\"\?]*")
+
+@given("entity", string)
 def talk(a, b):
-  say("You say '{#yellow}"+b+"{#reset}'.")
-  report_to(location(a), name(a)+" says: ""{#yellow}"+b+"{#reset}")
+  if b.strip()[-1] == "?":
+    understood.objects([b.strip()[:-1]])
+    call("ask", a, b)
+    understood.previous()
+    return True
+  understood.subject(a)
+  report("[Subject] say[s] '{#bold}{#yellow}[object]{#reset}'.")
+  understood.previous()
 
-@given("player", string, "entity")
-def talk(a, b, c):
-  message = "'{#yellow}"+b+"{#reset}' to "+call("indefinate_name", c)+"."
-  say("You say "+message)
-  report_to(location(a), name(a)+" says "+message)
 
-@given("player")
-def printed_name(a):
-  n = str(the(a, "firstname"))
-  return "{#magenta}"+n+"{#reset}"
+@given("entity", "entity", string)
+def tell(a, b, c):
+  print understood.objects()
+  understood.subject(a)
+  understood.objects([b, c])
+  print understood.objects()
+  report("[Subject] says '{#bold}{#yellow}[second object]{#reset}' to [object].")
+  understood.previous()
+  understood.previous()
 
+@given("entity", "entity", string)
+def ask(a, b, c):
+  understood.subject(a)
+  report("[Subject] ask[s] [object] '{#bold}{#cyan}[second object]{#reset}?'")
+  understood.previous()
+
+@given("entity", string)
+def ask(a, b):
+  understood.subject(a)
+  report("[Subject] ask[s] '{#bold}{#cyan}[object]{#reset}?'")
+  understood.previous()
+
+@before("player", "player")
+def print_name_for(a, b):
+  if a != b:
+    return "{#magenta}"
+
+@after("player", "player")
+def print_name_for(a, b):
+  if a != b:
+    return "{#reset}"
 
 @after("player", anything)
 def walk(a, b):
   call("look", a)
 
 
-@given("player", string)
-def walk(a, b):
-  loc = location(a)
-  exits = the(loc, "exits")
-  for k in exits:
-    if b == k:
-      v = exits[k]
-      r = data.rooms.get(v)
-      if call("move", a, r):
-        call("leave", loc, a, k)
-        call("arrive", a, r)
 
 
-@given("player", "thing")
-def get_name(a,b):
-  return (the(b, "name") or the(b, "id") or "thing")
-
-@given("player", "thing", equals("name"))
-def printing(actor, subjects, property):
-  res = dict_call("get_name", actor, subjects)
-  s = ""
-  if res.get("before"): s += res.get("before")
-  s += res.get("action") or "thing"
-  if res.get("after"): s += res.get("after")
-  return s 
-
-@given("player", "thing")
-def get_name(a,b):
-  return "(named)"  
 
 @given("player")
 def look(a):
   r = location(a)
   call("describe", a, r)
+
+@given("player", sequential)
+def look(a, col):
+  print "look(a, col)"
+  say(str(call("list_contents", col)))
 
 
 @given("player", undefined)
@@ -68,13 +83,22 @@ def look(a, b):
 
 @given("entity", "thing")
 def look(a, b):
-  relation = call("scope_relation", b, a)
-  report_to(location(a), call("indefinate_name", a), "looks at", call("indefinate_name", b)+relation+".")
+  relation = call("scope_relation", b, a) or ""
+  report("[Subject] [verb] at [object].")
 
 @given("player", "thing")
 def look(a, b):
-  relation = call("scope_relation", b, a)
-  say("you look at ", call("indefinate_name", b)+str(relation)+".\r\n", call("write",b,'desc'))
+  relation = call("scope_relation", b, a) or ""
+  report("[Subject] [verb] at [object].")
+  say(call("write",b,'desc'))
+
+@given("player", anything)
+def take(a, b):
+  say("That's not something you could take.")
+
+@check("player", sequential)
+def take(a, col):
+  map(INF(call, "take", a, "%1"), col)
 
 @check("player", a("fixed", "object"))
 def take(a, b):
@@ -86,16 +110,15 @@ def take(a, b):
   say("Maybe if it was unconscious, or dead..")
   return False
 
-@given("player", anything)
-def take(a, b):
-  say("That's not something you could take.")
 
 @given("player", a("located", "object"))
 def take(a, b):
-  relation = call("scope_relation", b, a)
+  understood.objects([b])
+  relation = call("scope_relation", b, a) or ""
   if call("move", b, a):
-    say("you pick up the ", name(b)+relation+".\r\n")
-    report_to(location(a), call("indefinate_name", a), "picks up the", name(b)+relation+".\r\n")
+    report("[Subject] pick[s] up [object]"+relation+".")
+  understood.previous()
+
 
 @given("player")
 def inventory(a):
@@ -103,29 +126,43 @@ def inventory(a):
 
 @given("player", a("located"))
 def drop(a, b):
-  if call("move", b, location(a)):
-    say("you drop the ", name(b)+".\r\n")
-    report_to(location(a), call("indefinate_name", a), "drops the", name(b)+".\r\n")
+  understood.objects([b])
+  if call("move", b, call("get_location",a)):
+    report("[Subject] [verb] [object].")
+  understood.previous()
 
-@given("player", a("located"), a("closed", "container"))
+@check("player", anything, a("closed", "container"))
 def drop(a, b, c):
   if call("open", a, c):
     return True
   say("You're not able to open it.")
   return False
 
-@given("player", a("located"), "container")
+
+@given("player", sequential)
+def drop(a, col):
+  map(INF(call, "drop", a, "%1"), col)
+
+
+
+@given("player", a("located"), "holder")
 def drop(a, b, c):
-  p = path(c)
-  print "PATH", map(name, map(from_uid, p))
-  if b["uuid"] in p or b["id"] in p:
+  understood.objects([b, c])
+  if call("move", b, c):
+    relation = call("scope_relation", c, a) or ""
+    report("[Subject] put[s] [object] into [second object]"+relation+".")
+  understood.previous()
+
+@check("player", "thing", "holder")
+def drop(a, b, c):
+  p = util.path(b)
+  if b == c or c["uuid"] in p or c["id"] in p:
     say("you can't put something inside of itself.")
     return False
-  if call("move", b, c):
-    relation = call("scope_relation", c, a)
-    say("you put the ", name(b)+" into "+call("indefinate_name", c)+relation+".\r\n")
-    report_to(location(a), call("indefinate_name", a), "puts the ", name(b)+" into "+call("indefinate_name", c)+relation+".\r\n")
+  return True
 
-
+@check("player", sequential, "container")
+def drop(a, col, c):
+  map(INF(call, "drop", a, "%1", c), col)
 
 

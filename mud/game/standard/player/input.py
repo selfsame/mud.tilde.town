@@ -6,7 +6,10 @@ bind.predicate("token", dictionary)
 
 @given("player", string)
 def player_input(a, b):
-	data.subject = a
+	understood.subject(a)
+	print util.name(call("get_location", a))
+	print map(util.name, call("get_contents", call("get_location", a)))
+	understood.scope(call("get_contents", call("get_location", a)))
 	tokens = verbs.determine(b)
 	if not tokens: return False
 	if len(tokens) > 0:
@@ -15,13 +18,20 @@ def player_input(a, b):
 
 @given("player", verb, sequential)
 def player_input(p, v, tokens):
+	understood.verb(v)
 	scope = call("scope_while", p, v)
-	res = map(lambda x: call("resolve_token", p, x, scope), tokens)
-	print map(util.name, res)
+	res = []
+	for idx, t in enumerate(tokens):
+		_scope = False
+		_scope = call("scope_"+str(idx+1)+"_while", p, v)
+		if not _scope: _scope = scope
+		res.append(call("resolve_token", p, t, _scope))
+	understood.objects(res)
+	print [v] + map(util.name, res)
 	if call("object_blocked", v, p, res): return False
 	#inoke the verb with player and resolved objects
 	apply(call, [v, p] + res)
-	#data.subject = False
+
 
 @given("player", verb, empty)
 def player_input(a, b, c):
@@ -29,8 +39,15 @@ def player_input(a, b, c):
 
 @after("player", anything, anything)
 def player_input(a, b, c):
-	data.subject = False
+	understood.reset()
 
+
+def _plural(s):
+	words = parse.words(s)
+	lastword = words.pop()
+	if GET(bind._plural_kinds, lastword): 
+		return True
+	return False
 
 
 @given("player", has("text"), sequential)
@@ -43,16 +60,41 @@ def resolve_token(p, token, scope):
 
 @given("player", has("string"), sequential)
 def resolve_token(p, token, scope):
-	for item in scope:
-		match = call("scope_match", token["string"], item)
-		if match: return match
+	if token["string"] in ["me", "myself"]: 
+		return p
+	matches = scope_matches(scope, token["string"])
+	if _plural(token["string"]): 
+		return matches
+	return GET(matches, 0, token["string"])
 
-	return token["string"]
+def passes(item, adjs):
+	for adj in adjs:
+		if not adj(item):
+			return False
+	return True
+
+
+@given(string, sequential, sequential)
+def resolve_singular_kind(kind, adjs, scope):
+	res = []
+	for item in scope:
+		if kind in GET(item, "kind", []): 
+			if passes(item, adjs):
+				res.append(item)
+	return res
+
+@given(string, sequential, sequential)
+def resolve_plural_kind(kind, adjs, scope):
+	res = []
+	for item in scope:
+		if kind in GET(item, "kind", []): 
+			if passes(item, adjs):
+				res.append(item)
+	return res
 
 @given("player", has("holder"), sequential)
 def resolve_token(p, token, scope):
 	matches = find_held_scope(token, scope)
-	print matches
 	if matches: return matches[0]
 	return token["string"]
 
@@ -60,25 +102,45 @@ def resolve_token(p, token, scope):
 @given(string, has("id"))
 def scope_match(s, e):
 	if re.match(e["id"], s): return e
-	if re.match( "|".join(str((call("indefinate_name", e))).split(" ")), s):return e
+	if re.match( "^"+"$|^".join(str(parse.plain(call("print_name_for", e, understood.subject()))).lower().split(" "))+"$", s):return e
 
 @given(string, has("name"))
 def scope_match(s, e):
 	if re.match(str(e["name"]), s): return e
-	if re.match( "|".join(str((call("indefinate_name", e))).split(" ")), s):return e
+	if re.match( "^"+"$|^".join(str(parse.plain(call("print_name_for", e, understood.subject()))).lower().split(" "))+"$", s):return e
 
 
 @given(string, has("regex"))
 def scope_match(s, e):
 	if re.match(str(e["regex"]), s): return e
-	if re.match( "|".join(str((call("indefinate_name", e))).split(" ")), s):return e
+	if re.match( "^"+"$|^".join(str(parse.plain(call("print_name_for", e, understood.subject()))).lower().split(" "))+"$", s):return e
 
 
 def scope_matches(scope, s):
+	words = parse.words(s)
+	lastword = words.pop()
+	adjs = []
+	for w in words:	
+		if GET(bind._adjectives, w): 
+			pred = bound(GET(bind._adjectives, w))
+			if pred:
+				adjs.append(pred)
+
+	if GET(bind._plural_kinds, lastword): 
+		print "PLURAL"
+		match = call("resolve_plural_kind", GET(bind._plural_kinds, lastword), adjs, scope)
+		if match: return match
+	elif GET(bind._singular_kinds, lastword):
+		print "SINGULAR"
+		match = call("resolve_singular_kind", GET(bind._singular_kinds, lastword), adjs, scope)
+		if match:  return match
+
 	res = []
 	for item in scope:
-		match = call("scope_match", s, item)
-		if match: res.append(match)
+		match = call("scope_match", lastword, item)
+		if match: 
+			if passes(match, adjs):
+				res.append(match)
 	return res
 
 def get_holder_stack(cursor, stack=[]):
@@ -99,9 +161,14 @@ def find_held_scope(cursor, scope):
         matches = scope_matches(hs, item["string"])
         if matches:
           for m in matches:
-            paths.append(contents_of(m))
+            paths.append(call("get_contents", m))
       scopes = paths
     res = []
+    print "find_held_scope:",cursor["string"]
+
     for branch in scopes:
-      res += scope_matches(branch, cursor["string"])
+      bmatches = scope_matches(branch, cursor["string"])
+      res += bmatches
+    print cursor["string"]
+    if _plural(cursor["string"]): return [res]
     return res

@@ -1,5 +1,4 @@
 {"id":"tenlet-1",
-"room":true,
 "name":"Tenlet Street",
 "regex":"tenlet|street",
 "desc":"The world ends abruptly.",

@@ -1,5 +1,4 @@
 {"id":"tenlet",
-"room":true,
 "name":"Tenlet Street",
 "regex":"tenlet|street",
 "desc":"The street is littered malformed test entities.",

@@ -1,5 +1,4 @@
 {"id":"tenlet-2",
-"room":true,
 "name":"{#green}The intersection of Tenlet Street and Recursion Avenue's Tenlet Street crossing.{#reset}",
 "regex":"tenlet|street|recursion|avenue",
 "desc":"Something about the persepective here hurts your eyes.  People are coming and going from the directions they had originally came and went.  Several shops with faded signs are enveloping each other on the corner. You bump into yourself as you take in the scene.",
@@ -13,6 +12,7 @@
 		"name":"{#cyan}mailbox{#reset}",
 		"regex":"mailbox",
 		"fixed":true,
+		"block":{"take":"You try to pick up the mailbox loop but the stack won't overflow."},
 		"desc":"A mailbox is mounted to the mailbox on top of the mailbox above the mailbox just above the mailbox.",
 		"closed":"False",
 		"contents":[{

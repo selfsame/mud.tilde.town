@@ -50,7 +50,7 @@ def map_get_in(ks, col):
 
 def from_uid(s):
   if isinstance(s, str):
-    r = data.rooms.get(s)
+    r = data.game["rooms"].get(s)
     if not r:
       r = data.instances.get(s)
     if r: return r
@@ -72,7 +72,7 @@ def holder_of(e):
 
 def location(e):
   r = the(e,"located")
-  room = data.rooms.get(r)
+  room = data.game["rooms"].get(r)
   if room: return room
   return from_uid(r)
 

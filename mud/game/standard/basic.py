@@ -7,12 +7,13 @@ def printed_name(a):
 
 def _located(e):
   if has("located")(e):
-    if e["located"]: return True
+    if GET(data.instances, GET(e, "located")): return True
+    if GET(data.game["rooms"], GET(e, "located")): return True
   return False
 
 bind.predicate("located", _located)
 
-@given(a("registered", "thing"), "holder")
+@given("registered", "holder")
 def move(a, b):
   uid = a['uuid']
   dest = b['contents']
@@ -23,18 +24,19 @@ def move(a, b):
     print "fail move:", uid, dest
     return False
 
-@given(a("located", "registered", "thing"), "holder")
+@given("located", "holder")
 def move(a, b):
   uid = a['uuid']
   loc = location(a)
-  source = loc['contents']
-  dest = b['contents']
+  source = GET(loc,"contents")
+  dest = GET(b,"contents")
   try:
-    if uid in source: source.remove(uid)
+    if uid in source:
+      source.remove(uid)
     dest.append(uid)
     return True
   except:
-    print "fail move:", uid, loc, source, dest
+    print "fail move:", uid, map(util.name, [a, b]), source
     return False
 
 @after("thing", "holder")
@@ -48,7 +50,7 @@ def move(a, b):
 @before(a("located", "thing"))
 def delete(e):
   print "deleting uid from holding room"
-  loc = location(e)
+  loc = call("get_location", e)
   if bound("room")(loc):
     uuid = e.get("uuid")
     if uuid in loc['contents']:
@@ -62,7 +64,7 @@ def delete(e):
 @given("holder")
 def delete(e):
   print "deleting ",name(e) ,"container contents"
-  map(data.delete, contents_of(e))
+  map(data.delete, call("get_contents", e))
   data.delete(e)
 
 

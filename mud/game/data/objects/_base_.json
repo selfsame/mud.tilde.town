@@ -1,4 +1,4 @@
 {"id" :"object",
 "desc":"It's nothing special.",
- "kind":["things","objects","items"],
+ "kind":["object|objects"],
  "object":true}

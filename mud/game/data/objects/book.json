@@ -1,3 +1,4 @@
 {"id" :"book", "desc":"a small paperback book", "name":"book",
+"kind":["book|books"],
 "surface":true,
 "writing":""}

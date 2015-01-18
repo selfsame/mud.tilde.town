@@ -19,12 +19,12 @@ bind.predicate("blank", non(written))
 
 @check("player", string, non("surface"), "implement")
 def write(a, b, c, d):
-  say("You try to write on "+call("indefinate_name", c)+" but your "+call("printed_name", d)+" doesn't leave a mark.")
+  say("Your "+call("printed_name", d)+" doesn't leave a mark.")
   return False
 
 @before("player", string, "surface", "implement")
 def write(a, b, c, d):
-  say("You start writing '"+b+"' on "+call("indefinate_name", c)+".")
+  report("[Subject] [verb] on [second object] with [third object].")
 
 @given("player", string, "surface", "implement")
 def write(a, b, c, d):

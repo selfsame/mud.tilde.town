@@ -1,3 +1,4 @@
 {"id":"player",
+"traits":true,
 "living": {"hpmax": "4d4"},
 "contents":[{"id":"paper"},{"id":"pencil"}]}

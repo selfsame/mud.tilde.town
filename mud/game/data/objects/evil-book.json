@@ -1,2 +1,5 @@
 {"id" :"evil-book", 
+"kind":["book|books"],
+"contents":[],
+"color":"random",
 "desc":"You flip through the pages, eventually something particularily horrible prompts you to stop browsing."}
