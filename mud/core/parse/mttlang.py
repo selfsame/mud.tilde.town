@@ -76,7 +76,7 @@ def tokens(data, t):
     tag = t[1:]
     _c = color(tag)
     try:
-      if tag not in ["reset", "bold", "underline", "blink", "reverse"]: data["c"].append(tag)
+      if GET(data, "c") != tag and tag not in ["reset", "bold", "underline", "blink", "reverse"]: data["c"].append(tag)
       if tag == "reset":
         if GET(data["b"], -1):
           _c += background(GET(data["b"], -1))
@@ -90,7 +90,7 @@ def tokens(data, t):
     tag = t[1:]
     _c = background(tag)
     try:
-      if tag not in ["reset", "bold", "underline", "blink", "reverse"]: data["b"].append(tag)
+      if GET(data, "b") != tag and tag not in ["reset", "bold", "underline", "blink", "reverse"]: data["b"].append(tag)
       if tag == "reset":
         if GET(data["c"], -1):
           _c += color(GET(data["c"], -1))

@@ -1,5 +1,6 @@
 from mud.core import *
 from mud.core.util import location, name
+from mud.core.CAPSMODE import *
 
 
 bind.verb("admin", "@")
@@ -8,13 +9,31 @@ bind.verb_pattern("admin", "{1:text} \"{2:text}\"")
 bind.verb_pattern("admin", "{1:text} {2} {3:text}={4:text}")
 
 
+def printdict(c, indent="", hues=["{#red}","{#green}","{#yellow}","{#white}","{#cyan}"]):
+	hue = GET(hues, -1, "")
+	res = []
+	for k in c:
+		if isinstance(c[k], dict):
+			res.append(indent+hue+str(k)+":"+"{#reset}")
+			res.append(printdict(c[k], indent+"  ", hues[:-1]))
+		else:
+			val = c[k]
+			if isinstance(val, str):
+				val = "'{#green}{#bold}"+str(c[k])+"{#reset}'"
+			elif isinstance(val, bool):
+				val = "{#magenta}{#bold}"+str(c[k])+"{#reset}"
+			elif isinstance(val, int):
+				val = "{#yellow}{#bold}"+str(c[k])+"{#reset}"
+			elif isinstance(val, float):
+				val = "{#red}{#bold}"+str(c[k])+"{#reset}"
+			else:
+				val = str(c[k])
+			res.append(indent+hue+str(k)+"{#reset}: "+val)
+	return "\r\n".join(res)
 
 @given("player", equals("show"), "thing")
 def admin(a, b, c):
-	res = []
-	for k in c:
-		res.append("{#yellow}"+str(k)+":"+"{#reset}"+str(c[k]))
-	say("\r\n".join(res))
+	say(printdict(c))
 
 @given("player", equals("delete"), "thing")
 def admin(a, b, c):

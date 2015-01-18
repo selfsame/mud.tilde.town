@@ -23,6 +23,7 @@ def player_enter_game(a, b):
   default = data.instance("player", False)
   b['player'] = a
   new = dict(default.items() + b.items())
+  new = components._merge([default, b])
   data.subject = new
   data.register(new)
   call("player_init", new)
@@ -70,7 +71,7 @@ def line_prompt(a):
   h = colors.special["heart"]
   hp = a["living"]["hp"]
   maxhp = a["living"]["hpmax"]
-  return parse.template("{#bold}{#red}"+h+"{#yellow}"+str(hp)+"{#green}/"+str(maxhp)+"{#reset}:")
+  return parse.template("{#bold}{#red}"+h+"{#yellow}"+str(hp)+"{#green}/"+str(maxhp)+"{#resetall}:")
 
 @given("player")
 def quit(a):
