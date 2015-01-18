@@ -19,9 +19,14 @@ mud.tilde.town
 
 
 ```python
-@given("entity", a("closed", "container"))
+@after(a("locked", "closed", "container"))
+def print_name(e):
+  return "(locked)"
+
+@check("entity", a("closed", "container"))
 def close(a, b):
   say("It's already closed.")
+  return False
 
 @given("entity", a("opened", "container"))
 def close(a, b):
@@ -130,7 +135,7 @@ parse.template("{%green}bg-green{#yellow}fg-yellow {#red}fg-red {#magenta}fg-mag
 ```
 
 ## extremely decoupled modules
-* no iport requirements between ```game/``` modules
+* no import requirements between ```game/``` modules
 * dispatch rules, component functions, predicates, verbs, adjectives all bound to strings and can be overwritten or removed.
 * module load order determines dispatching and binding priority
 * all game concepts built from standard modules, easy to drastically change the core design of a game
