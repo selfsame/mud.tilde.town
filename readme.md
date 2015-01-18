@@ -3,7 +3,7 @@ mud.tilde.town
 
 ***A python MUD for interactive fiction***
 
-![](http://www.selfsamegames.com/screens/ttmud.png)
+![](http://www.selfsamegames.com/screens/showoff.png)
 
 
 
