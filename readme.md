@@ -1,15 +1,24 @@
-mud.tilde.town
+mud.tilde.town*
 ==============
-
-***A python MUD for interactive fiction***
+***python library for telnet interactive fiction***
 
 ![](http://www.selfsamegames.com/screens/showoff.png)
 
+Requirements
+================
+* python 2.x
+* [twisted https://twistedmatrix.com/trac/](https://twistedmatrix.com/trac/)
+* [zope.interface https://pypi.python.org/pypi/zope.interface#download
+](https://pypi.python.org/pypi/zope.interface#download)
 
 
 #Features
 
 ## extensive function dispatching
+[wiki - dispatching](https://github.com/selfsame/mud.tilde.town/wiki/rules)
+
+[wiki - predicates](https://github.com/selfsame/mud.tilde.town/wiki/predicates)
+
 * inspired by inform7
 * functions dispatch for argument arity, argument predicate, and lifecycle variations (check, before, during, after)
 * Rich behavior trees are easily created by covering basic functionality then narrowing down edge cases to augment/ovveride.
@@ -99,7 +108,17 @@ def printed_name(e):
 
 ```
 
+## extremely decoupled modules
+* no import requirements between ```game/``` modules
+* dispatch rules, component functions, predicates, verbs, adjectives all bound to strings and can be overwritten or removed.
+* module load order determines dispatching and binding priority
+* all game concepts built from standard modules, easy to drastically change the core design of a game
+
+
+
+
 ## input parsing
+[wiki - player input and verbs](https://github.com/selfsame/mud.tilde.town/wiki/verbs)
 
 verbs can have multiple gramatical forms with arbitrary argument count and ordering.
 
@@ -111,22 +130,26 @@ verbs.register("write", "write|inscribe", {"past":"wrote"})
 verbs.register_structure("write", "{1:text}on|in{2}","{1:text}on|in{2}with|using{3}")
 ```
 
+
+
 ## contextualized string templates
+[wiki - context and reporting](https://github.com/selfsame/mud.tilde.town/wiki/context)
+
 subject, verb, objects, and observing scope can be set and rewound with ```mud.core.context```'s ```understood```
 
 Text can easily be customized for the observer, (especially useful to refer to acting player as "you|yourself")
-```
+```python
 #player commands have proper context.understood, 
 #but this can be changed and reverted incrementally if needed
 understood.subject(e)
 
-#dispatches "print_for(a, b)" for subject, observer, 
-#and "print_object_for(a, b)" for object, observer
 report("[Subject] introduce[s] [itself] to [object].")
 
 #undoes the previous subject change 
 understood.previous()
 ```
+
+
 
 ## colorcode templates with nesting foreground/background colors
 ```parse.template``` tracks fg/bg color stacks, allowing you to nest colorcoded strings. ```parse``` also includes utilities for getting length, indicies, and splices of a templated string.
@@ -134,26 +157,14 @@ understood.previous()
 parse.template("{%green}bg-green{#yellow}fg-yellow {#red}fg-red {#magenta}fg-magenta{%reset}bg-default{#reset}fg-red {#reset}fg-yellow {#reset}fg-default")
 ```
 
-## extremely decoupled modules
-* no import requirements between ```game/``` modules
-* dispatch rules, component functions, predicates, verbs, adjectives all bound to strings and can be overwritten or removed.
-* module load order determines dispatching and binding priority
-* all game concepts built from standard modules, easy to drastically change the core design of a game
 
 
 
-
-WIKI
+MORE WIKI
 ======
 [https://github.com/selfsame/mud.tilde.town/wiki](https://github.com/selfsame/mud.tilde.town/wiki)
 
 
-Requirements
-================
-mud.tilde.town requires: 
-* python 2.x
-* [twisted https://twistedmatrix.com/trac/](https://twistedmatrix.com/trac/)
-* [zope.interface https://pypi.python.org/pypi/zope.interface#download
-](https://pypi.python.org/pypi/zope.interface#download)
+
 
 
