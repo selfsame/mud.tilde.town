@@ -23,7 +23,8 @@
 	"closed":false,
 	"desc":"It doesn't look very menacing, but you realize it's the magazines themselves that have imbued it with evil.",
 	"contents":[
-		{"id": "evil-book", "name":"Accolyte's Life magazine"},
+		{"id": "evil-book", "name":"Accolyte's Life magazine",
+		"desc":"{%green}demo{#red}one{%white}two{#cyan}twoandahalf{%reset}three{#reset}four{%reset}point{#reset}default{%reset}\r\ndefault {#yellow}yellow {#red}red {#magenta}magenta {#reset}reset {#reset}reset {#reset}reset\r\n"},
 		{"id": "evil-book", "name":"Sacrificial Times"},
 		{"id": "evil-book", "name":"Better Homes and Covens"},
 		{"id": "evil-book", "name":"Maven Stuart's Unliving"},

@@ -83,3 +83,17 @@ class RoomBuilder(Dialogue):
 	def name(self, s):
 		return False
 
+
+@given("player", equals("colors"))
+def admin(a, b):
+	hues = ["black", "white", "yellow", "red", "magenta", "blue", "cyan", "green"]
+	res = "{#reset}{%reset}default text\r\n"
+	for b in hues:
+		for weight in ["", "{#bold}"]:
+			for c in hues:
+				res += weight+"  {%"+b+"}{#"+c+"}"+colors.special["heart"]+str(" "+c+"     ")[0:6]+"{#reset}{%reset}"
+			res += "\r\n"
+		res += "\r\n"
+	res += "\r\n"
+	res += " ".join(colors.special.values())
+	say(res)

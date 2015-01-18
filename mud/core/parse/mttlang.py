@@ -74,26 +74,32 @@ def tokens(data, t):
   #     data["codes"].append(color("bold"))
   if t[0] == "#":
     tag = t[1:]
+    _c = color(tag)
     try:
-      code = color(tag)
-      data["c"].append(tag)
-      data["codes"].append(code)
+      if tag not in ["reset", "bold", "underline", "blink", "reverse"]: data["c"].append(tag)
       if tag == "reset":
         if GET(data["b"], -1):
-          data["codes"].append(background(GET(data["b"], -1)))
-          pass
+          _c += background(GET(data["b"], -1))
+        if GET(data["c"], -1):
+          data["c"].pop()
+        if GET(data["c"], -1):
+          _c += color(GET(data["c"], -1))
     except: pass
+    data["codes"].append(_c)
   if t[0] == "%":
     tag = t[1:]
+    _c = background(tag)
     try:
-      code = background(tag)
-      data["b"].append(tag)
-      data["codes"].append(code)
+      if tag not in ["reset", "bold", "underline", "blink", "reverse"]: data["b"].append(tag)
       if tag == "reset":
         if GET(data["c"], -1):
-          data["codes"].append(color(GET(data["c"], -1)))
-          pass
+          _c += color(GET(data["c"], -1))
+        if GET(data["b"], -1):
+          data["b"].pop()
+        if GET(data["b"], -1):
+          _c += background(GET(data["b"], -1))
     except: pass
+    data["codes"].append(_c)
   return data
 
 

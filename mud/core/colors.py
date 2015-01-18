@@ -76,12 +76,12 @@ def style(text, reset=True):
 
 
 def color(name):
-    return CODES[name]
-
+    try: return CODES[name]
+    except: return ""
 
 def background(name):
-    return CODES[name.upper()]
-
+    try: return CODES[name.upper()]
+    except: return ""
 
 def wrap(s, c):
     return c+s+CODES['resetall']
