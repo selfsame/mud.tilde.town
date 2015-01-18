@@ -1,6 +1,6 @@
 mud.tilde.town*
 ==============
-***python library for telnet interactive fiction***
+***multiplayer interactive fiction over telnet (python)***
 
 ![](http://www.selfsamegames.com/screens/showoff.png)
 
@@ -69,8 +69,7 @@ import random
 
 @construct
 def color(c):
-  if c == "random":
-    return random.choice(["brown","red","cyan"])
+  if c == "random": return random.choice(["brown","red","cyan"])
   return c
 
 def _color_is(c): 
@@ -79,33 +78,22 @@ def _color_is(c):
 
 #binding predicates allows any other module to use or overwrite them
 bind.predicate("colored", has('color'))
-bind.predicate("brown", _color_is("brown"))
 bind.predicate("red", _color_is("red"))
 bind.predicate("cyan", _color_is("cyan"))
 
-#binding adjectives, the standard/player/input.py module finds predicates from adjective strings to filter matches
+#binding predicates as adjectives to be used for player input
 bind.adjective("colored", "colored")
 bind.adjective("red", "red")
-bind.adjective("brown", "brown")
 bind.adjective("cyan", "cyan")
 
-#dispatching "printed_name" should be sandwiched by these rules
 @before(a("cyan", "thing"))
-def printed_name(e):
-  return "{#bold}{#cyan}"
-
-@before(a("brown", "thing"))
-def printed_name(e):
-  return "{#yellow}"
+def printed_name(e): return "{#bold}{#cyan}"
 
 @before(a("red", "thing"))
-def printed_name(e):
-  return "{#red}"
+def printed_name(e): return "{#red}"
 
 @after(a("colored", "thing"))
-def printed_name(e):
-  return "{#reset}"
-
+def printed_name(e): return "{#reset}"
 ```
 
 ## extremely decoupled modules
