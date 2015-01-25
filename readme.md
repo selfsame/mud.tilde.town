@@ -28,9 +28,13 @@ Requirements
 
 
 ```python
-@after(a("locked", "closed", "container"))
-def print_name(e):
-  return "(locked)"
+@given(a("closed", "container"))
+def adjectives(e):
+  return "closed"
+
+@given(a("open", "container"))
+def adjectives(e):
+  return "open"
 
 @check("entity", a("closed", "container"))
 def close(a, b):
@@ -40,7 +44,7 @@ def close(a, b):
 @given("entity", a("opened", "container"))
 def close(a, b):
   b["closed"] = True
-  say("You close "+act("indefinate_name", b)+".")
+  report("[Subject] close[s] [object].")
 ```
 
 ## component/entity game objects:
