@@ -23,6 +23,16 @@ def contents(d):
   conts = map(util.from_uid, d)
   return map(components._serialize, conts)
 
+def recursive_register(e):
+  if isinstance(e, str): return e
+  e = components._deserialize(e)
+  data.register(e)
+  return e.get("uuid")
+
+@deserialize
+def contents(d):
+  return map(recursive_register, d)
+
 bind.predicate("holder", has('contents'))
 bind.predicate("container", a(non("entity"), "holder"))
 

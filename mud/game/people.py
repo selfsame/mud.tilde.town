@@ -129,7 +129,7 @@ def print_reflexive_for(e, o):
 
 bind.predicate("sentient", has("sentient"))
 
-bind.verb("introduce", "introduce")
+bind.verb("introduce", "introduce", {"doc":"Attempt to indtroduce yourself to a stranger, or introduce two people you know to each other."})
 bind.verb_pattern("introduce", "{1}","{1}to{2}")
 
 @check("player", "entity")

@@ -16,6 +16,7 @@ def register_structure(v, *patterns):
       structures[v] = [pattern] + group
 
 def register(name, regex, tenses = {}):
+  regexverbs[name] = regex
   command_pattern = "^(\W*"+regex+")\W*(.*)"
   c = re.compile(command_pattern)
   compiled[c] = name
@@ -25,9 +26,6 @@ def register(name, regex, tenses = {}):
   forms[name] = dict(tenses.items() + default.items())
   register_structure(name, "{1}")
 
-for regex in regexverbs:
-  name = regexverbs[regex]
-  register(name, regex)
 
 
 numeric = re.compile("\W(second|third|fourth|fifth|sixth|seventh|eight)\W")

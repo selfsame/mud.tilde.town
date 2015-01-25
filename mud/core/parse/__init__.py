@@ -1,7 +1,7 @@
 import mttlang
 import dice
 import re
-from dice import table_choice
+from dice import table_choice, Dice
 
 def length(s):
   return mttlang.length(str(s))

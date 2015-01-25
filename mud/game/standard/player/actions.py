@@ -13,6 +13,40 @@ bind.verb_pattern("tell", "{1} [\'\"]*{2:text}[\'\"\?]*")
 bind.verb("ask", "ask", {"past":"asked"})
 bind.verb_pattern("ask", "{1:text}","{1} [\'\"]*{2:text}[\'\"\?]*")
 
+@given(anything, anything)
+def understood_scope_while(e, v): 
+  return []
+
+@given("entity", string)
+def understood_scope_while(e, v): 
+  return call("get_contents", call("get_location", e))
+
+def _enact(s, v, *objects):
+  understood.subject(s)
+  understood.verb(v)
+  understood.objects(list(objects))
+  understood.scope(call("understood_scope_while", s, v))
+  res = apply(call, [v, s] + list(objects))
+  understood.previous().previous().previous().previous()
+  return res
+
+@given("entity", string)
+def enact(s, v): return _enact(s, v)
+
+@given("entity", string, anything)
+def enact(s, v, a): return _enact(s, v, a)
+
+@given("entity", string, anything, anything)
+def enact(s, v, a, b): return _enact(s, v, a, b)
+
+@given("entity", string, anything, anything, anything)
+def enact(s, v, a, b, c): return _enact(s, v, a, b, c)
+
+@given("entity", string, anything, anything, anything, anything)
+def enact(s, v, a, b, c, d): return _enact(s, v, a, b, c, d)
+
+
+
 @given("entity", string)
 def talk(a, b):
   if b.strip()[-1] == "?":
@@ -27,11 +61,9 @@ def talk(a, b):
 
 @given("entity", "entity", string)
 def tell(a, b, c):
-  print understood.objects()
   understood.subject(a)
   understood.objects([b, c])
-  print understood.objects()
-  report("[Subject] says '{#bold}{#yellow}[second object]{#reset}' to [object].")
+  report("[Subject] say[s] '{#bold}{#yellow}[second object]{#reset}' to [object].")
   understood.previous()
   understood.previous()
 

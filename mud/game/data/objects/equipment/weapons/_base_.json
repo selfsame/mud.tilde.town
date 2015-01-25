@@ -1,0 +1,7 @@
+{"id" :"weapon_base",
+"kind":["weapon|weapons"],
+"weapon":true,
+ "slot":"weapon",
+"material":{"copper":20,"iron":10,"steel":5},
+"fabricated":true,
+"damage":"1d1"}

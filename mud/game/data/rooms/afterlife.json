@@ -1,0 +1,5 @@
+{"id":"afterlife",
+  "name":"The afterlife.",
+  "desc":"An endless plain of tall grass. The sky is pure white and the brightness is almost blinding. Faceless figures wander aimlessly.",
+  "contents":[],
+  "exits": {"gate":"lobby"}}

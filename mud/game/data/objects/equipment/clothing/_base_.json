@@ -1,0 +1,5 @@
+{"id" :"clothing_base",
+"kind":["clothes|clothing"],
+"material":{"leather":10,"cloth":20},
+"fabricated":true,
+"AC":1}

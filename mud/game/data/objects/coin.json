@@ -2,5 +2,6 @@
 "name":"coin",
 "extends":[],
 "kind":["money","coins","currency"],
-"color":"yellow",
+"material":{"gold":10,"silver":20,"copper":30},
+"fabricated":true,
 "desc": "It's shiney!"}

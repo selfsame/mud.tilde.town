@@ -28,4 +28,4 @@
 	"name":"butcher", "scenery":"A butcher is doing things at the bench in front of his shop.",
 	"desc":"He's no longer has a solid boundry, the scene is rather gruesome."}],
 "spawning":{"rate":10,
-	"choices":{"person":10, "mouse":10, "person":20}}}
+	"choices":{"goblin":10}}}

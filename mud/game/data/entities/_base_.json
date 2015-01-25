@@ -4,4 +4,16 @@
  "entity":true,
  "located":false,
  "living": {"hpmax": "3d4"},
- "acting":{"ap":0}}
+ "acting":{"ap":0},
+ "exp":0,
+ "expvalue":1.0,
+ "level":1,
+ "damage":"1d2",
+ "opponents":[],
+ "target":false,
+ "stats":{
+    "str":6,
+    "dex":6,
+    "con":6,
+    "int":6,
+    "chr":6}}

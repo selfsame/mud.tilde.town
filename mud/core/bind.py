@@ -7,7 +7,9 @@ _singular_kinds = {}
 _plural_kinds = {}
 _adjectives = {}
 
-def predicate(s, f): return predicates._register(s, f)
+def predicate(s, f, adj=False): 
+	predicates._register(s, f)
+	if adj: adjective(s, s)
 
 def verb(name, regex, tenses = {}): return verbs.register(name, regex, tenses)
 

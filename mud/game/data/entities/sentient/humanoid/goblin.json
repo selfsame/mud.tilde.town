@@ -1,0 +1,11 @@
+{"id": "goblin",
+ "name":"goblin",
+ "color":"green",
+ "desc":"It looks like a typical fantasy goblin.",
+  "living": {"hpmax": "4d5+20"},
+  "expvalue":22.0,
+   "stats":{
+   	"con":14,
+   	"str":12},
+  "level":8,
+  "weight": 75}

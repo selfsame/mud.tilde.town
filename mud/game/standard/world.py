@@ -51,10 +51,9 @@ def update(delta):
     call("update", data.game["rooms"][id], delta)
 
 
-@after("room", number)
+@given("holder", number)
 def update(r, delta):
   contents = r['contents']
-  data.scope = map(from_uid, contents)    
   for uid in contents:
     if uid in data.instances:
-        call("update", data.instances[uid], delta)
+        stack("update", data.instances[uid], delta)

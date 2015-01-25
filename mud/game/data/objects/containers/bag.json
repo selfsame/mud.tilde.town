@@ -1,7 +1,7 @@
 {"id":"bag",
-"name":"leather bag",
-"extends":[],
-"regex":"leather|bag|leather bag",
+"name":"bag",
+"material":"leather",
+"fabricated":true,
 "descripton":"A crudely stitched leather bag, cinched close with a piece of twine.",
 "contents":[{"id":"coin"}],
 "capacity":5}

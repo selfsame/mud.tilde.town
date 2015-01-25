@@ -4,5 +4,5 @@
 "desc":"The world ends abruptly.",
 "exits": {"west":"tenlet"},
 "contents":[],
-"spawning":{"rate":10,
-	"choices":{"person":10, "mouse":10, "person":20}}}
+"spawning":{"rate":2,
+	"choices":{"person":5, "mouse":10, "rat":10}}}

@@ -5,7 +5,8 @@ def GET(col, k, notfound=None):
 
 def GET_IN(col, ks, notfound = None):
   for k in ks:
-    return GET(col, k, notfound)
+    col = GET(col, k, notfound)
+  return col
 
 def KEYFN(k):
   def _KEYFN_(col, nf=None): return GET(col, k, nf)
@@ -28,8 +29,6 @@ def INVERT(*args):
       if f(x): return False
     return True
   return _INVERT_
-
-
 
 _1 = "%1"
 _2 = "%2"

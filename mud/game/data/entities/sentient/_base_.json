@@ -1,4 +1,5 @@
 {"id":"sentient_base", 
 "sentient":true,
+ "expvalue":100.0,
 "contents":[],
 "desc":"There's nothing special about them."}

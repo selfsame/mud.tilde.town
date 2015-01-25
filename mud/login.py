@@ -160,7 +160,7 @@ class Account(Dialogue):
 
 _origins = {
 "a city orphan that was raised by the streets.":{
-  "stats":{
+  "statmod":{
     "dex":4,
     "con":-2,
     "int":-4},
@@ -173,7 +173,7 @@ _origins = {
   "perks":{"nickname", "insecure"}
   },
 "the bastard child of a fishwife.":{
-  "stats":{
+  "statmod":{
     "str":2,
     "con":1,
     "int":-1,
@@ -184,9 +184,9 @@ _origins = {
   "perks":{"fatherless"}
   },
 "a farmers child, youngest of 6.":{
-  "stats":{
-    "str":5,
-    "con":2,
+  "statmod":{
+    "str":3,
+    "con":1,
     "int":-4,
     "dex":-1},
   "skills":{
@@ -196,7 +196,7 @@ _origins = {
   "perks":{"honest"}
   },
 "only child to a textile merchant.":{
-  "stats":{
+  "statmod":{
     "str":-2,
     "con":-2,
     "int":4,
@@ -208,7 +208,7 @@ _origins = {
   "perks":{"handsome"}
   },
 "under the strict rule of your father, a Brigadier General.":{
-  "stats":{
+  "statmod":{
     "str":1,
     "con":1,
     "int":1,
@@ -220,7 +220,7 @@ _origins = {
   "perks":{"proud", "unfriendly"}
   },
 "favorite child of a Gypsy king.":{
-  "stats":{
+  "statmod":{
     "str":-3,
     "int":3,
     "dex":3},
@@ -232,7 +232,7 @@ _origins = {
   "perks":{"friendly", "lucky", "nickname"}
   },
 "grandchild of an impoverished Baroness.":{
-  "stats":{
+  "statmod":{
     "str":-1,
     "int":2,
     "dex":1},
@@ -245,7 +245,7 @@ _origins = {
   "perks":{"clumsy"}
   },
 "only child of a sailor, lost at sea before you turned eight.":{
-  "stats":{
+  "statmod":{
     "str":2,
     "int":-2,
     "dex":1},
@@ -260,7 +260,7 @@ _origins = {
   "perks":{"unlucky"}
   },
 "a groundskeepers child who had the run of the master's estate.":{
-  "stats":{
+  "statmod":{
     "str":2,
     "dex":1,
     "con":-1,
@@ -279,7 +279,7 @@ _origins = {
   "perks":{"homely", "honest"}
   },
 "the butchers sickly child.":{
-  "stats":{
+  "statmod":{
     "con":-4},
   "skills":{
     "meatlore":50},

@@ -1,10 +1,15 @@
 {"id":"treehouse",
 "name":"{#green}a small treehouse{#reset}","desc":"It's tiny and crudely built, but it's got a decent view of the jungle surrounding the visitor center.",
 "contents":[
+	{"id":"coin"},
+	{"id":"coin"},
 	{"id":"chest", "closed":false,
 	 "name":"chest",
 	 "fixed":true,
 	 "desc":"An old wooden chest with iron hinges is bolted to the floor.",
-	"contents":[{
-		"id":"bag"}]}],
+	"contents":[
+		{"id":"bag"},
+		{"id":"bandanna"},
+		{"id":"jacket"},
+		{"id" :"dagger","damage":"1d4+2"}]}],
 "exits": {"down": "lobby"}}

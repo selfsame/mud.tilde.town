@@ -69,7 +69,9 @@ def indefinate_name(n, e):
 
 @given(anything, "player")
 def print_name_for(e, o):
-  adjectives = ", ".join(stack("adjectives", e))
+  ajs = stack("adjectives", e)
+  ajs.reverse()
+  adjectives = " ".join(ajs)
   noun = str("".join(act_stack("printed_name", e)))
   if adjectives:
     noun = adjectives+" "+noun

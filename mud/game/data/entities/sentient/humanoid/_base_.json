@@ -1,0 +1,13 @@
+{"id":"humanoid_base", 
+"living": {"hpmax": "3d10+60"},
+"level":12,
+"equipment":{
+ "head":{"False":20,"bandanna":10},
+ "torso":{"shirt":20, "vest":10, "jacket":10},
+ "legs":{"trousers":10,"dress":10},
+ "feet":{"boots":10},
+ "hands":false,
+ "neck":false,
+ "weapon":{"False":20,"dagger":10,"club":14},
+ "offhand":false
+	}}

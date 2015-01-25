@@ -1,6 +1,6 @@
 from mud.core import *
 
-bind.verb("write", "write|inscribe", {"past":"wrote"})
+bind.verb("write", "write|inscribe", {"past":"wrote", "doc":"writes text on appropriate surface with a writing implement."})
 bind.verb_pattern("write", "{1:text}on|in{2}","{1:text}on|in{2}with|using{3}")
 
 bind.verb("erase", "erase", {"progressive":"erasing"})

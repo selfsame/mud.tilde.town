@@ -66,6 +66,7 @@ def check_scope(a):
 
 @given("entity", "thing")
 def check_scope(a, c):
+  if a == c: return []
   return [c]
 
 @given(a("player", "holder"))
@@ -74,7 +75,6 @@ def check_inventory_scope(a):
   for item in call("get_contents", a):
     res += call("check_scope", a, item)
   return res
-
 
 @given("player", "container")
 def check_scope(a, b):

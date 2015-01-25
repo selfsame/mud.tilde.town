@@ -1,7 +1,8 @@
 {"id": "rat",
  "name":"rat",
-  "living": {"hpmax": 12},
+  "living": {"hpmax": "2d4"},
   "extends":["mammal"],
   "weight": 1.2,
+  "expvalue":6.0,
   "contents":[{"id":"coin"}],
 	"fails": {"write":"Rat writing's really rude."}}

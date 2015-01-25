@@ -31,12 +31,9 @@ def connections(r):
 
 @given("located")
 def get_location(e):
-  r = GET(data.game["rooms"], e["located"])
-  if r: return r
-  r = GET(data.instances, e["located"])
-  if r: return r
-  print "NO LOCATION FOR", util.name(e)
-
+  r = GET(data.game["rooms"], e["located"], GET(data.instances, e["located"], False))
+  if not r: print "NO LOCATION FOR", util.name(e), data.game["rooms"].keys()
+  return r
 
 @given(a("spawning", "room"), number)
 def update(r, delta):

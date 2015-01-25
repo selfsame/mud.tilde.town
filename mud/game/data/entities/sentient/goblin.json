@@ -1,7 +1,0 @@
-{"id": "goblin",
- "name":"{#green}{#bold}goblin{#reset}",
- "regex":"goblin",
- "desc":"It looks like a typical fantasy goblin.",
-  "living": {"hpmax": "4d5+10"},
-  "extends":["mammal"],
-  "weight": 75}

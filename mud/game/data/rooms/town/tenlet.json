@@ -5,4 +5,4 @@
 "exits": {"north":"lobby","east":"tenlet-1","west":"tenlet-2"},
 "contents":[{"id":"person"}],
 "spawning":{"rate":10,
-	"choices":{"person":10, "mouse":10, "person":20}}}
+	"choices":{"person":10, "mouse":10, "goblin":20}}}

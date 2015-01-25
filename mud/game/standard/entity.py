@@ -8,7 +8,7 @@ bind.predicate("entity", has("entity"))
 
 def idle(e):
   if GET(e,"acting"):
-    if GET(e["acting"],"ap") <= 0:
+    if GET(e["acting"],"ap", 100) <= 0:
       return True
   return False
 
@@ -30,8 +30,9 @@ def inventory(d):
 
 @construct
 def acting(d):
-  d["ap"] = random.randint(20,100)
-  return d
+  return copy.copy(d)
+
+
 
 
 
@@ -39,24 +40,32 @@ def acting(d):
 @given(has("acting"), number)
 def update(a, delta):
   ap = a['acting']['ap']
-  ap -= delta
+  ap -= delta * 10
   if ap < 0: ap = 0
   a['acting']['ap'] = ap
 
+@before(has("living"), number)
+def update(a, delta):
+  hp = a["living"]["hp"]
+  hpmax = a["living"]["hpmax"]
+  hp += 0.1
+  if hp > hpmax: hp = hpmax
+  a["living"]["hp"] = hp
+
 @given(a(has("wandering"), "idle", "entity"), number)
 def update(a, delta):
-  a['acting']['ap'] = 30 + random.randint(100, 1000)
-  loc = location(a)
-  if has("room")(loc):
-    dests = connected_rooms(loc)
-    dest = random.choice(dests)
-    call("walk", a, dest)
+  a['acting']['ap'] = 10 + random.randint(10, 30)
+  if random.randint(0, 20) < 2:
+    loc = location(a)
+    if has("room")(loc):
+      dests = connected_rooms(loc)
+      dest = random.choice(dests)
+      call("enact", a, "walk", dest)
 
 
 @given("entity", "room")
 def walk(a, b):
   loc = location(a)
-  understood.subject(a)
   if call("move", a, b):
     if loc:
       exits = the(loc,"exits")
@@ -67,7 +76,6 @@ def walk(a, b):
       call("leave", loc, a, exit)
     understood.scope(call("get_contents", b))
     call("arrive", a, b)
-    understood.previous()
     understood.previous()
     return True
   return False
@@ -94,14 +102,13 @@ def leave(o, e, b):
 
 @given("entity", "room")
 def arrive(e, r):
-  sub = understood.subject(e)
+  understood.subject(e)
   sc = copy.copy(understood.scope())
   if e in sc:
     sc.remove(e)
   understood.scope(sc)
   report("[Subject] walk[s] in.")
-  understood.previous()
-  understood.previous()
+  understood.previous().previous()
 
 
 

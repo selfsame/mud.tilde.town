@@ -1,5 +1,6 @@
 from util import *
 from mud.core import verbs
+from CAPSMODE import *
 
 _registry = {}
 
@@ -99,6 +100,13 @@ def equals(*a):
       if b != v: return False
     return True
   return efn
+
+def key_is(a, b):
+  def _key_is(e):
+    if GET(e, a) == b: return True
+    return False
+  return _key_is
+
 
 def verb(e):
   if e in verbs.forms: return True

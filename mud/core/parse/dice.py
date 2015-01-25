@@ -67,3 +67,17 @@ def test():
   table = {"cat":20, "mouse":5, "dog":30, "cockroach": 1}
   for i in range(10):
     print table_choice(table)
+
+
+class Dice():
+  def __init__(self, s):
+    p = parse(s)
+    self.count = p["count"]
+    self.sides = p["sides"]
+    self.plus = p["plus"]
+
+  def roll(self):
+    return _roll(self.count, self.sides, self.plus)
+
+  def __str__(self):
+    return "{0}d{1}+{2}".format(self.count, self.sides, self.plus)

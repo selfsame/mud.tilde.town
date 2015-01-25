@@ -34,6 +34,7 @@ class Context:
 	def previous(self):
 		try: self._stack.pop().pop()
 		except: pass
+		return self
 
 	def reset(self):
 		self._stack = []
@@ -47,7 +48,6 @@ understood = Context()
 
 
 def _resolve(code, observer):
-	print "_resolve",code
 	if code == "": return ""
 	code = code[1:-1].strip()
 	if len(code) == 0: return ""
@@ -67,11 +67,12 @@ def _resolve(code, observer):
 		res = call("print_object_for", GET(understood.objects(), 2), observer)
 	elif code == "fourth object":
 		res = call("print_object_for", GET(understood.objects(), 3), observer)
-	elif code == "s":
-		if understood.subject() == observer: res = ""
-		else: res = "s"
+	elif code in ["s", "es"]:
+		if understood.subject() is observer: res = ""
+		else: res = code
 	elif code == "verb":
-		if understood.subject() == observer:
+		#todo, proper verb form lookup
+		if understood.subject() is observer:
 			res = understood.verb()
 		else: res = understood.verb() + "s"
 	res = str(res)
@@ -87,7 +88,6 @@ def _contextualize(s, observer):
   unzip = _separate('\[[^\[\]]*\]', s)
   swap = map(INF(_resolve, "%1", observer), unzip[0])
   zipped = [val for pair in zip(unzip[1], swap) for val in pair]
-  print zipped
   return "".join(zipped)
 
 def say(*args):

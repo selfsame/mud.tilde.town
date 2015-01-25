@@ -2,6 +2,8 @@
 "name":"chest",
 "descripton":"It is likely to have a thing or two inside",
   "contents":[{"id":"mouse"}],
+  "material":"wood",
+  "fabricated":true,
   "capacity":5,
   "closed":true,
   "opaque":true}

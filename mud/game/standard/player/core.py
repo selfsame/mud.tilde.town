@@ -21,13 +21,15 @@ def player_enter_game(a, b):
   if GET(data.instances, GET(b, "uuid")):
     return call("reconnect", GET(data.instances, GET(b, "uuid")), a)
   default = data.instance("player", False)
+  b = components._deserialize(b)
   b['player'] = a
-  new = dict(default.items() + b.items())
   new = components._merge([default, b])
   data.subject = new
   data.register(new)
   call("player_init", new)
   return new
+
+
 
 @given("player", "MUDClient")
 def reconnect(a, b):
@@ -39,7 +41,6 @@ def reconnect(a, b):
 
 @given("player")
 def player_init(e):
-  recursive_register(e)
   r = util.location(e)
   r['contents'].append(e['uuid'])
   dispatch.stack("init", e)
@@ -50,15 +51,9 @@ def player_init(e):
 
 @after("player")
 def player_init(e):
+  call("enact", e, "broadcast", "{#magenta}{#bold}"+e["firstname"]+" has entered the game.{#reset}")
   call("player_input", e, "look")
 
-def recursive_register(e):
-  if isinstance(e, str): return e
-  cont = e.get("contents")
-  if cont:
-    e["contents"] = map(recursive_register, cont)
-  data.register(e)
-  return e.get("uuid")
 
 
 @given("player")
@@ -69,13 +64,14 @@ def get_client(e):
 def line_prompt(a):
   if a["player"].dialogue: return ""
   h = colors.special["heart"]
-  hp = a["living"]["hp"]
-  maxhp = a["living"]["hpmax"]
+  hp = int(a["living"]["hp"])
+  maxhp = int(a["living"]["hpmax"])
   return parse.template("{#bold}{#red}"+h+"{#yellow}"+str(hp)+"{#green}/"+str(maxhp)+"{#resetall}:")
 
 @given("player")
 def quit(a):
   call("save", a)
+  call("enact", a, "broadcast", "{#magenta}"+a["firstname"]+" has disconnected.{#reset}")
   call("delete", a)
   call("get_client", a).close_connection("QUITTING!")
 

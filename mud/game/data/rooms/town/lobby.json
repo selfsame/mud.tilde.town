@@ -20,7 +20,7 @@
 	 "fixed":true,
 	"block":{"take":"Maybe later."},
 	"regex":"evil|magazine|rack|beast",
-	"closed":false,
+	"closed":true,
 	"desc":"It doesn't look very menacing, but you realize it's the magazines themselves that have imbued it with evil.",
 	"contents":[
 		{"id": "evil-book", "name":"Accolyte's Life magazine",
@@ -38,6 +38,6 @@
 	"name":"{#yellow}wooden sign{#reset}",
 	"regex":"wooden|sign|wooden sign",
 	"fixed":true,
-	"desc":"The sign reads: \r\n{#yellow}Welcome to mud.tilde.town!\r\nWe're still setting up the place, but feel free to have a look around.\r\nCurrent commands: {#red}say, look, get, drop, put, inventory, close, open{#reset}"}],
+	"desc":"A message has been carefully painted on it: \r\n{#yellow}{#bold}Welcome to mud.tilde.town!\r\n{#reset}Type '{#cyan}help{#reset}' to learn about the available commands."}],
 "spawning":{"rate":10,
 	"choices":{"mouse":10, "rat":10, "goblin":20}}}
