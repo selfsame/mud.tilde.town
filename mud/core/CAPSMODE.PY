@@ -8,8 +8,8 @@ def GET_IN(col, ks, notfound = None):
     col = GET(col, k, notfound)
   return col
 
-def KEYFN(k):
-  def _KEYFN_(col, nf=None): return GET(col, k, nf)
+def KEYFN(k, nf=None):
+  def _KEYFN_(col, notfound=nf): return GET(col, k, notfound)
   return _KEYFN_
 
 def NONE(v): return v is None
