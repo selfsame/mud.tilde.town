@@ -147,6 +147,7 @@ def die(e):
     weap = e["equipment"]["weapon"]
     if weap:
         loc["contents"].append(weap)
+        weap["located"] = loc["id"]
         e["equipment"]["weapon"] = False
         understood.subject(e)
         understood.objects([util.from_uid(weap)])
