@@ -1,15 +1,24 @@
-mud.tilde.town
+mud.tilde.town*
 ==============
-
-***A python MUD for interactive fiction***
+***multiplayer interactive fiction over telnet (python)***
 
 ![](http://www.selfsamegames.com/screens/showoff.png)
 
+Requirements
+================
+* python 2.x
+* [twisted https://twistedmatrix.com/trac/](https://twistedmatrix.com/trac/)
+* [zope.interface https://pypi.python.org/pypi/zope.interface#download
+](https://pypi.python.org/pypi/zope.interface#download)
 
 
 #Features
 
 ## extensive function dispatching
+[wiki - dispatching](https://github.com/selfsame/mud.tilde.town/wiki/rules)
+
+[wiki - predicates](https://github.com/selfsame/mud.tilde.town/wiki/predicates)
+
 * inspired by inform7
 * functions dispatch for argument arity, argument predicate, and lifecycle variations (check, before, during, after)
 * Rich behavior trees are easily created by covering basic functionality then narrowing down edge cases to augment/ovveride.
@@ -60,8 +69,7 @@ import random
 
 @construct
 def color(c):
-  if c == "random":
-    return random.choice(["brown","red","cyan"])
+  if c == "random": return random.choice(["brown","red","cyan"])
   return c
 
 def _color_is(c): 
@@ -70,68 +78,22 @@ def _color_is(c):
 
 #binding predicates allows any other module to use or overwrite them
 bind.predicate("colored", has('color'))
-bind.predicate("brown", _color_is("brown"))
 bind.predicate("red", _color_is("red"))
 bind.predicate("cyan", _color_is("cyan"))
 
-#binding adjectives, the standard/player/input.py module finds predicates from adjective strings to filter matches
+#binding predicates as adjectives to be used for player input
 bind.adjective("colored", "colored")
 bind.adjective("red", "red")
-bind.adjective("brown", "brown")
 bind.adjective("cyan", "cyan")
 
-#dispatching "printed_name" should be sandwiched by these rules
 @before(a("cyan", "thing"))
-def printed_name(e):
-  return "{#bold}{#cyan}"
-
-@before(a("brown", "thing"))
-def printed_name(e):
-  return "{#yellow}"
+def printed_name(e): return "{#bold}{#cyan}"
 
 @before(a("red", "thing"))
-def printed_name(e):
-  return "{#red}"
+def printed_name(e): return "{#red}"
 
 @after(a("colored", "thing"))
-def printed_name(e):
-  return "{#reset}"
-
-```
-
-## input parsing
-
-verbs can have multiple gramatical forms with arbitrary argument count and ordering.
-
-The standard game modules (```standard/player``` and ```standard/scope```) handle resolution of captured strings to entities or values.
-
-```python
-verbs.register("write", "write|inscribe", {"past":"wrote"})
-
-verbs.register_structure("write", "{1:text}on|in{2}","{1:text}on|in{2}with|using{3}")
-```
-
-## contextualized string templates
-subject, verb, objects, and observing scope can be set and rewound with ```mud.core.context```'s ```understood```
-
-Text can easily be customized for the observer, (especially useful to refer to acting player as "you|yourself")
-```
-#player commands have proper context.understood, 
-#but this can be changed and reverted incrementally if needed
-understood.subject(e)
-
-#dispatches "print_for(a, b)" for subject, observer, 
-#and "print_object_for(a, b)" for object, observer
-report("[Subject] introduce[s] [itself] to [object].")
-
-#undoes the previous subject change 
-understood.previous()
-```
-
-## colorcode templates with nesting foreground/background colors
-```parse.template``` tracks fg/bg color stacks, allowing you to nest colorcoded strings. ```parse``` also includes utilities for getting length, indicies, and splices of a templated string.
-```
-parse.template("{%green}bg-green{#yellow}fg-yellow {#red}fg-red {#magenta}fg-magenta{%reset}bg-default{#reset}fg-red {#reset}fg-yellow {#reset}fg-default")
+def printed_name(e): return "{#reset}"
 ```
 
 ## extremely decoupled modules
@@ -143,17 +105,54 @@ parse.template("{%green}bg-green{#yellow}fg-yellow {#red}fg-red {#magenta}fg-mag
 
 
 
-WIKI
+## input parsing
+[wiki - player input and verbs](https://github.com/selfsame/mud.tilde.town/wiki/verbs)
+
+verbs can have multiple gramatical forms with arbitrary argument count and ordering.
+
+The standard game modules (```standard/player``` and ```standard/scope```) handle resolution of captured strings to entities or values.
+
+```python
+verbs.register("write", "write|inscribe", {"past":"wrote"})
+
+verbs.register_structure("write", "{1:text}on|in{2}","{1:text}on|in{2}with|using{3}")
+```
+
+
+
+## contextualized string templates
+[wiki - context and reporting](https://github.com/selfsame/mud.tilde.town/wiki/context)
+
+subject, verb, objects, and observing scope can be set and rewound with ```mud.core.context```'s ```understood```
+
+Text can easily be customized for the observer, (especially useful to refer to acting player as "you|yourself")
+```python
+#player commands have proper context.understood, 
+#but this can be changed and reverted incrementally if needed
+understood.subject(e)
+
+report("[Subject] introduce[s] [itself] to [object].")
+
+#undoes the previous subject change 
+understood.previous()
+```
+
+
+
+## colorcode templates with nesting foreground/background colors
+```parse.template``` tracks fg/bg color stacks, allowing you to nest colorcoded strings. ```parse``` also includes utilities for getting length, indicies, and splices of a templated string.
+```
+parse.template("{%green}bg-green{#yellow}fg-yellow {#red}fg-red {#magenta}fg-magenta{%reset}bg-default{#reset}fg-red {#reset}fg-yellow {#reset}fg-default")
+```
+
+
+
+
+MORE WIKI
 ======
 [https://github.com/selfsame/mud.tilde.town/wiki](https://github.com/selfsame/mud.tilde.town/wiki)
 
 
-Requirements
-================
-mud.tilde.town requires: 
-* python 2.x
-* [twisted https://twistedmatrix.com/trac/](https://twistedmatrix.com/trac/)
-* [zope.interface https://pypi.python.org/pypi/zope.interface#download
-](https://pypi.python.org/pypi/zope.interface#download)
+
 
 
