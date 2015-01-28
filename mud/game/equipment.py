@@ -1,5 +1,6 @@
 from mud.core import *
 from mud.core.CAPSMODE import *
+from copy import copy
 
 @merge
 def equipment(a, b):
@@ -28,6 +29,7 @@ def equipment(a):
 
 @serialize
 def equipment(d):
+  d = d.copy()
   for slot in d:
     uuid = d[slot]
     if isinstance(uuid, str):
@@ -39,6 +41,7 @@ def equipment(d):
 @deserialize
 def equipment(d):
   for slot in d:
+    d = d.copy()
     item = d[slot]
     if isinstance(item, dict):
       item = components._deserialize(item)
