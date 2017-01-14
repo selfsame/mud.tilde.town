@@ -6,3 +6,5 @@
 log.txt
 save/accounts/*.json
 
+*.sublime-workspace
+*.sublime-project
